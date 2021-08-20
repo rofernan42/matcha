@@ -20,7 +20,7 @@ exports.signup = (req, res, next) => {
       return bcrypt.hash(password, 12);
     })
     .then((hashedPwd) => {
-      const user = new User(username, name, lastname, email, hashedPwd);
+      const user = new User({ username, name, lastname, email, password: hashedPwd });
       return user.save();
     })
     .then((user) => {

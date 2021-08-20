@@ -2,18 +2,18 @@ const mongodb = require("mongodb");
 const getDb = require("../util/database").getDb;
 
 class User {
-  constructor(username, name, lastname, email, password, id) {
-    this.username = username;
-    this.name = name;
-    this.lastname = lastname;
-    this.email = email;
-    this.password = password;
-    this._id = id;
-    const gender = "other";
-    const sexOr = "bisexual";
-    const bio = "";
-    const interests = "";
-    const images = [];
+  constructor(data) {
+    this.username = data.username;
+    this.name = data.name;
+    this.lastname = data.lastname;
+    this.email = data.email;
+    this.password = data.password;
+    this._id = data._id;
+    this.gender = data.gender || "other";
+    this.attraction = data.attraction || "both"
+    this.bio = data.bio || "";
+    this.interests = data.interests || "";
+    this.images = data.images || [];
   }
 
   save() {
@@ -21,7 +21,7 @@ class User {
     if (this._id) {
       return db
         .collection("users")
-        .updateOne({ _id: this._id }, { $set: this });
+        .updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
     } else {
       return db.collection("users").insertOne(this);
     }
@@ -54,7 +54,11 @@ class User {
       });
   }
 
-  setGender;
+  updateData(data) {
+    this.gender = data;
+    const db = getDb();
+    return db.collection("users").updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
+  }
 }
 
 module.exports = User;

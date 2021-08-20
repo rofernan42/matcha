@@ -7,4 +7,6 @@ router.get("/profile", isAuth, userController.getProfile);
 
 router.get("/users", isAuth, userController.getUsers);
 
+router.post("/change-gender", isAuth, userController.postGender);
+
 module.exports = router;

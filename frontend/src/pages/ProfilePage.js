@@ -1,31 +1,26 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import Profile from "../components/Profile/Profile";
+import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
+import { fetchCurrentUser, updateGender } from "../util/usersReq";
 
 const ProfilePage = () => {
   const authCtx = useContext(AuthContext);
-  const [user, setUser] = useState({});
+  const {
+    sendReq,
+    status,
+    data: user,
+    error,
+  } = useHttp(fetchCurrentUser, true);
+
   useEffect(() => {
-    fetch("http://localhost:8000/profile", {
-      headers: {
-        Authorization: "Bearer " + authCtx.token,
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw new Error("Failed to fetch user data");
-        }
-      })
-      .then((data) => {
-        setUser(data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }, [authCtx.token]);
-  return <Profile user={user} />;
+    sendReq(authCtx.token);
+  }, [sendReq, authCtx.token]);
+
+  const genderHandler = (gender) => {
+    updateGender({ token: authCtx.token, gender });
+  };
+  return <>{user && <Profile user={user} onChangeGender={genderHandler} />}</>;
 };
 
 export default ProfilePage;

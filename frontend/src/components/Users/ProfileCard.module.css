@@ -10,7 +10,7 @@
 
 .card {
   left: 50%;
-  top: 50%;
+  top: 45%;
   transform: translate(-50%, -50%);
   position: fixed;
   width: 415px;
@@ -87,7 +87,8 @@
 .card-body {
   border-top: 1px solid #afafaf;
   text-align: center;
-  padding-left: 10px;
+  padding: 0;
+  vertical-align: middle;
 }
 
 .name {
@@ -99,13 +100,39 @@
   color: rgb(226, 226, 226);
 }
 
-.bio {
-  font-size: 14px;
+.location {
+  font-size: 11px;
   color: #afafaf;
   font-weight: 300;
   text-align: center;
   margin-bottom: 2px;
   margin-top: 0;
+}
+
+.bio {
+  margin-top: 5px;
+  position: absolute;
+  font-style: italic;
+  font-size: 14px;
+  color: #afafaf;
+  text-align: center;
+  height: 100px;
+  width: 355px;
+  display: table-cell;
+  vertical-align: middle;
+  word-break: break-all;
+  z-index: 10;
+  left: 30px;
+}
+
+.bio-img {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  bottom: 155px;
+  left: 20px;
+  transform: rotate(10deg);
+  filter: invert(35%);
 }
 
 .card-footer {

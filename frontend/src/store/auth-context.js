@@ -33,7 +33,6 @@ const retrieveAuthData = () => {
 
 export const AuthContextProvider = (props) => {
   const data = retrieveAuthData();
-  console.log(data)
   let initialToken;
   let initialUserId;
   if (data && data.token) {

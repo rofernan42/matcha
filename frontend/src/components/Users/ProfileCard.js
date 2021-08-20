@@ -1,4 +1,5 @@
 import classes from "./ProfileCard.module.css";
+import quotes from "../../images/left-quotes-sign.png"
 
 const ProfileCard = (props) => {
   const closeProfile = () => {
@@ -15,7 +16,7 @@ const ProfileCard = (props) => {
           }}
         >
           <div className={classes["card-header-bar"]}>
-            <a href="#" className={classes["btn-message"]}>
+            <a href="/" className={classes["btn-message"]}>
               <span className={classes["sr-only"]}>Message</span>
             </a>
             <div className={classes["user-status"]}>
@@ -26,21 +27,20 @@ const ProfileCard = (props) => {
             </div>
           </div>
 
-          <a href="#" className={classes["btn-follow"]}>
+          <div className={classes["btn-follow"]}>
             <span className={classes["sr-only"]}>Follow</span>
-          </a>
+          </div>
         </div>
 
         <div className={classes["card-body"]}>
           <h2 className={classes["name"]}>{props.user.username}</h2>
-          <h2 className={classes["bio"]} style={{ fontSize: "11px" }}>
+          <h2 className={classes["location"]}>
             1 km
           </h2>
+          <img src={quotes} className={classes["bio-img"]} alt="" />
           <div className={classes["bio"]}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Dignissimos, aperiam. Lorem ipsum dolor sit amet, consectetur
-            adipisicing elit. Dignissimos, aperiam. Lorem ipsum dolor sit amet,
-            consectetur adipisicing elit. Dignissimos, aperiam.
+            {props.user.bio.length > 0 && <span>{props.user.bio}</span>}
+            {props.user.bio.length === 0 && <span>{props.user.name} does not have a bio...</span>}
           </div>
         </div>
 

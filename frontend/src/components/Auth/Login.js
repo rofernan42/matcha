@@ -11,12 +11,12 @@ const Login = () => {
   const history = useHistory();
   const authCtx = useContext(AuthContext);
 
-  const formSubmit = (e) => {
+  const formSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const entEmail = emailRef.current.value;
     const entPassword = passwordRef.current.value;
-    fetch("http://localhost:8000/auth/login", {
+    const res = await fetch("http://localhost:8000/auth/login", {
       method: "POST",
       body: JSON.stringify({
         email: entEmail,
@@ -25,26 +25,25 @@ const Login = () => {
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((res) => {
-        setIsLoading(false);
-        if (res.ok) {
-          return res.json();
-        } else {
-          return res.json().then((data) => {
-            throw new Error(data.message);
-          });
-        }
-      })
-      .then((data) => {
-        console.log(data);
-        const expirationTime = new Date(new Date().getTime() + (+data.expiresIn * 1000));
-        authCtx.login(data.token, data.userId, expirationTime.toISOString());
-        history.replace("/");
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    });
+    setIsLoading(false);
+    try {
+      let data;
+      if (res.ok) {
+        data = await res.json();
+      } else {
+        data = await res.json();
+        throw new Error(data.message);
+      }
+      console.log(data);
+      const expirationTime = new Date(
+        new Date().getTime() + +data.expiresIn * 1000
+      );
+      authCtx.login(data.token, data.userId, expirationTime.toISOString());
+      history.replace("/");
+    } catch (err) {
+      console.log(err.message);
+    }
   };
   return (
     <section className={classes.auth}>

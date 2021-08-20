@@ -5,7 +5,7 @@ import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
 import { fetchUsers } from "../util/usersReq";
 
-const fetchMessages = async () => {};
+// const fetchMessages = async () => {};
 
 const ChatPage = () => {
   const authCtx = useContext(AuthContext);

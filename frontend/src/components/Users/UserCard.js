@@ -10,7 +10,7 @@ const UserCard = (props) => {
         {/* <Avatar imgUrl="http://envato.jayasankarkr.in/code/profile/assets/img/profile-2.jpg" /> */}
         <img
           src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-2.jpg"
-          className={`${classes.img} ${classes["img-responsive"]}`}
+          className={`${classes.img} ${classes["img-responsive"]}`} alt=""
         />
         <div className={classes["profile-name"]}>{props.user.username}</div>
         <div className={classes["profile-username"]}>@johndoesurname</div>
