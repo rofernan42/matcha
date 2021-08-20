@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import classes from "./Nav.module.css";
 
@@ -11,24 +11,39 @@ const Nav = () => {
   };
   return (
     <header className={classes.header}>
-      <Link to="/">
-        <div className={classes.logo}>Matcha</div>
-      </Link>
+      <div className={classes.logo}>
+        <NavLink activeClassName={classes.active} to="/" exact>
+          Matcha
+        </NavLink>
+      </div>
       <nav>
         <ul>
-        {!isAuth && (
+          {isAuth && (
             <li>
-              <NavLink activeClassName={classes.active} to="/login">Login</NavLink>
+              <NavLink activeClassName={classes.active} to="/chat">
+                Chat
+              </NavLink>
             </li>
           )}
           {!isAuth && (
             <li>
-              <NavLink activeClassName={classes.active} to="/signup"><button>Sign up</button></NavLink>
+              <NavLink activeClassName={classes.active} to="/login">
+                Login
+              </NavLink>
+            </li>
+          )}
+          {!isAuth && (
+            <li>
+              <NavLink activeClassName={classes.active} to="/signup">
+                <button>Sign up</button>
+              </NavLink>
             </li>
           )}
           {isAuth && (
             <li>
-              <NavLink activeClassName={classes.active} to="/profile">Profile</NavLink>
+              <NavLink activeClassName={classes.active} to="/profile">
+                Profile
+              </NavLink>
             </li>
           )}
           {isAuth && (

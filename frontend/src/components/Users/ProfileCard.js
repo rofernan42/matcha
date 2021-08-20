@@ -1,0 +1,67 @@
+import classes from "./ProfileCard.module.css";
+
+const ProfileCard = (props) => {
+  const closeProfile = () => {
+    props.onCloseProfile();
+  };
+  return (
+    <>
+      <div className={classes.background} onClick={closeProfile} />
+      <div className={classes.card}>
+        <div
+          className={classes["card-header"]}
+          style={{
+            backgroundImage: `url("http://envato.jayasankarkr.in/code/profile/assets/img/profile-2.jpg")`,
+          }}
+        >
+          <div className={classes["card-header-bar"]}>
+            <a href="#" className={classes["btn-message"]}>
+              <span className={classes["sr-only"]}>Message</span>
+            </a>
+            <div className={classes["user-status"]}>
+              {/* <span className={`${classes.status} ${classes.green}`}></span>
+            <span className={classes["status-label"]}>Online</span> */}
+              <span className={`${classes.status} ${classes.orange}`}></span>
+              <span className={classes["status-label"]}>2h ago</span>
+            </div>
+          </div>
+
+          <a href="#" className={classes["btn-follow"]}>
+            <span className={classes["sr-only"]}>Follow</span>
+          </a>
+        </div>
+
+        <div className={classes["card-body"]}>
+          <h2 className={classes["name"]}>{props.user.username}</h2>
+          <h2 className={classes["bio"]} style={{ fontSize: "11px" }}>
+            1 km
+          </h2>
+          <div className={classes["bio"]}>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Dignissimos, aperiam. Lorem ipsum dolor sit amet, consectetur
+            adipisicing elit. Dignissimos, aperiam. Lorem ipsum dolor sit amet,
+            consectetur adipisicing elit. Dignissimos, aperiam.
+          </div>
+        </div>
+
+        <div className={classes["card-footer"]}>
+          <div className={classes["stats"]}>
+            <div className={classes["stat"]}>
+              <span className={classes["label"]}>Score</span>
+              <span className={classes["value"]}></span>
+            </div>
+            <div className={classes["stat"]}>
+              <span className={classes["label"]}>Likes you</span>
+              <span className={classes["value"]}></span>
+            </div>
+            <div className={classes["stat"]}>
+              <span className={classes["label"]}>Block</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ProfileCard;

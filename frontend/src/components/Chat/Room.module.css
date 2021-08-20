@@ -1,0 +1,232 @@
+#chatroom {
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(100vh - 4rem);
+  background: #ece9e9;
+  margin: 0;
+  font-size: 0;
+  /* overflow: hidden; */
+  display: flex;
+}
+.contacts {
+  width: 260px;
+  height: calc(100vh - 4rem);
+  background-color: #332e36;
+  /* display: inline-block; */
+  font-size: 15px;
+  vertical-align: top;
+}
+
+.contacts header {
+  padding: 15px;
+  text-align: center;
+}
+
+.contacts input {
+  width: 80%;
+  height: 20px;
+  line-height: 50px;
+  padding: 10px;
+  background-color: #5e616a;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_search.png);
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 40px;
+}
+.contacts input::placeholder {
+  color: #fff;
+}
+.contacts ul {
+  padding-left: 0;
+  margin: 0;
+  list-style-type: none;
+  overflow-y: scroll;
+  height: 75vh;
+}
+.contacts li {
+  padding: 10px 0;
+  white-space: nowrap;
+}
+.contacts li:hover {
+  background-color: #5e616a;
+}
+
+.room {
+  width: 100%;
+  /* height: 100%; */
+  height: calc(100vh - 4rem);
+  /* display: inline-block; */
+  flex-grow: 1;
+  font-size: 15px;
+  vertical-align: top;
+}
+
+.contacts h2,
+.contacts h3 {
+  margin: 0;
+}
+.contacts li img {
+  border-radius: 50%;
+  margin-left: 20px;
+  margin-right: 8px;
+}
+.contacts li div {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 12px;
+}
+.contacts li h2 {
+  font-size: 14px;
+  color: #fff;
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+.contacts li h3 {
+  font-size: 12px;
+  color: #7e818a;
+  font-weight: normal;
+}
+
+.status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 7px;
+}
+.green {
+  background-color: #58b666;
+}
+.orange {
+  background-color: #ff725d;
+}
+.blue {
+  background-color: #6fbced;
+  margin-right: 0;
+  margin-left: 7px;
+}
+
+.room header {
+  white-space: nowrap;
+  height: 10vh;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+}
+.room header > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+.room header img:first-child {
+  margin-left: 10px;
+  margin-top: 5px;
+  border-radius: 50%;
+}
+.room header img:last-child {
+  width: 24px;
+  margin-top: 8px;
+}
+.room header div {
+  margin-left: 10px;
+  margin-right: 145px;
+}
+.room header h2 {
+  font-size: 16px;
+}
+.room header h3 {
+  font-size: 14px;
+  font-weight: normal;
+  color: #7e818a;
+}
+
+#chat {
+  background: #ece9e9;
+  padding-left: 0;
+  margin: 0;
+  list-style-type: none;
+  overflow-y: scroll;
+  height: calc(66vh - 4rem);
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+}
+#chat li {
+  padding: 0 30px;
+  margin-bottom: 10px;
+}
+#chat h2,
+#chat h3 {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: normal;
+}
+#chat h3 {
+  color: #bbb;
+}
+#chat .message {
+  padding: 15px;
+  color: #fff;
+  line-height: 25px;
+  max-width: 90%;
+  display: inline-block;
+  text-align: left;
+  border-radius: 5px;
+}
+#chat .me {
+  text-align: right;
+}
+#chat .you .message {
+  background-color: #38015c;
+}
+#chat .me .message {
+  background-color: #c79ee2;
+}
+#chat .triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+}
+#chat .you .triangle {
+  border-color: transparent transparent #38015c transparent;
+  margin-left: 15px;
+}
+#chat .me .triangle {
+  border-color: transparent transparent #c79ee2 transparent;
+  margin-left: auto;
+  margin-right: 15px;
+}
+
+.room footer {
+  height: 20vh;
+  padding: 10px;
+}
+.room footer input {
+  resize: none;
+  border: none;
+  display: block;
+  width: 90%;
+  height: 50px;
+  border-radius: 3px;
+  padding: 20px;
+  font-size: 13px;
+  margin: auto;
+}
+.room footer input::placeholder {
+  color: rgb(185, 185, 185);
+}
+.room footer img {
+  height: 30px;
+  cursor: pointer;
+}
+.room footer button {
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #38015c;
+  vertical-align: middle;
+}

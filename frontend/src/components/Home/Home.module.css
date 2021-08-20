@@ -1,0 +1,58 @@
+.title {
+  font-weight: bold;
+  white-space: nowrap;
+  color: #38015c;
+  font-size: 3rem;
+  margin-top: 10rem;
+  text-align: center;
+  animation: titleOpening 1.5s ease-out forwards;
+}
+
+.options {
+  margin: auto;
+  text-align: center;
+  width: 100%;
+}
+
+.options a {
+  display: inline-flex;
+  text-decoration: none;
+  color: #b571e2;
+  font-size: 2rem;
+  margin-top: 2rem;
+  animation: elemOpening 1.5s ease-out forwards;
+}
+
+.options a:hover {
+  color: #38015c;
+}
+
+.options a + a {
+  margin-left: 5rem;
+}
+
+@keyframes titleOpening {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes elemOpening {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  30% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

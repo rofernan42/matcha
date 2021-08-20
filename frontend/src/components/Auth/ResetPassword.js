@@ -4,7 +4,7 @@ import AuthContext from "../../store/auth-context";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
 
-const Login = () => {
+const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -38,8 +38,7 @@ const Login = () => {
       })
       .then((data) => {
         console.log(data);
-        const expirationTime = new Date(new Date().getTime() + (+data.expiresIn * 1000));
-        authCtx.login(data.token, data.userId, expirationTime.toISOString());
+        authCtx.login(data.token);
         history.replace("/");
       })
       .catch((err) => {
@@ -77,4 +76,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;

@@ -1,6 +1,7 @@
 import { useContext, useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
+import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
 
 const Signup = () => {
@@ -16,7 +17,7 @@ const Signup = () => {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    setError({});
+    // setError({});
     setIsLoading(true);
     const entUsername = usernameRef.current.value;
     const entName = nameRef.current.value;
@@ -117,7 +118,7 @@ const Signup = () => {
         </div>
         <div className={classes.actions}>
           {!isLoading && <button>Create account</button>}
-          {isLoading && <p>Sending request...</p>}
+          {isLoading && <LoadingSpinner />}
           <div className={classes.footer}>
             Already signed up ? <Link to="/login">Login</Link>
           </div>

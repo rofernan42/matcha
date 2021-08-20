@@ -54,6 +54,7 @@
 }
 
 .actions button {
+  height: 40px;
   white-space: nowrap;
   cursor: pointer;
   font: inherit;
@@ -61,7 +62,7 @@
   background-color: #a770cc;
   border: none;
   border-radius: 4px;
-  padding: 0.5rem 2.5rem;
+  padding: 0 2.5rem;
   margin-bottom: 0.5rem;
 }
 

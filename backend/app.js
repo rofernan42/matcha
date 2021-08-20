@@ -36,5 +36,9 @@ app.use((error, req, res, next) => {
 });
 
 mongoConnect((client) => {
-  app.listen(8000);
+  const server = app.listen(8000);
+  const io = require("./socket").init(server);
+  io.on("connection", (socket) => {
+    console.log("Client connected");
+  })
 });
