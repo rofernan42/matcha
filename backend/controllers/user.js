@@ -1,4 +1,7 @@
 const User = require("../models/user");
+const fs = require("fs");
+const path = require("path");
+const { json } = require("express");
 
 exports.getProfile = async (req, res, next) => {
   const user = await User.findById(req.userId);
@@ -29,29 +32,6 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
-exports.updateUser = async (req, res, next) => {
-  const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  const gender = req.body.gender;
-  const attrMen = req.body.attrMen;
-  const attrWomen = req.body.attrWomen;
-  const bio = req.body.bio || "";
-  const interests = req.body.interests || "";
-  let sexOr = "bisexual";
-  if ((attrMen && gender === "female") || (attrWomen && gender === "male")) {
-    sexOr = "heterosexual";
-  } else if (
-    (attrMen && gender === "male") ||
-    (attrWomen && gender === "female")
-  ) {
-    sexOr = "homosexual";
-  }
-};
-
 exports.postGender = async (req, res, next) => {
   const user = await User.findById(req.userId);
   if (!user) {
@@ -59,11 +39,11 @@ exports.postGender = async (req, res, next) => {
     error.statusCode = 401;
     throw error;
   }
-  user.gender = req.body.gender;
+  user.gender = req.body.data;
   const updatedUser = new User({ ...user });
-  result = await updatedUser.save();
+  await updatedUser.save();
   try {
-    res.status(201).json(user);
+    res.status(201).json(updatedUser);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -72,15 +52,119 @@ exports.postGender = async (req, res, next) => {
   }
 };
 
-exports.postAttraction = () => {
-//   const user = await User.findById(req.userId);
-//   if (!user) {
-//     const error = new Error("User not found");
-//     error.statusCode = 401;
-//     throw error;
-//   }
-//   const attrMen = req.body.attrMen;
-//   const attrWomen = req.body.attrWomen;
-//   if (attrMen && !attrWomen) {
-//   }
+exports.postAttraction = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 401;
+    throw error;
+  }
+  const attr = req.body.data;
+  user.attrMen = attr.men;
+  user.attrWomen = attr.women;
+  const updatedUser = new User({ ...user });
+  await updatedUser.save();
+  try {
+    res.status(201).json(updatedUser);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.postBio = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 401;
+    throw error;
+  }
+  user.bio = req.body.data;
+  const updatedUser = new User({ ...user });
+  await updatedUser.save();
+  try {
+    res.status(201).json(updatedUser);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.postImage = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 401;
+    throw error;
+  }
+  const image = req.file;
+  const userDir = `images/${user._id.toString()}`;
+  const imageNb = +req.body.imageNb;
+  if (!image) {
+    const error = new Error("Please upload a file");
+    error.statusCode = 422;
+    throw error;
+  }
+  await fs.mkdir(userDir, (err) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log("Directory created successfully");
+  });
+  const oldImageUrl = image.path.replace("\\", "/");
+  const imageUrl = userDir + "/" + image.filename;
+  fs.rename(oldImageUrl, imageUrl, (err) => {
+    if (err) {
+      throw err;
+    } else {
+      console.log("File moved successfully");
+    }
+  });
+  if (user.images[imageNb]) {
+    clearImage(user.images[imageNb]);
+  }
+  user.images[imageNb] = imageUrl;
+  const updatedUser = new User({ ...user });
+  await updatedUser.save();
+  try {
+    res.status(201).json(updatedUser);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.deleteImage = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 401;
+    throw error;
+  }
+  const imageNb = +req.body.imageNb;
+  if (user.images[imageNb]) {
+    clearImage(user.images[imageNb]);
+  }
+  user.images[imageNb] = null;
+  const updatedUser = new User({ ...user });
+  await updatedUser.save();
+  try {
+    res.status(201).json(updatedUser);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+const clearImage = (filePath) => {
+  filePath = path.join(__dirname, "..", filePath);
+  fs.unlink(filePath, (err) => console.log(err));
 };

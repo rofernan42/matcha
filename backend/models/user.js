@@ -10,10 +10,11 @@ class User {
     this.password = data.password;
     this._id = data._id;
     this.gender = data.gender || "other";
-    this.attraction = data.attraction || "both"
+    this.attrMen = data.attrMen === null ? true : data.attrMen;
+    this.attrWomen = data.attrWomen === null ? true : data.attrWomen;
     this.bio = data.bio || "";
     this.interests = data.interests || "";
-    this.images = data.images || [];
+    this.images = data.images || [null, null, null, null, null];
   }
 
   save() {

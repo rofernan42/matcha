@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoConnect = require("./util/database").mongoConnect;
+const multer = require("multer");
+const path = require("path");
 // const cors = require("cors");
 
 const authRoutes = require("./routes/auth");
@@ -7,7 +9,27 @@ const userRoutes = require("./routes/user");
 
 const app = express();
 
-app.use(express.json());
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'images')
+  },
+  filename: (req, file, cb) => {
+      const dateStr = new Date().toISOString().replace(/:/g, '-')
+      cb(null, dateStr + '-' + file.originalname)
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+      cb(null, true);
+  } else {
+      cb(null, false);
+  }
+};
+
+app.use(express.json({limit: '50mb'}));
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); // allow every domains
   res.setHeader(

@@ -9,4 +9,12 @@ router.get("/users", isAuth, userController.getUsers);
 
 router.post("/change-gender", isAuth, userController.postGender);
 
+router.post("/change-attraction", isAuth, userController.postAttraction);
+
+router.post("/change-bio", isAuth, userController.postBio);
+
+router.post("/post-image", isAuth, userController.postImage);
+
+router.delete("/delete-image", isAuth, userController.deleteImage);
+
 module.exports = router;

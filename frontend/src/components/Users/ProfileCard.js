@@ -40,7 +40,7 @@ const ProfileCard = (props) => {
           <img src={quotes} className={classes["bio-img"]} alt="" />
           <div className={classes["bio"]}>
             {props.user.bio.length > 0 && <span>{props.user.bio}</span>}
-            {props.user.bio.length === 0 && <span>{props.user.name} does not have a bio...</span>}
+            {props.user.bio.length === 0 && <span>{props.user.username} does not have a bio...</span>}
           </div>
         </div>
 
