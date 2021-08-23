@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import Image from "./Image";
 import classes from "./Profile.module.css";
@@ -14,10 +14,10 @@ const ImagesForm = (props) => {
         <tbody>
           <tr>
             <td rowSpan="2" className={classes["td-main"]}>
-              {props.status === "pending" && (
+              {props.statusImg === "pending" && (
                 <LoadingSpinner loadingScreen={true} />
               )}
-              {props.status === "completed" && (
+              {(props.status === "completed" || props.statusImg === "completed") && (
                 <Image
                   img={image[0]}
                   typeField="main"

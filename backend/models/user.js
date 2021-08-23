@@ -13,7 +13,7 @@ class User {
     this.attrMen = data.attrMen === null ? true : data.attrMen;
     this.attrWomen = data.attrWomen === null ? true : data.attrWomen;
     this.bio = data.bio || "";
-    this.interests = data.interests || "";
+    this.interests = data.interests || [];
     this.images = data.images || [null, null, null, null, null];
   }
 

@@ -94,6 +94,51 @@ exports.postBio = async (req, res, next) => {
   }
 };
 
+exports.postInterest = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 401;
+    throw error;
+  }
+  const interests = req.body.data.trim().split(/\s+/);
+  user.interests.push(...interests);
+  const updatedUser = new User({ ...user });
+  await updatedUser.save();
+  try {
+    res.status(201).json(updatedUser);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.removeInterest = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 401;
+    throw error;
+  }
+  const intToRemove = req.body.data;
+  const index = user.interests.indexOf(intToRemove);
+  if (index > -1) {
+    user.interests.splice(index, 1);
+  }
+  const updatedUser = new User({ ...user });
+  await updatedUser.save();
+  try {
+    res.status(201).json(updatedUser);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
 exports.postImage = async (req, res, next) => {
   const user = await User.findById(req.userId);
   if (!user) {
@@ -161,6 +206,18 @@ exports.deleteImage = async (req, res, next) => {
       err.statusCode = 500;
     }
     next(err);
+  }
+};
+
+exports.postLike = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 401;
+    throw error;
+  }
+  userId = req.params.id;
+  if (userId !== user._id.toString()) {
   }
 };
 

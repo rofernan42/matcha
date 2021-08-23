@@ -6,6 +6,7 @@ import AuthContext from "../store/auth-context";
 import { fetchUsers } from "../util/usersReq";
 import classes from "../components/Users/UserCard.module.css";
 import ProfileCard from "../components/Users/ProfileCard";
+import ImageSlider from "../components/Users/ImageSlider";
 
 const UsersPage = () => {
   const authCtx = useContext(AuthContext);
@@ -32,6 +33,7 @@ const UsersPage = () => {
   const closeProfileHandler = () => {
     setUserProfile({ display: false, profile: null });
   };
+  const imgs = users[0].images.filter((img) => img !== null);
   return (
     <>
       <div className={classes["users-list"]}>
@@ -49,6 +51,7 @@ const UsersPage = () => {
           user={userProfile.profile}
         />
       )}
+      {/* <ImageSlider images={imgs} /> */}
     </>
   );
 };

@@ -6,7 +6,7 @@ const GenderForm = (props) => {
   const genderHandler = (e) => {
     const genderData = e.target.value;
     setChecked(genderData);
-    props.onChangeGender(genderData);
+    props.onChangeGender({ toUpdate: genderData, path: "change-gender" });
   };
   return (
     <>

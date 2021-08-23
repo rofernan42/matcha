@@ -1,20 +1,18 @@
 import classes from "./ProfileCard.module.css";
-import quotes from "../../images/left-quotes-sign.png"
+import quotes from "../../images/left-quotes-sign.png";
+import ImageSlider from "./ImageSlider";
 
 const ProfileCard = (props) => {
   const closeProfile = () => {
     props.onCloseProfile();
   };
+  const imgs = props.user.images.filter((img) => img !== null);
   return (
     <>
       <div className={classes.background} onClick={closeProfile} />
       <div className={classes.card}>
-        <div
-          className={classes["card-header"]}
-          style={{
-            backgroundImage: `url("http://envato.jayasankarkr.in/code/profile/assets/img/profile-2.jpg")`,
-          }}
-        >
+        <div className={classes["card-header"]}>
+          <ImageSlider images={imgs} />
           <div className={classes["card-header-bar"]}>
             <a href="/" className={classes["btn-message"]}>
               <span className={classes["sr-only"]}>Message</span>
@@ -27,20 +25,18 @@ const ProfileCard = (props) => {
             </div>
           </div>
 
-          <div className={classes["btn-follow"]}>
-            <span className={classes["sr-only"]}>Follow</span>
-          </div>
+          <div className={classes["btn-follow"]}></div>
         </div>
 
         <div className={classes["card-body"]}>
           <h2 className={classes["name"]}>{props.user.username}</h2>
-          <h2 className={classes["location"]}>
-            1 km
-          </h2>
+          <h2 className={classes["location"]}>1 km</h2>
           <img src={quotes} className={classes["bio-img"]} alt="" />
           <div className={classes["bio"]}>
             {props.user.bio.length > 0 && <span>{props.user.bio}</span>}
-            {props.user.bio.length === 0 && <span>{props.user.username} does not have a bio...</span>}
+            {props.user.bio.length === 0 && (
+              <span>{props.user.username} does not have a bio...</span>
+            )}
           </div>
         </div>
 

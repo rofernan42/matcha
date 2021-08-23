@@ -23,7 +23,7 @@ const AttractionForm = (props) => {
   };
   useEffect(() => {
     if (isSending) {
-      props.onChangeAttr(checkedAttr);
+      props.onChangeAttr({ toUpdate: checkedAttr, path: "change-attraction" });
       setIsSending(false);
     }
   }, [props, isSending, checkedAttr]);

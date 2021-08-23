@@ -13,8 +13,10 @@ const BioForm = (props) => {
   };
   const bioHandler = (e) => {
     e.preventDefault();
-    props.onChangeBio(bioRef.current.value);
-    setSaveActive(false);
+    if (saveActive) {
+      props.onChangeBio({ toUpdate: bioRef.current.value, path: "change-bio" });
+      setSaveActive(false);
+    }
   };
   return (
     <>

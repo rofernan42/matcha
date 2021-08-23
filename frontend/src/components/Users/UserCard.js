@@ -1,16 +1,18 @@
+import { url } from "../../util/usersReq";
 import classes from "./UserCard.module.css";
 
 const UserCard = (props) => {
   const displayProfile = () => {
     props.onProfileCard(props.user);
   };
+  const imgProfile = props.user.images.find(img => img !== null);
   return (
     <div className={classes.container} onClick={displayProfile}>
       <div className={classes["profile-card-2"]}>
-        {/* <Avatar imgUrl="http://envato.jayasankarkr.in/code/profile/assets/img/profile-2.jpg" /> */}
+          {}
         <img
-          src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-2.jpg"
-          className={`${classes.img} ${classes["img-responsive"]}`} alt=""
+          src={`${url}${imgProfile}`}
+          className={`${classes["profile-img"]}`} alt=""
         />
         <div className={classes["profile-name"]}>{props.user.username}</div>
         <div className={classes["profile-username"]}>@johndoesurname</div>

@@ -19,17 +19,17 @@ function App() {
           <HomePage isAuth={authCtx.isAuth} />
         </Route>
         {!authCtx.isAuth && (
-          <Route path="/signup">
+          <Route path="/signup" exact>
             <SignupPage />
           </Route>
         )}
         {!authCtx.isAuth && (
-          <Route path="/login">
+          <Route path="/login" exact>
             <LoginPage />
           </Route>
         )}
         {authCtx.isAuth && (
-          <Route path="/profile">
+          <Route path="/profile" exact>
             <ProfilePage />
           </Route>
         )}
@@ -38,9 +38,11 @@ function App() {
             <ChatPage />
           </Route>
         )}
-        <Route path="/users">
-          <UsersPage />
-        </Route>
+        {authCtx.isAuth && (
+          <Route path="/users">
+            <UsersPage />
+          </Route>
+        )}
         <Route path="*">
           <Redirect to="/" />
         </Route>

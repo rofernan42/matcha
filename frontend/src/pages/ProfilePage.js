@@ -12,39 +12,27 @@ const ProfilePage = () => {
     data: user,
     error,
   } = useHttp(fetchCurrentUser, true);
-  const {
-    sendReq: sendUpdate,
-    data: updatedUser
-  } = useHttp(updateUser, true);
+  const { sendReq: sendUpdate, data: updatedUser } = useHttp(updateUser, true);
   const {
     sendReq: sendImage,
-    data: updatedImages
+    statusImages,
+    data: updatedImages,
   } = useHttp(updateImage, true);
+
+  const updateUserHandler = (attr) => {
+    sendUpdate({
+      token: authCtx.token,
+      ...attr,
+    });
+  };
+  const imgHandler = (img) => {
+    sendImage({ token: authCtx.token, ...img });
+  };
 
   useEffect(() => {
     sendReq(authCtx.token);
   }, [sendReq, authCtx.token]);
 
-  const genderHandler = (gender) => {
-    sendUpdate({
-      token: authCtx.token,
-      toUpdate: gender,
-      path: "change-gender",
-    });
-  };
-  const attrHandler = (attr) => {
-    sendUpdate({
-      token: authCtx.token,
-      toUpdate: attr,
-      path: "change-attraction",
-    });
-  };
-  const bioHandler = (bio) => {
-    sendUpdate({ token: authCtx.token, toUpdate: bio, path: "change-bio" });
-  };
-  const imgHandler = (img) => {
-    sendImage({ token: authCtx.token, ...img });
-  };
   return (
     <>
       {user && (
@@ -52,10 +40,9 @@ const ProfilePage = () => {
           user={updatedUser ? updatedUser : user}
           images={updatedImages ? updatedImages.images : user.images}
           status={status}
-          onChangeGender={genderHandler}
-          onChangeAttr={attrHandler}
-          onChangeBio={bioHandler}
+          onChangeUser={updateUserHandler}
           onChangeImg={imgHandler}
+          statusImg={statusImages}
         />
       )}
     </>
