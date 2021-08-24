@@ -15,6 +15,7 @@ class User {
     this.bio = data.bio || "";
     this.interests = data.interests || [];
     this.images = data.images || [null, null, null, null, null];
+    this.likes = data.likes || [];
   }
 
   save() {
@@ -54,12 +55,18 @@ class User {
         return users;
       });
   }
-
-  updateData(data) {
-    this.gender = data;
+  static async fetchFilteredUsers(currentUserId) {
     const db = getDb();
-    return db.collection("users").updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
+    const users = await db.collection("users").find().toArray();
+    return users.filter((users) => users._id.toString() !== currentUserId);
   }
+
+  // static async fetchFilteredUsers(currentPage) {
+  //   const perPage = 2;
+  //   const db = getDb();
+  //   const users = await db.collection("users").find().toArray();
+  //   return users.filter((users) => users._id.toString() !== currentUserId);
+  // }
 }
 
 module.exports = User;

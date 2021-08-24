@@ -1,10 +1,25 @@
 import classes from "./ProfileCard.module.css";
 import quotes from "../../images/left-quotes-sign.png";
 import ImageSlider from "./ImageSlider";
+import useHttp from "../../hooks/use-http";
+import { updateUser } from "../../util/usersReq";
+import { useState } from "react";
 
 const ProfileCard = (props) => {
+  const { sendReq: sendUpdate } = useHttp(updateUser, true);
+  const [liked, setLiked] = useState(props.liked);
   const closeProfile = () => {
     props.onCloseProfile();
+  };
+  const sendLikeHandler = () => {
+    sendUpdate({
+      token: props.token,
+      toUpdate: props.user._id,
+      path: "send-like",
+    });
+    setLiked(() => {
+      return !liked;
+    });
   };
   const imgs = props.user.images.filter((img) => img !== null);
   return (
@@ -24,8 +39,12 @@ const ProfileCard = (props) => {
               <span className={classes["status-label"]}>2h ago</span>
             </div>
           </div>
-
-          <div className={classes["btn-follow"]}></div>
+          <div
+            className={`${classes["btn-follow"]} ${
+              liked ? classes["active"] : ""
+            }`}
+            onClick={sendLikeHandler}
+          ></div>
         </div>
 
         <div className={classes["card-body"]}>

@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const fs = require("fs");
 const path = require("path");
-const { json } = require("express");
+const mongodb = require("mongodb");
 
 exports.getProfile = async (req, res, next) => {
   const user = await User.findById(req.userId);
@@ -12,18 +12,6 @@ exports.getProfile = async (req, res, next) => {
   }
   try {
     res.status(200).json(user);
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
-
-exports.getUsers = async (req, res, next) => {
-  const users = await User.fetchUsers();
-  try {
-    res.status(200).json(users);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -149,6 +137,11 @@ exports.postImage = async (req, res, next) => {
   const image = req.file;
   const userDir = `images/${user._id.toString()}`;
   const imageNb = +req.body.imageNb;
+  if (imageNb > 4) {
+    const error = new Error("Wrong index");
+    error.statusCode = 422;
+    throw error;
+  }
   if (!image) {
     const error = new Error("Please upload a file");
     error.statusCode = 422;
@@ -216,8 +209,26 @@ exports.postLike = async (req, res, next) => {
     error.statusCode = 401;
     throw error;
   }
-  userId = req.params.id;
-  if (userId !== user._id.toString()) {
+  const userId = req.body.data;
+  if (!user.likes) {
+    user.likes = [];
+  }
+  // const userObjectId = new mongodb.ObjectId(userId);
+  const index = user.likes.indexOf(userId)
+  if (userId !== user._id.toString() && index < 0) {
+    user.likes.push(userId);
+  } else if (index > -1) {
+    user.likes.splice(index, 1);
+  }
+  const updatedUser = new User({ ...user });
+  await updatedUser.save();
+  try {
+    res.status(201).json(updatedUser);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };
 

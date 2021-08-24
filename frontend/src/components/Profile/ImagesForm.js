@@ -6,8 +6,8 @@ import classes from "./Profile.module.css";
 const ImagesForm = (props) => {
   const [image, setImages] = useState([]);
   useEffect(() => {
-      setImages(props.image)
-  }, [props.image])
+    setImages(props.image);
+  }, [props.image]);
   return (
     <div className={classes["images-field"]}>
       <table>
@@ -17,8 +17,10 @@ const ImagesForm = (props) => {
               {props.statusImg === "pending" && (
                 <LoadingSpinner loadingScreen={true} />
               )}
-              {(props.status === "completed" || props.statusImg === "completed") && (
+              {(props.status === "completed" ||
+                props.statusImg === "completed") && (
                 <Image
+                  key={image[0]}
                   img={image[0]}
                   typeField="main"
                   imageNb={0}
@@ -28,6 +30,7 @@ const ImagesForm = (props) => {
             </td>
             <td className={classes["td-small"]}>
               <Image
+                key={image[1]}
                 img={image[1]}
                 typeField="small"
                 imageNb={1}
@@ -36,6 +39,7 @@ const ImagesForm = (props) => {
             </td>
             <td className={classes["td-small"]}>
               <Image
+                key={image[2]}
                 img={image[2]}
                 typeField="small"
                 imageNb={2}
@@ -46,6 +50,7 @@ const ImagesForm = (props) => {
           <tr>
             <td className={classes["td-small"]}>
               <Image
+                key={image[3]}
                 img={image[3]}
                 typeField="small"
                 imageNb={3}
@@ -54,6 +59,7 @@ const ImagesForm = (props) => {
             </td>
             <td className={classes["td-small"]}>
               <Image
+                key={image[4]}
                 img={image[4]}
                 typeField="small"
                 imageNb={4}

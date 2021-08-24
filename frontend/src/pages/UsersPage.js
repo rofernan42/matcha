@@ -3,55 +3,66 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import UserCard from "../components/Users/UserCard";
 import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
-import { fetchUsers } from "../util/usersReq";
+import { fetchCurrentUser, fetchUsers } from "../util/usersReq";
 import classes from "../components/Users/UserCard.module.css";
 import ProfileCard from "../components/Users/ProfileCard";
-import ImageSlider from "../components/Users/ImageSlider";
+import Pagination from "../components/Users/Pagination";
+import { useLocation } from "react-router-dom";
 
 const UsersPage = () => {
+  const loc = useLocation();
   const authCtx = useContext(AuthContext);
   const [userProfile, setUserProfile] = useState({
     display: false,
     profile: null,
   });
-  const { sendReq, status, data: users, error } = useHttp(fetchUsers, true);
+  const { sendReq, status, data: usersData, error } = useHttp(fetchUsers, true);
+  const { sendReq: sendReqCurrentUser, data: currentUser } = useHttp(
+    fetchCurrentUser,
+    true
+  );
   useEffect(() => {
-    sendReq(authCtx.token);
-  }, [sendReq, authCtx.token]);
+    sendReq({ token: authCtx.token, path: "filtered-users" + loc.search });
+    sendReqCurrentUser(authCtx.token);
+  }, [sendReq, sendReqCurrentUser, authCtx.token, loc.search]);
   if (status === "pending") {
     return <LoadingSpinner loadingScreen={true} />;
   }
   if (error) {
     return <p>{error}</p>;
   }
-  if (status === "completed" && (!users || users.length === 0)) {
+  if (status === "completed" && (!usersData || usersData.users.length === 0)) {
     return <p>No user found.</p>;
   }
   const profileCardHandler = (user) => {
+    sendReqCurrentUser(authCtx.token);
     setUserProfile({ display: true, profile: user });
   };
   const closeProfileHandler = () => {
     setUserProfile({ display: false, profile: null });
   };
-  const imgs = users[0].images.filter((img) => img !== null);
   return (
     <>
-      <div className={classes["users-list"]}>
-        {users.map((user) => (
-          <UserCard
-            key={user._id}
-            user={user}
-            onProfileCard={profileCardHandler}
-          />
-        ))}
-      </div>
-      {userProfile.display && (
+      <Pagination lastPage={Math.ceil(usersData.totalItems / usersData.perPage)} >
+        <div className={classes["users-list"]}>
+          {usersData.users.map((user) => (
+            <UserCard
+              key={user._id}
+              user={user}
+              onProfileCard={profileCardHandler}
+            />
+          ))}
+        </div>
+      </Pagination>
+      {userProfile.display && currentUser && (
         <ProfileCard
+          key={userProfile.profile._id}
           onCloseProfile={closeProfileHandler}
           user={userProfile.profile}
+          token={authCtx.token}
+          liked={currentUser.likes.includes(userProfile.profile._id)}
         />
       )}
-      {/* <ImageSlider images={imgs} /> */}
     </>
   );
 };

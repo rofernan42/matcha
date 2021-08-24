@@ -35,7 +35,7 @@
   transition: all linear 0.25s;
 }
 
-.profile-card-2 .profile-name {
+.profile-card-2 .profile-username {
   position: absolute;
   left: 10px;
   bottom: 30px;
@@ -50,20 +50,20 @@
   width: 90%;
 }
 
-.profile-card-2 .profile-icons {
+/* .profile-card-2 .profile-icons {
   position: absolute;
   bottom: 30px;
   right: 30px;
   color: #fff;
   transition: all linear 0.25s;
-}
+} */
 
-.profile-card-2 .profile-username {
+.profile-card-2 .profile-location {
   position: absolute;
   bottom: 15px;
-  left: 30px;
+  left: 10px;
   color: #fff;
-  font-size: 13px;
+  font-size: 12px;
   transition: all linear 0.25s;
 }
 
@@ -75,17 +75,17 @@
   filter: grayscale(100%);
 }
 
-.profile-card-2:hover .profile-name {
+.profile-card-2:hover .profile-username {
   bottom: 50px;
 }
 
-.profile-card-2:hover .profile-username {
+.profile-card-2:hover .profile-location {
   bottom: 30px;
 }
 
-.profile-card-2:hover .profile-icons {
+/* .profile-card-2:hover .profile-icons {
   right: 40px;
-}
+} */
 
 @keyframes usersOpening {
   0% {

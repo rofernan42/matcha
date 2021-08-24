@@ -5,8 +5,6 @@ const router = express.Router();
 
 router.get("/profile", isAuth, userController.getProfile);
 
-router.get("/users", isAuth, userController.getUsers);
-
 router.post("/change-gender", isAuth, userController.postGender);
 
 router.post("/change-attraction", isAuth, userController.postAttraction);
@@ -21,6 +19,6 @@ router.post("/post-image", isAuth, userController.postImage);
 
 router.delete("/delete-image", isAuth, userController.deleteImage);
 
-router.post("/post-like/:id", isAuth, userController.postLike);
+router.post("/send-like", isAuth, userController.postLike);
 
 module.exports = router;

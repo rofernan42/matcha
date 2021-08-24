@@ -5,17 +5,19 @@ const UserCard = (props) => {
   const displayProfile = () => {
     props.onProfileCard(props.user);
   };
-  const imgProfile = props.user.images.find(img => img !== null);
+  const imgProfile = props.user.images.find((img) => img !== null);
   return (
     <div className={classes.container} onClick={displayProfile}>
       <div className={classes["profile-card-2"]}>
-          {}
-        <img
-          src={`${url}${imgProfile}`}
-          className={`${classes["profile-img"]}`} alt=""
-        />
-        <div className={classes["profile-name"]}>{props.user.username}</div>
-        <div className={classes["profile-username"]}>@johndoesurname</div>
+        {imgProfile && (
+          <img
+            src={`${url}${imgProfile}`}
+            className={`${classes["profile-img"]}`}
+            alt=""
+          />
+        )}
+        <div className={classes["profile-username"]}>{props.user.username}</div>
+        <div className={classes["profile-location"]}>1 km away</div>
         {/* <div className={classes["profile-icons"]}>
           <a href="#">
             <i className={classes["fa fa-facebook"]}></i>

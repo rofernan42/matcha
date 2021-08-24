@@ -23,9 +23,6 @@
 .card-header {
   position: relative;
   height: 270px;
-  /* background-size: contain;
-  background-position: top;
-  background-repeat: no-repeat; */
   background-color: #221e24;
 }
 
@@ -57,8 +54,6 @@
 }
 .user-status {
   display: inline-block;
-  /* background: url(https://res.cloudinary.com/dj14cmwoz/image/upload/v1491077483/profile-card/images/menu.svg)
-    no-repeat; */
   margin-left: 10px;
 }
 
@@ -71,6 +66,11 @@
   background: linear-gradient(to left, #5a4368, #c8a2e2);
   border-radius: 50%;
   transition: 200ms linear;
+}
+
+.btn-follow.active {
+  box-shadow: 0 10px 15px #c79ee285;
+  background: linear-gradient(to left, #38015c, #a852e2);
 }
 
 .btn-follow:after {

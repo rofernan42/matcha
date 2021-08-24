@@ -1,9 +1,9 @@
 export const url = "http://localhost:8000/";
 
-export const fetchUsers = async (token) => {
-  const res = await fetch("http://localhost:8000/users", {
+export const fetchUsers = async (data) => {
+  const res = await fetch(url + data.path, {
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + data.token,
     },
   });
   const resData = await res.json();
@@ -11,14 +11,18 @@ export const fetchUsers = async (token) => {
     throw new Error(resData.message || "Could not fetch users");
   }
   const usersData = [];
-  for (const elem of resData) {
+  for (const elem of resData.users) {
     usersData.push({ key: elem._id, ...elem });
   }
-  return usersData;
+  return {
+    users: usersData,
+    totalItems: resData.totalItems,
+    perPage: resData.perPage,
+  };
 };
 
 export const fetchCurrentUser = async (token) => {
-  const res = await fetch("http://localhost:8000/profile", {
+  const res = await fetch(url + "profile", {
     headers: {
       Authorization: "Bearer " + token,
     },
@@ -47,7 +51,7 @@ export const updateUser = async (data) => {
 };
 
 export const updateImage = async (data) => {
-    let res;
+  let res;
   if (data.req === "POST") {
     const formData = new FormData();
     formData.append("image", data.files);

@@ -6,6 +6,7 @@ const path = require("path");
 
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const usersRoutes = require("./routes/users");
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use((req, res, next) => {
 
 app.use("/auth", authRoutes);
 app.use(userRoutes);
+app.use(usersRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

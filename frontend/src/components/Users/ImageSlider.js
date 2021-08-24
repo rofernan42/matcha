@@ -38,7 +38,6 @@ const ImageSlider = (props) => {
       };
     });
   };
-  console.log(properties.index);
   return (
     <>
       {properties.index > 0 && (
