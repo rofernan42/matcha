@@ -6,8 +6,8 @@ import AuthContext from "../store/auth-context";
 import { fetchCurrentUser, fetchUsers } from "../util/usersReq";
 import classes from "../components/Users/UserCard.module.css";
 import ProfileCard from "../components/Users/ProfileCard";
-import Pagination from "../components/Users/Pagination";
 import { useLocation } from "react-router-dom";
+import Pagination from "../components/Pagination/Pagination";
 
 const UsersPage = () => {
   const loc = useLocation();

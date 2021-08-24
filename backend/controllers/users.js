@@ -1,6 +1,6 @@
 const User = require("../models/user");
 
-const NB_USERS_PER_PAGE = 3;
+const NB_USERS_PER_PAGE = 2;
 
 exports.getUsers = async (req, res, next) => {
   const users = await User.fetchUsers();

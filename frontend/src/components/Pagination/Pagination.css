@@ -1,0 +1,43 @@
+.paginator__controls {
+  display: block;
+  text-align: center;
+}
+
+.paginator__control {
+  vertical-align: middle;
+  margin: 1rem 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  color: white;
+  font-size: 15px;
+  padding: 5px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.paginator__control:hover,
+.paginator__control:active {
+  cursor: pointer;
+  background-color: rgba(22, 22, 22, 0.5);
+}
+
+.paginator__control.active {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  cursor: default;
+  background-color: rgba(104, 104, 104, 0.5);
+}
+
+.paginator__control.dots {
+  cursor: default;
+  background-color: transparent;
+  color: black;
+  font-size: 10px;
+}
+
+.paginator__control:focus {
+  outline: none;
+}
