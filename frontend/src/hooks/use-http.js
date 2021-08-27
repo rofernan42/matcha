@@ -40,7 +40,7 @@ const useHttp = (reqFct, isPending = false) => {
       } catch (err) {
         dispatch({
           type: "ERROR",
-          message: err.message || "Something went wrong",
+          message: err.data || "Something went wrong",
         });
       }
     },

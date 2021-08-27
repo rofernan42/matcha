@@ -36,7 +36,7 @@ export const fetchCurrentUser = async (token) => {
 
 export const updateUser = async (data) => {
   const res = await fetch(url + data.path, {
-    method: "POST",
+    method: "PUT",
     body: JSON.stringify({ data: data.toUpdate }),
     headers: {
       "Content-Type": "application/json",
@@ -45,7 +45,9 @@ export const updateUser = async (data) => {
   });
   const resData = await res.json();
   if (!res.ok) {
-    throw new Error(resData.message || "Could not update user");
+    const error = new Error("Something went wrong");
+    error.data = resData.message;
+    throw error;
   }
   return resData;
 };

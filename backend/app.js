@@ -59,10 +59,25 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message });
 });
 
+
+
 mongoConnect((client) => {
   const server = app.listen(8000);
   const io = require("./socket").init(server);
+  // io.use((req, next) => {
+  //   req.u
+  // })
   io.on("connection", (socket) => {
-    console.log("Client connected");
+    // console.log(socket.id)
+    // const users = [];
+    // users.push({ id: socket.id })
+    // console.log(users)
+    // socket.on("test", data => {
+    //   console.log(data.userId + " " + socket.id);
+    //   socket.set("user", {userId: data.userId, socketId: socket.id})
+    // })
+    // const lala = socket.get("user");
+    // console.log(lala)
+    // socket.broadcast.emit("connected", { message: "connected"})
   })
 });

@@ -8,9 +8,16 @@ const Contacts = (props) => {
         <input type="text" placeholder="search" />
       </header>
       <ul>
-        {props.users.map((usr) => (
-          <Contact key={usr._id} username={usr.username} />
-        ))}
+        {props.users.map((usr) => {
+          const imgProfile = usr.images.find((img) => img !== null);
+          return (
+            <Contact
+              key={usr._id}
+              imgProfile={imgProfile}
+              username={usr.username}
+            />
+          );
+        })}
       </ul>
     </aside>
   );

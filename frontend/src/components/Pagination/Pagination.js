@@ -7,7 +7,11 @@ const Pagination = (props) => {
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
   const [currentPage, setCurrentPage] = useState(+queryParams.get("page") || 1);
+  // const [lastPage, setLastPage] = useState(1);
 
+  // useEffect(() => {
+  //   setLastPage(Math.ceil(props.usersData.totalItems / props.usersData.perPage))
+  // }, [])
   const changePage = (pageNb) => {
     setCurrentPage(pageNb);
     history.push({
@@ -37,7 +41,6 @@ const Pagination = (props) => {
   );
   return (
     <div className="paginator">
-      {props.children}
       <div className="paginator__controls">
         {currentPage > 1 && (
           <button
@@ -49,15 +52,11 @@ const Pagination = (props) => {
             1
           </button>
         )}
-        {currentPage > 3 && (
-          <>...</>
-        )}
+        {currentPage > 3 && <>...</>}
         {currentPage > 2 && prevPage}
         <button className="paginator__control active">{currentPage}</button>
         {currentPage < props.lastPage - 1 && nextPage}
-        {currentPage < props.lastPage - 2 && (
-          <>...</>
-        )}
+        {currentPage < props.lastPage - 2 && <>...</>}
         {currentPage < props.lastPage && (
           <button
             className="paginator__control"

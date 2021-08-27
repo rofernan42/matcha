@@ -1,7 +1,11 @@
 const User = require("../models/user");
 const fs = require("fs");
 const path = require("path");
-const mongodb = require("mongodb");
+const Match = require("../models/match");
+const bcrypt = require("bcryptjs");
+const authValidation = require("../middleware/auth-validation");
+
+const io = require("../socket");
 
 exports.getProfile = async (req, res, next) => {
   const user = await User.findById(req.userId);
@@ -12,6 +16,72 @@ exports.getProfile = async (req, res, next) => {
   }
   try {
     res.status(200).json(user);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.editSettings = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 401;
+    throw error;
+  }
+  const username = req.body.data.username.trim();
+  const name = req.body.data.name.trim();
+  const lastname = req.body.data.lastname.trim();
+  const email = req.body.data.email.trim();
+  let password = req.body.data.password;
+  if (password.length === 0)
+    password = null;
+  try {
+    errors = await authValidation(username, name, lastname, email, password, req.userId);
+    if (Object.keys(errors).length > 0) {
+      const error = new Error("Something went wrong");
+      error.error = errors;
+      error.statusCode = 422;
+      throw error;
+    }
+    user.username = username;
+    user.name = name;
+    user.lastname = lastname;
+    user.email = email;
+    if (password) {
+      const hashedPwd = await bcrypt.hash(password, 12);
+      user.password = hashedPwd;
+    }
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
+
+    res.status(201).json(updatedUser);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.postAge = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 401;
+    throw error;
+  }
+  let age = +req.body.data;
+  if (age < 18 || age > 99) {
+    age = null;
+  }
+  user.age = age;
+  const updatedUser = new User({ ...user });
+  await updatedUser.save();
+  try {
+    res.status(201).json(updatedUser);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -213,22 +283,36 @@ exports.postLike = async (req, res, next) => {
   if (!user.likes) {
     user.likes = [];
   }
-  // const userObjectId = new mongodb.ObjectId(userId);
-  const index = user.likes.indexOf(userId)
+  const index = user.likes.indexOf(userId);
   if (userId !== user._id.toString() && index < 0) {
     user.likes.push(userId);
+    createMatch(user._id.toString(), userId);
   } else if (index > -1) {
     user.likes.splice(index, 1);
+    await Match.destroy(user._id.toString(), userId);
   }
   const updatedUser = new User({ ...user });
   await updatedUser.save();
   try {
-    res.status(201).json(updatedUser);
+    res.status(201).json({ updatedUser });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
     next(err);
+  }
+};
+
+const createMatch = async (userId, otherUserId) => {
+  const otherUser = await User.findById(otherUserId);
+  const matchExists = await Match.findByUsers(userId, otherUserId);
+  if (otherUser.likes.includes(userId) && !matchExists) {
+    const match = new Match(userId, otherUserId);
+    await match.save();
+    console.log(io.getIO().sockets);
+    io.getIO().emit("new match", {
+      message: `You matched with ${otherUser.username} !`,
+    });
   }
 };
 

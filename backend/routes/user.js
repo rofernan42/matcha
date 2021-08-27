@@ -5,20 +5,24 @@ const router = express.Router();
 
 router.get("/profile", isAuth, userController.getProfile);
 
-router.post("/change-gender", isAuth, userController.postGender);
+router.put("/change-age", isAuth, userController.postAge);
 
-router.post("/change-attraction", isAuth, userController.postAttraction);
+router.put("/edit-settings", isAuth, userController.editSettings);
 
-router.post("/change-bio", isAuth, userController.postBio);
+router.put("/change-gender", isAuth, userController.postGender);
 
-router.post("/add-interest", isAuth, userController.postInterest);
+router.put("/change-attraction", isAuth, userController.postAttraction);
 
-router.post("/remove-interest", isAuth, userController.removeInterest);
+router.put("/change-bio", isAuth, userController.postBio);
+
+router.put("/add-interest", isAuth, userController.postInterest);
+
+router.put("/remove-interest", isAuth, userController.removeInterest);
 
 router.post("/post-image", isAuth, userController.postImage);
 
 router.delete("/delete-image", isAuth, userController.deleteImage);
 
-router.post("/send-like", isAuth, userController.postLike);
+router.put("/send-like", isAuth, userController.postLike);
 
 module.exports = router;

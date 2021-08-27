@@ -31,8 +31,8 @@ const InterestsForm = (props) => {
       <form onSubmit={InterestsHandler}>
         <input type="text" onChange={addBtnHandler} ref={intRef} />
         <button
-          id="save"
-          name="save"
+          id="add"
+          name="add"
           className={`${classes.btn} ${addActive ? classes.active : ""}`}
         >
           Add

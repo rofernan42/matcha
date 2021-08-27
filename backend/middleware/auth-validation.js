@@ -1,13 +1,13 @@
 const User = require("../models/user");
 
-module.exports = async (username, name, lastname, email, password) => {
+module.exports = async (username, name, lastname, email, password, currentUser) => {
   let errors = {};
   userName = await User.findByUsername(username);
   userEmail = await User.findByEmail(email);
   if (username.length === 0) {
     errors = { ...errors, errusername: "Username must not be empty" };
   }
-  if (userName) {
+  if (userName && userName._id.toString() !== currentUser) {
     errors = { ...errors, errusername: "Username already taken" };
   }
   if (name.length === 0) {
@@ -19,11 +19,11 @@ module.exports = async (username, name, lastname, email, password) => {
   if (email.length === 0 || !email.includes("@")) {
     errors = { ...errors, erremail: "Bad email input" };
   }
-  if (userEmail) {
+  if (userEmail && userEmail._id.toString() !== currentUser) {
     errors = { ...errors, erremail: "User already exists" };
   }
-  if (password.length < 6) {
-    errors = { ...errors, errpassword: "Password is too short" };
+  if (password !== null && password.length < 6) {
+    errors = { ...errors, errpassword: "Password is too short (min 6 characters)" };
   }
   return errors;
 };

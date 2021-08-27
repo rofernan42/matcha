@@ -1,0 +1,33 @@
+.edit-settings {
+    display: inline-block;
+}
+
+.settings {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.settings input {
+  font: inherit;
+  border: none;
+  width: 100%;
+  border-bottom: 1px solid black;
+  padding: 0px;
+  height: 2rem;
+  background-color: transparent;
+}
+
+.settings input:focus {
+  outline: none;
+  background-color: white;
+}
+
+.settings input.error {
+  /* background-color: rgba(255, 2, 2, 0.247); */
+  -webkit-box-shadow: 0 0 0px 1000px rgb(253, 190, 190) inset;
+}
+
+.settings span.error {
+  color: rgb(223, 45, 45);
+  font-size: 12px;
+}

@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authValidation = require("../middleware/auth-validation");
+// const io = require("../socket")
 
 exports.signup = (req, res, next) => {
   const username = req.body.username.trim();
@@ -44,20 +45,20 @@ exports.signup = (req, res, next) => {
 exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  let loadedUser;
   const user = await User.findByEmail(email);
   if (!user) {
     const error = new Error("User not found");
     error.statusCode = 404;
     throw error;
   }
-  loadedUser = user;
   const isEqual = await bcrypt.compare(password, user.password);
   if (!isEqual) {
     const error = new Error("Wrong password");
     error.statusCode = 401;
     throw error;
   }
+  const loadedUser = new User({ ...user });
+  await loadedUser.save();
   try {
     const token = jwt.sign(
       {
@@ -67,6 +68,7 @@ exports.login = async (req, res, next) => {
       "matchasecrettoken",
       { expiresIn: "1h" }
     );
+    // io.getIO().emit('test', {message: `${loadedUser.username} is conected`})
     res
       .status(200)
       .json({ token, userId: loadedUser._id.toString(), expiresIn: 3600 });

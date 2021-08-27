@@ -1,30 +1,39 @@
+.profilePage {
+  /* background-color: white; */
+}
+
 .btn {
-  height: 30px;
+  margin: 10px;
+  height: 25px;
+  width: 70px;
+  font-size: 15px;
   white-space: nowrap;
-  cursor: pointer;
-  font: inherit;
-  color: #a770cc;
-  background-color: white;
-  border-radius: 4px;
-  border: 1px solid #a770cc;
+  cursor: default;
+  /* font: inherit; */
+  color: white;
+  /* background-color: white; */
+  /* border-radius: 4px; */
+  border: none;
+  /* border: 1px solid #a770cc; */
+  /* background-color: #c0aecc; */
+  background: linear-gradient(127deg, #cec9d1, #c0aecc);
 }
 
 .btn:hover {
-  color: white;
-  /* background-color: #c0aecc; */
+  cursor: pointer;
+  /* color: white;
+  background-color: #c0aecc;
   border-color: #c0aecc;
-  background: linear-gradient(127deg, #6b4f7e, #c0aecc);
+  background: linear-gradient(127deg, #6b4f7e, #c0aecc); */
 }
 
 .btn.active {
   color: white;
-  /* background-color: #a770cc; */
   background: linear-gradient(127deg, #38015c, #a852e2);
 }
 
 .images-field {
   display: inline-block;
-  /* background-color: blue; */
   width: max-content;
   height: max-content;
   padding: 10px;

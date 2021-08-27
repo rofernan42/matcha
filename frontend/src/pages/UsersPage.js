@@ -12,6 +12,7 @@ import Pagination from "../components/Pagination/Pagination";
 const UsersPage = () => {
   const loc = useLocation();
   const authCtx = useContext(AuthContext);
+  // const [lastPage, setLastPage] = useState(1);
   const [userProfile, setUserProfile] = useState({
     display: false,
     profile: null,
@@ -25,6 +26,10 @@ const UsersPage = () => {
     sendReq({ token: authCtx.token, path: "filtered-users" + loc.search });
     sendReqCurrentUser(authCtx.token);
   }, [sendReq, sendReqCurrentUser, authCtx.token, loc.search]);
+  // useEffect(() => {
+  //   setLastPage(Math.ceil(usersData.totalItems / usersData.perPage));
+  // });
+
   if (status === "pending") {
     return <LoadingSpinner loadingScreen={true} />;
   }
@@ -43,17 +48,18 @@ const UsersPage = () => {
   };
   return (
     <>
-      <Pagination lastPage={Math.ceil(usersData.totalItems / usersData.perPage)} >
-        <div className={classes["users-list"]}>
-          {usersData.users.map((user) => (
-            <UserCard
-              key={user._id}
-              user={user}
-              onProfileCard={profileCardHandler}
-            />
-          ))}
-        </div>
-      </Pagination>
+      <div className={classes["users-list"]}>
+        {usersData.users.map((user) => (
+          <UserCard
+            key={user._id}
+            user={user}
+            onProfileCard={profileCardHandler}
+          />
+        ))}
+      </div>
+      <Pagination
+        lastPage={Math.ceil(usersData.totalItems / usersData.perPage)}
+      />
       {userProfile.display && currentUser && (
         <ProfileCard
           key={userProfile.profile._id}

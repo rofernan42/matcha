@@ -12,7 +12,7 @@ const ProfilePage = () => {
     data: user,
     error,
   } = useHttp(fetchCurrentUser, true);
-  const { sendReq: sendUpdate, data: updatedUser } = useHttp(updateUser, true);
+  const { sendReq: sendUpdate, data: updatedUser, error: errorUpdate } = useHttp(updateUser, true);
   const {
     sendReq: sendImage,
     statusImages,
@@ -32,7 +32,6 @@ const ProfilePage = () => {
   useEffect(() => {
     sendReq(authCtx.token);
   }, [sendReq, authCtx.token]);
-
   return (
     <>
       {user && (
@@ -43,6 +42,7 @@ const ProfilePage = () => {
           onChangeUser={updateUserHandler}
           onChangeImg={imgHandler}
           statusImg={statusImages}
+          error={errorUpdate ? errorUpdate : {}}
         />
       )}
     </>

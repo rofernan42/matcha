@@ -9,6 +9,7 @@ class User {
     this.email = data.email;
     this.password = data.password;
     this._id = data._id;
+    this.age = data.age || null;
     this.gender = data.gender || "other";
     this.attrMen = data.attrMen === null ? true : data.attrMen;
     this.attrWomen = data.attrWomen === null ? true : data.attrWomen;
@@ -16,6 +17,8 @@ class User {
     this.interests = data.interests || [];
     this.images = data.images || [null, null, null, null, null];
     this.likes = data.likes || [];
+    this.score = data.score || 0.0;
+    this.lastConnection = Date.now();
   }
 
   save() {
@@ -60,13 +63,6 @@ class User {
     const users = await db.collection("users").find().toArray();
     return users.filter((users) => users._id.toString() !== currentUserId);
   }
-
-  // static async fetchFilteredUsers(currentPage) {
-  //   const perPage = 2;
-  //   const db = getDb();
-  //   const users = await db.collection("users").find().toArray();
-  //   return users.filter((users) => users._id.toString() !== currentUserId);
-  // }
 }
 
 module.exports = User;

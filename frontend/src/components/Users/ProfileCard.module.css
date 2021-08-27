@@ -43,7 +43,6 @@
   overflow: hidden;
 }
 .btn-message {
-  display: inline-block;
   background: url(https://res.cloudinary.com/dj14cmwoz/image/upload/v1491077483/profile-card/images/message.svg)
     no-repeat;
   width: 19.37px;
@@ -122,12 +121,12 @@
   font-style: italic;
   font-size: 14px;
   color: #afafaf;
-  text-align: center;
+  text-align: left;
   height: 100px;
   width: 355px;
   display: table-cell;
   vertical-align: middle;
-  word-break: break-all;
+  word-break: keep-all;
   z-index: 10;
   left: 30px;
 }
@@ -136,8 +135,8 @@
   width: 30px;
   height: 30px;
   position: absolute;
-  bottom: 155px;
-  left: 20px;
+  bottom: 160px;
+  left: 15px;
   transform: rotate(10deg);
   filter: invert(35%);
 }

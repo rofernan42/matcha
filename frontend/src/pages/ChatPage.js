@@ -9,9 +9,9 @@ import { fetchUsers } from "../util/usersReq";
 
 const ChatPage = () => {
   const authCtx = useContext(AuthContext);
-  const { sendReq, status, data: users, error } = useHttp(fetchUsers, true);
+  const { sendReq, status, data, error } = useHttp(fetchUsers, true);
   useEffect(() => {
-    sendReq(authCtx.token);
+    sendReq({ token: authCtx.token, path: "all-matches" });
   }, [sendReq, authCtx.token]);
 
   if (status === "pending") {
@@ -20,12 +20,12 @@ const ChatPage = () => {
   if (error) {
     return <p>{error}</p>;
   }
-  if (status === "completed" && (!users || users.length === 0)) {
+  if (status === "completed" && (!data.users || data.users.length === 0)) {
     return <p>No user found.</p>;
   }
   return (
     <>
-      <Room users={users} />
+      <Room users={data.users} />
     </>
   );
 };

@@ -10,8 +10,17 @@ import HomePage from "./pages/HomePage";
 import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
 
+import socket from "./util/socket";
+
 function App() {
   const authCtx = useContext(AuthContext);
+
+  // socket.on("connected", (data) => {
+  //   console.log(data.message);
+  // });
+  if (authCtx.userId) {
+    socket.emit("test", { userId: authCtx.userId });
+  }
   return (
     <Layout>
       <Switch>

@@ -2,8 +2,8 @@ const mongodb = require("mongodb");
 const getDb = require("../util/database").getDb;
 
 class Chatroom {
-  constructor(userIds, id) {
-    this.userIds = [userIds];
+  constructor(userId1, userId2, id) {
+    this.userIds = [userId1, userId2];
     this._id = id ? new mongodb.ObjectId(id) : null;
   }
 
