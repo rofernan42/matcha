@@ -4,6 +4,7 @@ import ImageSlider from "./ImageSlider";
 import useHttp from "../../hooks/use-http";
 import { updateUser } from "../../util/usersReq";
 import { useState } from "react";
+import TimeAgo from "react-timeago";
 
 const ProfileCard = (props) => {
   const { sendReq: sendUpdate } = useHttp(updateUser, true);
@@ -33,10 +34,9 @@ const ProfileCard = (props) => {
               <span className={classes["sr-only"]}>Message</span>
             </a>
             <div className={classes["user-status"]}>
-              {/* <span className={`${classes.status} ${classes.green}`}></span>
-            <span className={classes["status-label"]}>Online</span> */}
-              <span className={`${classes.status} ${classes.orange}`}></span>
-              <span className={classes["status-label"]}>2h ago</span>
+              <span className={`${classes.status} ${props.online ? classes.green : classes.orange}`}></span>
+              {props.online && <span className={classes["status-label"]}>online</span>}
+              {!props.online && <span className={classes["status-label"]}><TimeAgo date={props.user.lastConnection} /></span>}
             </div>
           </div>
           <div
@@ -46,7 +46,6 @@ const ProfileCard = (props) => {
             onClick={sendLikeHandler}
           ></div>
         </div>
-
         <div className={classes["card-body"]}>
           <h2 className={classes["name"]}>{props.user.username}</h2>
           <h2 className={classes["location"]}>1 km</h2>

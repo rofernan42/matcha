@@ -13,7 +13,7 @@ const Contact = (props) => {
         alt=""
       />
       <div className={classes.username}>{props.user.username}</div>
-      <span className={`${classes.status} ${classes.orange}`}></span>
+      <span className={`${classes.status} ${props.online ? classes.green : classes.orange}`}></span>
     </div>
   );
 };

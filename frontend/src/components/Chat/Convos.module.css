@@ -1,7 +1,7 @@
 .convos {
   flex: 3;
-  background-color: #d6d4d4;
-  border-left: 2px solid white;
+  /* background-color: #d6d4d4; */
+  /* border-left: 2px solid white; */
 }
 
 .wrapper {
@@ -25,13 +25,15 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .lastMessage {
   width: 0;
   flex-grow: 1;
+  font-size: smaller;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: rgb(151, 151, 151);
 }

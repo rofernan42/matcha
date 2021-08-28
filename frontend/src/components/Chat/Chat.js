@@ -13,12 +13,12 @@ const Chat = (props) => {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const currentRoom = props.room.roomData;
 
-  useEffect(() => {
-    socket.emit("addUser", authCtx.userId);
-    socket.off("getUsers").on("getUsers", (users) => {
-      // console.log(users);
-    });
-  }, [authCtx.userId]);
+  // useEffect(() => {
+  //   socket.emit("addUser", authCtx.userId);
+  //   socket.off("getUsers").on("getUsers", (users) => {
+  //     // console.log(users);
+  //   });
+  // }, [authCtx.userId]);
 
   useEffect(() => {
     arrivalMessage &&
@@ -87,7 +87,8 @@ const Chat = (props) => {
       <div className={classes.wrapper}>
         <div className={classes.roomHeader}>
           {messages &&
-            messages.map((msg) => (
+            messages.map((msg) => {
+              return (
               <div key={msg._id} ref={scrollRef}>
                 <Message
                   imgProfile={`${url}${imgProfile}`}
@@ -96,7 +97,7 @@ const Chat = (props) => {
                   who={msg.creator === authCtx.userId ? "me" : "you"}
                 />
               </div>
-            ))}
+            )})}
         </div>
         <form className={classes.roomFooter} onSubmit={formSubmitHandler}>
           <textarea
@@ -114,35 +115,3 @@ const Chat = (props) => {
 };
 
 export default Chat;
-
-{
-  /* <header>
-          <img src={`${url}${imgProfile}`} alt="" />
-          <div>
-            <h2>{props.room.user.username}</h2>
-          </div>
-        </header>
-        <ul id={classes.chat}>
-          {messages &&
-            messages.map((msg) => (
-              <div key={msg._id} ref={scrollRef}>
-                <Message
-                  key={msg._id}
-                  msg={msg}
-                  who={msg.creator === authCtx.userId ? "me" : "you"}
-                />
-              </div>
-            ))}
-        </ul>
-        <footer>
-          <form onSubmit={formSubmitHandler}>
-            <input
-              type="textarea"
-              placeholder="Type your message"
-              value={newMsg}
-              onChange={(e) => setNewMsg(e.target.value)}
-            />
-            <button>Send</button>
-          </form>
-        </footer> */
-}

@@ -9,6 +9,11 @@ const UserCard = (props) => {
   return (
     <div className={classes.container} onClick={displayProfile}>
       <div className={classes["profile-card-2"]}>
+        <span
+          className={`${classes.status} ${
+            props.online ? classes.green : classes.orange
+          }`}
+        ></span>
         {imgProfile && (
           <img
             src={`${url}${imgProfile}`}

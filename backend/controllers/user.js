@@ -307,7 +307,7 @@ const createMatch = async (userId, otherUserId) => {
   const otherUser = await User.findById(otherUserId);
   const matchExists = await Match.findByUsers(userId, otherUserId);
   if (otherUser.likes.includes(userId) && !matchExists) {
-    const match = new Match(userId, otherUserId);
+    const match = new Match({user1: userId, user2: otherUserId});
     await match.save();
     // console.log(io.getIO().sockets);
     // io.getIO().emit("new match", {

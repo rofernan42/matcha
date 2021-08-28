@@ -2,7 +2,6 @@ const express = require("express");
 const mongoConnect = require("./util/database").mongoConnect;
 const multer = require("multer");
 const path = require("path");
-const { ObjectId } = require("mongodb");
 
 // const cors = require("cors");
 
@@ -86,6 +85,7 @@ mongoConnect((client) => {
   io.on("connection", (socket) => {
     socket.on("addUser", (userId) => {
       addUser(userId, socket.id);
+      console.log("user connected");
       io.emit("getUsers", users);
     });
     socket.on("sendMessage", ({ senderId, receiverId, text, roomId }) => {
@@ -101,7 +101,10 @@ mongoConnect((client) => {
     socket.on("disconnect", () => {
       removeUser(socket.id);
       io.emit("getUsers", users);
-      console.log("a user disconnected");
+    });
+    socket.on("logout", () => {
+      removeUser(socket.id);
+      io.emit("getUsers", users);
     });
   });
 });

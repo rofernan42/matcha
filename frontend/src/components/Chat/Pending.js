@@ -1,10 +1,11 @@
 import classes from "./Chat.module.css";
 
 const Pending = () => {
-    console.log("hihi")
   return (
     <div className={classes.room}>
-      <div className={classes.wrapper}>lalala</div>
+      <div className={classes.wrapper}>
+        <span className={classes.noMessage}>Open a conversation to start a chat.</span>
+      </div>
     </div>
   );
 };

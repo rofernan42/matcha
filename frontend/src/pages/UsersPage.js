@@ -9,7 +9,7 @@ import ProfileCard from "../components/Users/ProfileCard";
 import { useLocation } from "react-router-dom";
 import Pagination from "../components/Pagination/Pagination";
 
-const UsersPage = () => {
+const UsersPage = (props) => {
   const loc = useLocation();
   const authCtx = useContext(AuthContext);
   // const [lastPage, setLastPage] = useState(1);
@@ -54,6 +54,7 @@ const UsersPage = () => {
             key={user._id}
             user={user}
             onProfileCard={profileCardHandler}
+            online={props.onlineUsers.some((e) => e.userId === user._id)}
           />
         ))}
       </div>
@@ -67,6 +68,7 @@ const UsersPage = () => {
           user={userProfile.profile}
           token={authCtx.token}
           liked={currentUser.likes.includes(userProfile.profile._id)}
+          online={props.onlineUsers.some((e) => e.userId === userProfile.profile._id)}
         />
       )}
     </>

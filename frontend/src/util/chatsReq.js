@@ -1,4 +1,4 @@
-export const url = "http://localhost:8000/";
+import { url } from "./usersReq";
 
 export const fetchMatches = async (data) => {
   const res = await fetch(url + data.path, {

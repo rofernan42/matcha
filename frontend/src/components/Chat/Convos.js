@@ -12,7 +12,7 @@ const Convos = (props) => {
               key={match.user._id}
               matchId={match.matchId}
               imgProfile={imgProfile}
-              // user={match.user}
+              user={match.user}
               onChangeRoom={props.onChangeRoom}
             />
           );

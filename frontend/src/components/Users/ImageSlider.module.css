@@ -16,9 +16,9 @@
 }
 
 .card-content {
-    width: 415px;
-    height: 100%;
-    flex: 1;
+  width: 415px;
+  height: 100%;
+  flex: 1;
 }
 
 .card-image {
@@ -31,29 +31,29 @@
 }
 
 .btn-slider {
-    background-color: rgba(0, 0, 0, 0.5);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    z-index: 10;
-    margin-top: 110px;
-    color: white;
-    font-size: 20px;
-    font-family: 'Courier New', Courier, monospace;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  z-index: 10;
+  margin-top: 110px;
+  color: white;
+  font-size: 20px;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .btn-slider.prev {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .btn-slider.next {
-    right: 0;
-    margin-right: 5px;
+  right: 0;
+  margin-right: 5px;
 }
 
 .btn-slider:hover {
-    cursor: pointer;
-    background-color: rgba(22, 22, 22, 0.5);
+  cursor: pointer;
+  background-color: rgba(22, 22, 22, 0.5);
 }

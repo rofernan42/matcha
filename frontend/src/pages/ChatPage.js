@@ -8,7 +8,7 @@ import classes from "./Pages.module.css";
 
 // const fetchMessages = async () => {};
 
-const ChatPage = () => {
+const ChatPage = (props) => {
   const authCtx = useContext(AuthContext);
   const [user, setUser] = useState(null);
   const { sendReq, status, data, error } = useHttp(fetchMatches, true);
@@ -41,6 +41,7 @@ const ChatPage = () => {
         room={{ roomData, user }}
         status={roomStatus}
         onChangeRoom={loadRoomHandler}
+        onlineUsers={props.onlineUsers}
       />
     </>
   );

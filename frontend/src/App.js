@@ -3,16 +3,24 @@ import Layout from "./components/Layout/Layout";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "./store/auth-context";
 import HomePage from "./pages/HomePage";
 import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
 
-// import socket from "./util/socket";
+import socket from "./util/socket";
 
 function App() {
   const authCtx = useContext(AuthContext);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  
+  useEffect(() => {
+    socket.emit("addUser", authCtx.userId);
+    socket.off("getUsers").on("getUsers", (users) => {
+      setOnlineUsers(users);
+    });
+  }, [authCtx.userId]);
   return (
     <Layout>
       <Switch>
@@ -36,12 +44,12 @@ function App() {
         )}
         {authCtx.isAuth && (
           <Route path="/chat" exact>
-            <ChatPage />
+            <ChatPage onlineUsers={onlineUsers} />
           </Route>
         )}
         {authCtx.isAuth && (
           <Route path="/users">
-            <UsersPage />
+            <UsersPage onlineUsers={onlineUsers} />
           </Route>
         )}
         <Route path="*">

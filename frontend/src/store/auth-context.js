@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
+import socket from "../util/socket";
 
 let logoutTimer;
 
@@ -52,6 +53,7 @@ export const AuthContextProvider = (props) => {
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }
+    socket.emit("logout");
   }, []);
   const loginHandler = (token, userId, expirationTime) => {
     setToken(token);
