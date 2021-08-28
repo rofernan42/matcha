@@ -1,9 +1,10 @@
-.chatroom {
-  height: calc(100vh - 60px);
-  display: flex;
+.users-list {
+  margin-top: 30px;
+  text-align: center;
+  line-height: 0;
 }
 
-.chat-error {
+.error {
   text-align: center;
   font-size: 40px;
   font-weight: bold;

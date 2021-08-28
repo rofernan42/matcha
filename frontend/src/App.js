@@ -1,4 +1,3 @@
-import "./App.css";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import SignupPage from "./pages/SignupPage";
@@ -10,17 +9,10 @@ import HomePage from "./pages/HomePage";
 import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
 
-import socket from "./util/socket";
+// import socket from "./util/socket";
 
 function App() {
   const authCtx = useContext(AuthContext);
-
-  // socket.on("connected", (data) => {
-  //   console.log(data.message);
-  // });
-  if (authCtx.userId) {
-    socket.emit("test", { userId: authCtx.userId });
-  }
   return (
     <Layout>
       <Switch>
@@ -43,7 +35,7 @@ function App() {
           </Route>
         )}
         {authCtx.isAuth && (
-          <Route path="/chat">
+          <Route path="/chat" exact>
             <ChatPage />
           </Route>
         )}

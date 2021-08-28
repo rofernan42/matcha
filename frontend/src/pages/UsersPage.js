@@ -4,7 +4,7 @@ import UserCard from "../components/Users/UserCard";
 import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
 import { fetchCurrentUser, fetchUsers } from "../util/usersReq";
-import classes from "../components/Users/UserCard.module.css";
+import classes from "./Pages.module.css";
 import ProfileCard from "../components/Users/ProfileCard";
 import { useLocation } from "react-router-dom";
 import Pagination from "../components/Pagination/Pagination";
@@ -34,10 +34,10 @@ const UsersPage = () => {
     return <LoadingSpinner loadingScreen={true} />;
   }
   if (error) {
-    return <p>{error}</p>;
+    return <p className={classes.error}>{error}</p>;
   }
   if (status === "completed" && (!usersData || usersData.users.length === 0)) {
-    return <p>No user found.</p>;
+    return <p className={classes.error}>No user found.</p>;
   }
   const profileCardHandler = (user) => {
     sendReqCurrentUser(authCtx.token);

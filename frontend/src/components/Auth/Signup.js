@@ -47,9 +47,6 @@ const Signup = () => {
         throw error;
       }
       console.log(data);
-      // if (data && data.token) {
-      //   authCtx.login(data.token);
-      // }
       history.replace("/login");
     } catch (err) {
       console.log({ ...err.data.message });

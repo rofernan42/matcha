@@ -1,12 +1,11 @@
 .header {
   width: 100%;
-  height: 4rem;
+  height: 60px;
   background-color: #472661;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* padding: 0 10%; */
 }
 
 .logo {
@@ -17,7 +16,6 @@
 
 .logo:hover {
   color: #d3b2e9;
-  /* color: #faf730; */
 }
 
 .header ul {
@@ -51,7 +49,6 @@
 
 .header a:hover {
   color: white;
-  /* color: #faf730; */
 }
 
 .header button:hover {
@@ -61,7 +58,6 @@
 
 .header a.active {
   color: white;
-  /* color: #faf730; */
 }
 
 .header .active button {

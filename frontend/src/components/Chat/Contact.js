@@ -1,21 +1,20 @@
-import classes from "./Room.module.css";
+import classes from "./Contacts.module.css";
 import { url } from "../../util/usersReq";
 
 const Contact = (props) => {
+  const changeRoomHandler = () => {
+    props.onChangeRoom(props.matchId, props.user);
+  };
   return (
-    <li>
+    <div className={classes.contact} onClick={changeRoomHandler}>
       <img
+        className={classes.imgProfile}
         src={`${url}${props.imgProfile}`}
         alt=""
       />
-      <div>
-        <h2>{props.username}</h2>
-        <h3>
-          <span className={`${classes.status} ${classes.orange}`}></span>
-          offline
-        </h3>
-      </div>
-    </li>
+      <div className={classes.username}>{props.user.username}</div>
+      <span className={`${classes.status} ${classes.orange}`}></span>
+    </div>
   );
 };
 

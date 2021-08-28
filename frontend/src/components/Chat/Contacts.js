@@ -1,25 +1,25 @@
 import Contact from "./Contact";
-import classes from "./Room.module.css";
+import classes from "./Contacts.module.css";
 
 const Contacts = (props) => {
   return (
-    <aside className={classes.contacts}>
-      <header>
-        <input type="text" placeholder="search" />
-      </header>
-      <ul>
-        {props.users.map((usr) => {
-          const imgProfile = usr.images.find((img) => img !== null);
-          return (
-            <Contact
-              key={usr._id}
-              imgProfile={imgProfile}
-              username={usr.username}
-            />
-          );
-        })}
-      </ul>
-    </aside>
+    <div className={classes.contacts}>
+      <div className={classes.wrapper}>
+        <input type="text" placeholder="search" className={classes.searchInput} />
+          {props.matches.map((match) => {
+            const imgProfile = match.user.images.find((img) => img !== null);
+            return (
+              <Contact
+                key={match.user._id}
+                matchId={match.matchId}
+                imgProfile={imgProfile}
+                user={match.user}
+                onChangeRoom={props.onChangeRoom}
+              />
+            );
+          })}
+      </div>
+    </div>
   );
 };
 

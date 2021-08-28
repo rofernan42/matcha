@@ -309,10 +309,10 @@ const createMatch = async (userId, otherUserId) => {
   if (otherUser.likes.includes(userId) && !matchExists) {
     const match = new Match(userId, otherUserId);
     await match.save();
-    console.log(io.getIO().sockets);
-    io.getIO().emit("new match", {
-      message: `You matched with ${otherUser.username} !`,
-    });
+    // console.log(io.getIO().sockets);
+    // io.getIO().emit("new match", {
+    //   message: `You matched with ${otherUser.username} !`,
+    // });
   }
 };
 

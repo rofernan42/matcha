@@ -1,19 +1,25 @@
-import classes from "./Room.module.css";
+import classes from "./Chat.module.css";
 
 const Message = (props) => {
   return (
-    <li className={classes.you}>
-      <div className={classes.entete}>
-        <span className={`${classes.status} ${classes.green}`}></span>
-        <h2>Vincent</h2>
-        <h3>10:12AM, Today</h3>
+    <div className={`${classes.message} ${classes[props.who]}`}>
+      <div className={classes.top}>
+        <img className={classes.imgProfile} src={props.imgProfile} alt="" />
+        <p className={classes.content}>{props.msg.content}</p>
       </div>
-      <div className={classes.triangle}></div>
-      <div className={classes.message}>
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-        ligula eget dolor.
-      </div>
-    </li>
+      <div className={classes.bottom}>1 hour ago</div>
+    </div>
+    // <li className={classes[`${props.who}`]}>
+    //   <div className={classes.entete}>
+    //     <span className={`${classes.status} ${classes.green}`}></span>
+    //     <h2>{props.msg.creator}</h2>
+    //     <h3>{props.msg.created_at}</h3>
+    //   </div>
+    //   <div className={classes.triangle}></div>
+    //   <div className={classes.message}>
+    //     {props.msg.content}
+    //   </div>
+    // </li>
   );
 };
 

@@ -1,21 +1,24 @@
+import Convo from "./Convo";
 import classes from "./Convos.module.css";
 
-const Convos = () => {
+const Convos = (props) => {
   return (
-    <aside className={classes.convos}>
-      <ul>
-        {/* {props.users.map((usr) => {
-          const imgProfile = usr.images.find((img) => img !== null);
+    <div className={classes.convos}>
+      <div className={classes.wrapper}>
+        {props.matches.map((match) => {
+          const imgProfile = match.user.images.find((img) => img !== null);
           return (
-            <Contact
-              key={usr._id}
+            <Convo
+              key={match.user._id}
+              matchId={match.matchId}
               imgProfile={imgProfile}
-              username={usr.username}
+              // user={match.user}
+              onChangeRoom={props.onChangeRoom}
             />
           );
-        })} */}
-      </ul>
-    </aside>
+        })}
+      </div>
+    </div>
   );
 };
 

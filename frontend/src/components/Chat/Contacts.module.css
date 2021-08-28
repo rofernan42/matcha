@@ -1,0 +1,61 @@
+.contacts {
+  flex: 3.5;
+  background-color: #332e36;
+}
+
+.wrapper {
+  height: 100%;
+  text-align: center;
+}
+
+.searchInput {
+  width: 80%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid gray;
+  background-color: transparent;
+  margin-bottom: 10px;
+  color: #d3d3d3;
+}
+
+.searchInput::placeholder {
+  color: gray;
+}
+
+.contact {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  color: #d3d3d3;
+}
+
+.contact:hover {
+  background-color: #5e616a;
+}
+
+.imgProfile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.username {
+  font-weight: 500;
+}
+
+.status {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-bottom: 25px;
+}
+.green {
+  background-color: #58b666;
+}
+.orange {
+  background-color: #ff725d;
+}

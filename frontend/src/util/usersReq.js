@@ -8,7 +8,7 @@ export const fetchUsers = async (data) => {
   });
   const resData = await res.json();
   if (!res.ok) {
-    throw new Error(resData.message || "Could not fetch users");
+    throw new Error(resData.message || "Could not fetch users.");
   }
   const usersData = [];
   for (const elem of resData.users) {
@@ -29,7 +29,7 @@ export const fetchCurrentUser = async (token) => {
   });
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(data.message || "Failed to fetch user data");
+    throw new Error(data.message || "Failed to fetch user data.");
   }
   return data;
 };
@@ -45,7 +45,7 @@ export const updateUser = async (data) => {
   });
   const resData = await res.json();
   if (!res.ok) {
-    const error = new Error("Something went wrong");
+    const error = new Error("Something went wrong.");
     error.data = resData.message;
     throw error;
   }
@@ -77,7 +77,7 @@ export const updateImage = async (data) => {
   }
   const resData = await res.json();
   if (!res.ok) {
-    throw new Error(resData.message || "Could not update image");
+    throw new Error(resData.message || "Could not update image.");
   }
   return resData;
 };

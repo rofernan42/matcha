@@ -6,6 +6,7 @@ import classes from "./Auth.module.css";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const emailRef = useRef();
   const passwordRef = useRef();
   const history = useHistory();
@@ -28,12 +29,11 @@ const Login = () => {
     });
     setIsLoading(false);
     try {
-      let data;
-      if (res.ok) {
-        data = await res.json();
-      } else {
-        data = await res.json();
-        throw new Error(data.message);
+      const data = await res.json();
+      if (!res.ok) {
+        const error = new Error("Something went wrong");
+        error.data = data;
+        throw error;
       }
       console.log(data);
       const expirationTime = new Date(
@@ -42,7 +42,7 @@ const Login = () => {
       authCtx.login(data.token, data.userId, expirationTime.toISOString());
       history.replace("/");
     } catch (err) {
-      console.log(err.message);
+      setError({ ...err.data });
     }
   };
   return (
@@ -50,15 +50,25 @@ const Login = () => {
       <h1>Login</h1>
       <form onSubmit={formSubmit}>
         <div className={classes.control}>
-          <input placeholder="Email" ref={emailRef} type="email" id="email" />
+          <input
+            className={`${error ? classes.error : ""}`}
+            placeholder="Email"
+            ref={emailRef}
+            type="email"
+            id="email"
+          />
         </div>
         <div className={classes.control}>
           <input
+            className={`${error ? classes.error : ""}`}
             placeholder="Password"
             ref={passwordRef}
             type="password"
             id="password"
           />
+          {error && (
+            <span className={classes.error}>Wrong email or password</span>
+          )}
         </div>
         <div className={classes.actions}>
           {!isLoading && <button>Login</button>}

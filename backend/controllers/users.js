@@ -15,28 +15,6 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
-exports.getMatches = async (req, res, next) => {
-  const matches = await Match.fetchMatches(req.userId);
-  const usersMatched = matches.map((users) => {
-    if (users.user1.toString() === req.userId) {
-      return users.user2;
-    }
-    return users.user1;
-  });
-  const resMacthes = await Promise.all(usersMatched.map(async (userId) => {
-      const user = await User.findById(userId);
-      return user;
-  }));
-  try {
-    res.status(200).json({ users: resMacthes });
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
-
 exports.getFilteredUsers = async (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = NB_USERS_PER_PAGE;
