@@ -22,18 +22,7 @@ const UserCard = (props) => {
           />
         )}
         <div className={classes["profile-username"]}>{props.user.username}</div>
-        <div className={classes["profile-location"]}>1 km away</div>
-        {/* <div className={classes["profile-icons"]}>
-          <a href="#">
-            <i className={classes["fa fa-facebook"]}></i>
-          </a>
-          <a href="#">
-            <i className={classes["fa fa-twitter"]}></i>
-          </a>
-          <a href="#">
-            <i className={classes["fa fa-linkedin"]}></i>
-          </a>
-        </div> */}
+        <div className={classes["profile-location"]}>{props.user.age && <>{props.user.age} yo - </>}1km away</div>
       </div>
     </div>
   );

@@ -1,9 +1,10 @@
 .edit-settings {
-    display: inline-block;
+  /* flex: 0.5; */
+    height: 350px;
 }
 
 .settings {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 

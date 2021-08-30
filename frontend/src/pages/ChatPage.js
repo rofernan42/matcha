@@ -20,15 +20,12 @@ const ChatPage = (props) => {
   useEffect(() => {
     sendReq({ token: authCtx.token, path: "chat/matches" });
   }, [sendReq, authCtx.token]);
-  if (status === "pending") {
-    return <LoadingSpinner loadingScreen={true} />;
-  }
   if (error) {
     return <p className={classes.error}>{error}</p>;
   }
-  if (status === "completed" && (!data.matches || data.matches.length === 0)) {
-    return <p className={classes.error}>No user found.</p>;
-  }
+  // if (status === "completed" && (!data.matches || data.matches.length === 0)) {
+  //   return <p className={classes.error}>No user found.</p>;
+  // }
 
   const loadRoomHandler = (id, user) => {
     getRoomData({ token: authCtx.token, path: `chat/room/${id}` });
@@ -36,13 +33,15 @@ const ChatPage = (props) => {
   };
   return (
     <>
-      <Room
-        matches={data.matches}
-        room={{ roomData, user }}
-        status={roomStatus}
-        onChangeRoom={loadRoomHandler}
-        onlineUsers={props.onlineUsers}
-      />
+      {data && (
+        <Room
+          matches={data.matches}
+          room={{ roomData, user }}
+          status={roomStatus}
+          onChangeRoom={loadRoomHandler}
+          onlineUsers={props.onlineUsers}
+        />
+      )}
     </>
   );
 };

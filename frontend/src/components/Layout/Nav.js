@@ -21,7 +21,7 @@ const Nav = () => {
           {isAuth && (
             <li>
               <NavLink activeClassName={classes.active} to="/chat">
-                Chat
+                Matches
               </NavLink>
             </li>
           )}

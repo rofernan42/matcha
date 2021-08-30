@@ -1,7 +1,31 @@
+.container {
+  height: calc(90vh - 60px);
+}
+
+.filters {
+  display: flex;
+  margin-top: 10px;
+  height: 60px;
+  /* border-bottom: 1px solid black; */
+  margin-bottom: 10px;
+  /* height: 100%; */
+  background: #ffffff;
+  box-shadow: 5px 5px 20px rgba(80, 80, 80, 0.466);
+}
+
 .users-list {
-  margin-top: 30px;
+  margin: auto;
+  /* margin-top: 10px; */
   text-align: center;
   line-height: 0;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 5px 5px 20px rgba(80, 80, 80, 0.466);
+  /* width: fit-content; */
+}
+
+.pagination {
+  /* background: chocolate; */
 }
 
 .error {

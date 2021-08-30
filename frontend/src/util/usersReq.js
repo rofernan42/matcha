@@ -1,5 +1,5 @@
-export const url = "http://localhost:8000/";
-// export const url = "http://192.168.1.44:8000/";
+// export const url = "http://localhost:8000/";
+export const url = "http://192.168.1.44:8000/";
 
 export const fetchUsers = async (data) => {
   const res = await fetch(url + data.path, {

@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
+import { url } from "../../util/usersReq";
 
 const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +23,7 @@ const Signup = () => {
     const entLastname = lastnameRef.current.value;
     const entEmail = emailRef.current.value;
     const entPassword = passwordRef.current.value;
-    const res = await fetch("http://localhost:8000/auth/signup", {
+    const res = await fetch(url + "auth/signup", {
       method: "POST",
       body: JSON.stringify({
         username: entUsername,
@@ -119,11 +120,27 @@ const Signup = () => {
         </div>
         <div className={classes.actions}>
           {!isLoading && <button>Create account</button>}
-          {isLoading && <LoadingSpinner />}
+          {isLoading && (
+            <div className={classes.loadingContainer}>
+              <button className={classes.loading}>
+                Creating...
+                <LoadingSpinner
+                  styles={{
+                    display: "inline-block",
+                    verticalAlign: "middle",
+                    position: "relative",
+                    marginLeft: "15px",
+                    marginBottom: "3px",
+                    width: "20px",
+                    height: "20px",
+                  }}
+                />
+              </button>
+            </div>
+          )}
           <div className={classes.footer}>
             Already signed up ? <Link to="/login">Login</Link>
           </div>
-          {/* <button type="button" className={classes.toggle}></button> */}
         </div>
       </form>
     </section>

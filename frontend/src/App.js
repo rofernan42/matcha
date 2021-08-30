@@ -14,12 +14,14 @@ import socket from "./util/socket";
 function App() {
   const authCtx = useContext(AuthContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  
+
   useEffect(() => {
-    socket.emit("addUser", authCtx.userId);
-    socket.off("getUsers").on("getUsers", (users) => {
-      setOnlineUsers(users);
-    });
+    if (authCtx.userId) {
+      socket.emit("addUser", authCtx.userId);
+      socket.off("getUsers").on("getUsers", (users) => {
+        setOnlineUsers(users);
+      });
+    }
   }, [authCtx.userId]);
   return (
     <Layout>

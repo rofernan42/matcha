@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react";
 import Profile from "../components/Profile/Profile";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
 import { fetchCurrentUser, updateImage, updateUser } from "../util/usersReq";
@@ -32,6 +33,10 @@ const ProfilePage = () => {
   useEffect(() => {
     sendReq(authCtx.token);
   }, [sendReq, authCtx.token]);
+
+  if (status === "pending") {
+    return <LoadingSpinner loadingScreen={true} />;
+  }
   return (
     <>
       {user && (

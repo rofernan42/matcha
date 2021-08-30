@@ -13,13 +13,6 @@ const Chat = (props) => {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const currentRoom = props.room.roomData;
 
-  // useEffect(() => {
-  //   socket.emit("addUser", authCtx.userId);
-  //   socket.off("getUsers").on("getUsers", (users) => {
-  //     // console.log(users);
-  //   });
-  // }, [authCtx.userId]);
-
   useEffect(() => {
     arrivalMessage &&
       arrivalMessage.fromRoom === currentRoom._id &&

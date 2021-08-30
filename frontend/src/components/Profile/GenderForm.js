@@ -17,7 +17,7 @@ const GenderForm = (props) => {
           id="male"
           name="gender"
           className={`${classes.btn} ${
-            checkedGender === "male" ? classes.active : ""
+            checkedGender === "male" ? classes.selected : classes.active
           }`}
           onClick={genderHandler}
         >
@@ -28,7 +28,7 @@ const GenderForm = (props) => {
           id="female"
           name="gender"
           className={`${classes.btn} ${
-            checkedGender === "female" ? classes.active : ""
+            checkedGender === "female" ? classes.selected : classes.active
           }`}
           onClick={genderHandler}
         >
@@ -39,7 +39,7 @@ const GenderForm = (props) => {
           id="other"
           name="gender"
           className={`${classes.btn} ${
-            checkedGender === "other" ? classes.active : ""
+            checkedGender === "other" ? classes.selected : classes.active
           }`}
           onClick={genderHandler}
         >

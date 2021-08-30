@@ -29,6 +29,7 @@
   padding: 10px;
   cursor: pointer;
   color: #d3d3d3;
+  animation: opening 300ms ease-in-out;
 }
 
 .contact:hover {
@@ -65,4 +66,13 @@
 }
 .orange {
   background-color: #ff725d;
+}
+
+@keyframes opening {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

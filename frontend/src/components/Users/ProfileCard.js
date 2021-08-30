@@ -3,8 +3,11 @@ import quotes from "../../images/left-quotes-sign.png";
 import ImageSlider from "./ImageSlider";
 import useHttp from "../../hooks/use-http";
 import { updateUser } from "../../util/usersReq";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TimeAgo from "react-timeago";
+import { store } from "react-notifications-component";
+import socket from "../../util/socket";
+import LikeButton from "./LikeButton";
 
 const ProfileCard = (props) => {
   const { sendReq: sendUpdate } = useHttp(updateUser, true);
@@ -22,6 +25,26 @@ const ProfileCard = (props) => {
       return !liked;
     });
   };
+  useEffect(() => {
+    socket.off("newMatch").on("newMatch", (data) => {
+      if (data.match) {
+        store.addNotification({
+          title: "You have a new match!",
+          message: data.message,
+          type: "info",
+          insert: "top",
+          container: "top-center",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: false,
+          },
+        });
+      }
+    });
+  }, []);
+
   const imgs = props.user.images.filter((img) => img !== null);
   return (
     <>
@@ -34,21 +57,26 @@ const ProfileCard = (props) => {
               <span className={classes["sr-only"]}>Message</span>
             </a>
             <div className={classes["user-status"]}>
-              <span className={`${classes.status} ${props.online ? classes.green : classes.orange}`}></span>
-              {props.online && <span className={classes["status-label"]}>online</span>}
-              {!props.online && <span className={classes["status-label"]}><TimeAgo date={props.user.lastConnection} /></span>}
+              <span
+                className={`${classes.status} ${
+                  props.online ? classes.green : classes.orange
+                }`}
+              ></span>
+              {props.online && (
+                <span className={classes["status-label"]}>online</span>
+              )}
+              {!props.online && (
+                <span className={classes["status-label"]}>
+                  <TimeAgo date={props.user.lastConnection} />
+                </span>
+              )}
             </div>
           </div>
-          <div
-            className={`${classes["btn-follow"]} ${
-              liked ? classes["active"] : ""
-            }`}
-            onClick={sendLikeHandler}
-          ></div>
+          
         </div>
         <div className={classes["card-body"]}>
           <h2 className={classes["name"]}>{props.user.username}</h2>
-          <h2 className={classes["location"]}>1 km</h2>
+          <h2 className={classes["location"]}>{props.user.age && <>{props.user.age} yo - </>}1km away</h2>
           <img src={quotes} className={classes["bio-img"]} alt="" />
           <div className={classes["bio"]}>
             {props.user.bio.length > 0 && <span>{props.user.bio}</span>}
@@ -57,7 +85,7 @@ const ProfileCard = (props) => {
             )}
           </div>
         </div>
-
+        <LikeButton sendLikeHandler={sendLikeHandler} liked={liked} />
         <div className={classes["card-footer"]}>
           <div className={classes["stats"]}>
             <div className={classes["stat"]}>

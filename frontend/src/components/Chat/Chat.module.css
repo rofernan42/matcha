@@ -93,20 +93,29 @@
 }
 
 .noMessage {
-    position: absolute;
-    top: 7%;
-    font-size: 40px;
-    color: rgb(189, 189, 189);
-    cursor: default;
-    margin-left: 10px;
+  position: absolute;
+  top: 7%;
+  font-size: 40px;
+  color: rgb(189, 189, 189);
+  cursor: default;
+  margin-left: 10px;
 }
 
+.noMessage a {
+  text-decoration: none;
+  color: #9f5ccc67;
+}
+
+.noMessage a:hover {
+  color: #38015c96;
+}
+
+
 @keyframes opening {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  0% {
+    opacity: 0;
   }
-  
+  100% {
+    opacity: 1;
+  }
+}

@@ -69,7 +69,7 @@ app.use((error, req, res, next) => {
 });
 
 mongoConnect((client) => {
-  const server = app.listen(8000);
+  const server = app.listen(8000, "192.168.1.44");
   const io = require("./socket").init(server);
   let users = [];
   const addUser = (userId, socketId) => {
@@ -85,7 +85,6 @@ mongoConnect((client) => {
   io.on("connection", (socket) => {
     socket.on("addUser", (userId) => {
       addUser(userId, socket.id);
-      console.log("user connected");
       io.emit("getUsers", users);
     });
     socket.on("sendMessage", ({ senderId, receiverId, text, roomId }) => {

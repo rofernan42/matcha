@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import Image from "./Image";
-import classes from "./Profile.module.css";
+import classes from "./Images.module.css";
 
 const ImagesForm = (props) => {
   const [image, setImages] = useState([]);

@@ -284,12 +284,13 @@ exports.postLike = async (req, res, next) => {
     user.likes = [];
   }
   const index = user.likes.indexOf(userId);
+  const existingMatch = await Match.findByUsers(user._id.toString(), userId);
   if (userId !== user._id.toString() && index < 0) {
     user.likes.push(userId);
     createMatch(user._id.toString(), userId);
-  } else if (index > -1) {
+  }else if (index > -1 && !existingMatch) {
     user.likes.splice(index, 1);
-    await Match.destroy(user._id.toString(), userId);
+    // await Match.destroy(user._id.toString(), userId);
   }
   const updatedUser = new User({ ...user });
   await updatedUser.save();
@@ -309,10 +310,10 @@ const createMatch = async (userId, otherUserId) => {
   if (otherUser.likes.includes(userId) && !matchExists) {
     const match = new Match({user1: userId, user2: otherUserId});
     await match.save();
-    // console.log(io.getIO().sockets);
-    // io.getIO().emit("new match", {
-    //   message: `You matched with ${otherUser.username} !`,
-    // });
+    io.getIO().emit("newMatch", {
+      match: true,
+      message: `You matched with ${otherUser.username} !`,
+    });
   }
 };
 

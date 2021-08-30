@@ -1,6 +1,7 @@
 import { useContext, useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
+import { url } from "../../util/usersReq";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
 
@@ -11,13 +12,14 @@ const Login = () => {
   const passwordRef = useRef();
   const history = useHistory();
   const authCtx = useContext(AuthContext);
+  // const btnClasses = {isLoading }
 
   const formSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const entEmail = emailRef.current.value;
     const entPassword = passwordRef.current.value;
-    const res = await fetch("http://localhost:8000/auth/login", {
+    const res = await fetch(url + "auth/login", {
       method: "POST",
       body: JSON.stringify({
         email: entEmail,
@@ -47,7 +49,7 @@ const Login = () => {
   };
   return (
     <section className={classes.auth}>
-      <h1>Login</h1>
+      <h1>Log in</h1>
       <form onSubmit={formSubmit}>
         <div className={classes.control}>
           <input
@@ -71,15 +73,31 @@ const Login = () => {
           )}
         </div>
         <div className={classes.actions}>
-          {!isLoading && <button>Login</button>}
-          {isLoading && <LoadingSpinner />}
+          {!isLoading && <button>Log in</button>}
+          {isLoading && (
+            <div className={classes.loadingContainer}>
+              <button className={classes.loading}>
+                Logging in
+                <LoadingSpinner
+                  styles={{
+                    display: "inline-block",
+                    verticalAlign: "middle",
+                    position: "relative",
+                    marginLeft: "15px",
+                    marginBottom: "4px",
+                    width: "20px",
+                    height: "20px",
+                  }}
+                />
+              </button>
+            </div>
+          )}
           <div className={classes.footer}>
             I don't have an account. <Link to="/signup">Sign up</Link>
           </div>
           <div className={classes.footer}>
             <Link to="/reset-password">I forgot my password.</Link>
           </div>
-          {/* <button type="button" className={classes.toggle}></button> */}
         </div>
       </form>
     </section>

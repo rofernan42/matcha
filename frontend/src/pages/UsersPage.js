@@ -8,6 +8,7 @@ import classes from "./Pages.module.css";
 import ProfileCard from "../components/Users/ProfileCard";
 import { useLocation } from "react-router-dom";
 import Pagination from "../components/Pagination/Pagination";
+import Filters from "../components/Users/Filters";
 
 const UsersPage = (props) => {
   const loc = useLocation();
@@ -30,9 +31,20 @@ const UsersPage = (props) => {
   //   setLastPage(Math.ceil(usersData.totalItems / usersData.perPage));
   // });
 
-  if (status === "pending") {
-    return <LoadingSpinner loadingScreen={true} />;
-  }
+  // if (status === "pending") {
+  //   return (
+  //     <LoadingSpinner
+  //       styles={{
+  //         position: "absolute",
+  //         top: "50%",
+  //         left: "50%",
+  //         transform: `translate(-50%, -50%)`,
+  //         width: "200px",
+  //         height: "200px",
+  //       }}
+  //     />
+  //   );
+  // }
   if (error) {
     return <p className={classes.error}>{error}</p>;
   }
@@ -48,19 +60,42 @@ const UsersPage = (props) => {
   };
   return (
     <>
-      <div className={classes["users-list"]}>
-        {usersData.users.map((user) => (
-          <UserCard
-            key={user._id}
-            user={user}
-            onProfileCard={profileCardHandler}
-            online={props.onlineUsers.some((e) => e.userId === user._id)}
-          />
-        ))}
+      <div className={classes.container}>
+        <div className={classes.filters}>
+          <Filters />
+        </div>
+        <div className={classes["users-list"]}>
+          {!usersData && (
+            <LoadingSpinner
+              styles={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: `translate(-50%, -50%)`,
+                width: "200px",
+                height: "200px",
+              }}
+            />
+          )}
+          {usersData &&
+            usersData.users.map((user) => (
+              <UserCard
+                key={user._id}
+                user={user}
+                onProfileCard={profileCardHandler}
+                online={props.onlineUsers.some((e) => e.userId === user._id)}
+              />
+            ))}
+        </div>
+
+        <div className={classes.pagination}>
+          {usersData && (
+            <Pagination
+              lastPage={Math.ceil(usersData.totalItems / usersData.perPage)}
+            />
+          )}
+        </div>
       </div>
-      <Pagination
-        lastPage={Math.ceil(usersData.totalItems / usersData.perPage)}
-      />
       {userProfile.display && currentUser && (
         <ProfileCard
           key={userProfile.profile._id}
@@ -68,7 +103,9 @@ const UsersPage = (props) => {
           user={userProfile.profile}
           token={authCtx.token}
           liked={currentUser.likes.includes(userProfile.profile._id)}
-          online={props.onlineUsers.some((e) => e.userId === userProfile.profile._id)}
+          online={props.onlineUsers.some(
+            (e) => e.userId === userProfile.profile._id
+          )}
         />
       )}
     </>

@@ -1,6 +1,7 @@
 import { useContext, useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
+import { url } from "../../util/usersReq";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
 
@@ -16,7 +17,7 @@ const ResetPassword = () => {
     setIsLoading(true);
     const entEmail = emailRef.current.value;
     const entPassword = passwordRef.current.value;
-    fetch("http://localhost:8000/auth/login", {
+    fetch(url + "auth/login", {
       method: "POST",
       body: JSON.stringify({
         email: entEmail,

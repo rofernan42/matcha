@@ -11,7 +11,7 @@ const BioForm = (props) => {
     } else {
       setSaveActive(false);
     }
-    setCounter(200 - bioRef.current.value.length)
+    setCounter(200 - bioRef.current.value.length);
   };
   const bioHandler = (e) => {
     e.preventDefault();
@@ -35,7 +35,11 @@ const BioForm = (props) => {
         <button
           id="save"
           name="save"
-          className={`${classes.btn} ${saveActive ? classes.active : ""}`}
+          className={`${classes.btn} ${
+            saveActive
+              ? `${classes.active} ${classes.selected}`
+              : classes.inactive
+          }`}
         >
           Save
         </button>

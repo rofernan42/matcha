@@ -35,7 +35,11 @@ const AttractionForm = (props) => {
           value="men"
           id="men"
           name="attraction"
-          className={`${classes.btn} ${checkedAttr.men ? classes.active : ""}`}
+          className={`${classes.btn} ${
+            checkedAttr.men
+              ? `${classes.active} ${classes.selected}`
+              : classes.active
+          }`}
           onClick={attrHandler}
         >
           Men
@@ -45,7 +49,9 @@ const AttractionForm = (props) => {
           id="women"
           name="attraction"
           className={`${classes.btn} ${
-            checkedAttr.women ? classes.active : ""
+            checkedAttr.women
+              ? `${classes.active} ${classes.selected}`
+              : classes.active
           }`}
           onClick={attrHandler}
         >

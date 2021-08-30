@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { url } from "../../util/usersReq";
-import classes from "./Profile.module.css";
+import classes from "./Images.module.css";
 
 const Image = (props) => {
   const [file, setFile] = useState(null);

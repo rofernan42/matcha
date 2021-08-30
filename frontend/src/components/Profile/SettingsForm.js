@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./SettingsForm.module.css";
+import btn from "./Profile.module.css";
 
 const SettingsForm = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +33,7 @@ const SettingsForm = (props) => {
   };
   return (
     <section className={classes["edit-settings"]}>
-      <h1>Edit settings</h1>
+      <h1>Account settings</h1>
       <form onSubmit={formSubmit}>
         <div className={classes.settings}>
           <input
@@ -99,7 +100,7 @@ const SettingsForm = (props) => {
           )}
         </div>
         <div className={classes.settings}>
-          {!isLoading && <button>Edit</button>}
+          {!isLoading && <button className={`${btn.active} ${btn.selected}`}>Edit</button>}
           {isLoading && <LoadingSpinner />}
           {/* <button type="button" className={classes.toggle}></button> */}
         </div>

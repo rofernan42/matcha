@@ -58,40 +58,6 @@
   margin-left: 10px;
 }
 
-.btn-follow {
-  position: absolute;
-  top: 240px;
-  right: 25px;
-  width: 45px;
-  height: 45px;
-  background: linear-gradient(to left, #5a4368, #c8a2e2);
-  border-radius: 50%;
-  transition: 200ms linear;
-}
-
-.btn-follow.active {
-  box-shadow: 0 10px 15px #c79ee285;
-  background: linear-gradient(to left, #38015c, #a852e2);
-}
-
-.btn-follow:after {
-  content: "";
-  position: absolute;
-  background: url(https://res.cloudinary.com/dj14cmwoz/image/upload/v1491077480/profile-card/images/add.svg)
-    no-repeat;
-  width: 17px;
-  height: 17px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.btn-follow:hover {
-  box-shadow: 0 10px 15px #c79ee285;
-  background: linear-gradient(to left, #38015c, #a852e2);
-  cursor: pointer;
-}
-
 .card-body {
   border-top: 1px solid #564f5a;
   text-align: center;

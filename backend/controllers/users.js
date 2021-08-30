@@ -1,7 +1,7 @@
 const Match = require("../models/match");
 const User = require("../models/user");
 
-const NB_USERS_PER_PAGE = 3;
+const NB_USERS_PER_PAGE = 10;
 
 exports.getUsers = async (req, res, next) => {
   const users = await User.fetchUsers();

@@ -33,7 +33,11 @@ const InterestsForm = (props) => {
         <button
           id="add"
           name="add"
-          className={`${classes.btn} ${addActive ? classes.active : ""}`}
+          className={`${classes.btn} ${
+            addActive
+              ? `${classes.active} ${classes.selected}`
+              : classes.inactive
+          }`}
         >
           Add
         </button>
