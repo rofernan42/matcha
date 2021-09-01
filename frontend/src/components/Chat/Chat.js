@@ -11,7 +11,7 @@ const Chat = (props) => {
   const scrollRef = useRef();
   const [newMsg, setNewMsg] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const currentRoom = props.room.roomData;
+  const currentRoom = props.room.roomData.match;
 
   useEffect(() => {
     arrivalMessage &&
@@ -42,7 +42,7 @@ const Chat = (props) => {
       });
       try {
         const res = await fetch(
-          url + `chat/room/${props.room.roomData._id}/message`,
+          url + `chat/room/${props.room.roomData.match._id}/message`,
           {
             method: "POST",
             body: JSON.stringify({ content: newMsg }),
@@ -87,7 +87,7 @@ const Chat = (props) => {
                   imgProfile={`${url}${imgProfile}`}
                   key={msg._id}
                   msg={msg}
-                  who={msg.creator === authCtx.userId ? "me" : "you"}
+                  who={msg.user_id === +authCtx.userId ? "me" : "you"}
                 />
               </div>
             )})}

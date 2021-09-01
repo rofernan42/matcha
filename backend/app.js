@@ -1,7 +1,10 @@
 const express = require("express");
-const mongoConnect = require("./util/database").mongoConnect;
+const db = require("./util/database");
+// const mongoConnect = require("./util/database").mongoConnect;
 const multer = require("multer");
 const path = require("path");
+// const fs = require("fs");
+// const https = require("https");
 
 // const cors = require("cors");
 
@@ -11,6 +14,11 @@ const usersRoutes = require("./routes/users");
 const chatroomRoutes = require("./routes/chatroom");
 
 const app = express();
+
+// db.execute("SELECT * FROM users");
+
+// const privateKey = fs.readFileSync("server.key");
+// const certificate = fs.readFileSync("server.cert");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -68,42 +76,43 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message });
 });
 
-mongoConnect((client) => {
-  const server = app.listen(8000, "192.168.1.44");
-  const io = require("./socket").init(server);
-  let users = [];
-  const addUser = (userId, socketId) => {
-    !users.some((user) => user.userId === userId) &&
-      users.push({ userId, socketId });
-  };
-  const removeUser = (socketId) => {
-    users = users.filter((user) => user.socketId !== socketId);
-  };
-  const getUser = (userId) => {
-    return users.find((user) => user.userId === userId);
-  };
-  io.on("connection", (socket) => {
-    socket.on("addUser", (userId) => {
-      addUser(userId, socket.id);
-      io.emit("getUsers", users);
-    });
-    socket.on("sendMessage", ({ senderId, receiverId, text, roomId }) => {
-      const user = getUser(receiverId);
-      if (user) {
-        io.to(user.socketId).emit("getMessage", {
-          senderId,
-          text,
-          fromRoom: roomId,
-        });
-      }
-    });
-    socket.on("disconnect", () => {
-      removeUser(socket.id);
-      io.emit("getUsers", users);
-    });
-    socket.on("logout", () => {
-      removeUser(socket.id);
-      io.emit("getUsers", users);
-    });
+// mongoConnect((client) => {
+// const server = https.createServer({key: privateKey, cert: certificate}, app).listen(8000);
+const server = app.listen(8000, "192.168.1.44");
+const io = require("./socket").init(server);
+let users = [];
+const addUser = (userId, socketId) => {
+  !users.some((user) => user.userId == userId) &&
+    users.push({ userId, socketId });
+};
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId != socketId);
+};
+const getUser = (userId) => {
+  return users.find((user) => user.userId == userId);
+};
+io.on("connection", (socket) => {
+  socket.on("addUser", (userId) => {
+    addUser(userId, socket.id);
+    io.emit("getUsers", users);
+  });
+  socket.on("sendMessage", ({ senderId, receiverId, text, roomId }) => {
+    const user = getUser(receiverId);
+    if (user) {
+      io.to(user.socketId).emit("getMessage", {
+        senderId,
+        text,
+        fromRoom: roomId,
+      });
+    }
+  });
+  socket.on("disconnect", () => {
+    removeUser(socket.id);
+    io.emit("getUsers", users);
+  });
+  socket.on("logout", () => {
+    removeUser(socket.id);
+    io.emit("getUsers", users);
   });
 });
+// });

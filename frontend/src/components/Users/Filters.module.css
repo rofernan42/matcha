@@ -9,14 +9,14 @@
 }
 
 .label {
-  font-size: 15px;
+  font-size: 13px;
   background: #ddcce7;
   color: #897696;
   width: min-content;
   margin: auto;
   margin-top: 13px;
   padding: 7px;
-  border-radius: 3px;
+  /* border-radius: 15px; */
   vertical-align: middle;
   transition: all 200ms linear;
   /* overflow: hidden; */

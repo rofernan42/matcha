@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Image = require("../models/image");
 const fs = require("fs");
 const path = require("path");
 const Match = require("../models/match");
@@ -9,13 +10,19 @@ const io = require("../socket");
 
 exports.getProfile = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
   try {
-    res.status(200).json(user);
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const images = await Image.findByUser(user._id);
+    if (!images) {
+      const error = new Error("Images not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    res.status(200).json({ user, images });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -36,10 +43,16 @@ exports.editSettings = async (req, res, next) => {
   const lastname = req.body.data.lastname.trim();
   const email = req.body.data.email.trim();
   let password = req.body.data.password;
-  if (password.length === 0)
-    password = null;
+  if (password.length === 0) password = null;
   try {
-    errors = await authValidation(username, name, lastname, email, password, req.userId);
+    errors = await authValidation(
+      username,
+      name,
+      lastname,
+      email,
+      password,
+      req.userId
+    );
     if (Object.keys(errors).length > 0) {
       const error = new Error("Something went wrong");
       error.error = errors;
@@ -175,19 +188,20 @@ exports.postInterest = async (req, res, next) => {
 
 exports.removeInterest = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  const intToRemove = req.body.data;
-  const index = user.interests.indexOf(intToRemove);
-  if (index > -1) {
-    user.interests.splice(index, 1);
-  }
-  const updatedUser = new User({ ...user });
-  await updatedUser.save();
   try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const intToRemove = req.body.data;
+    const index = user.interests.indexOf(intToRemove);
+    if (index > -1) {
+      user.interests.splice(index, 1);
+    }
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
+
     res.status(201).json(updatedUser);
   } catch (err) {
     if (!err.statusCode) {
@@ -199,47 +213,71 @@ exports.removeInterest = async (req, res, next) => {
 
 exports.postImage = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  const image = req.file;
-  const userDir = `images/${user._id.toString()}`;
-  const imageNb = +req.body.imageNb;
-  if (imageNb > 4) {
-    const error = new Error("Wrong index");
-    error.statusCode = 422;
-    throw error;
-  }
-  if (!image) {
-    const error = new Error("Please upload a file");
-    error.statusCode = 422;
-    throw error;
-  }
-  await fs.mkdir(userDir, (err) => {
-    if (err) {
-      console.log(err);
-    }
-    console.log("Directory created successfully");
-  });
-  const oldImageUrl = image.path.replace("\\", "/");
-  const imageUrl = userDir + "/" + image.filename;
-  fs.rename(oldImageUrl, imageUrl, (err) => {
-    if (err) {
-      throw err;
-    } else {
-      console.log("File moved successfully");
-    }
-  });
-  if (user.images[imageNb]) {
-    clearImage(user.images[imageNb]);
-  }
-  user.images[imageNb] = imageUrl;
-  const updatedUser = new User({ ...user });
-  await updatedUser.save();
   try {
-    res.status(201).json(updatedUser);
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const images = await Image.findByUser(user._id);
+    if (!images) {
+      const error = new Error("Images not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const image = req.file;
+    const userDir = `images/${user._id.toString()}`;
+    const imageNb = +req.body.imageNb;
+    if (imageNb > 4) {
+      const error = new Error("Wrong index");
+      error.statusCode = 422;
+      throw error;
+    }
+    if (!image) {
+      const error = new Error("Please upload a file");
+      error.statusCode = 422;
+      throw error;
+    }
+    await fs.mkdir(userDir, (err) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log("Directory created successfully");
+    });
+    const oldImageUrl = image.path.replace("\\", "/");
+    const imageUrl = userDir + "/" + image.filename;
+    fs.rename(oldImageUrl, imageUrl, (err) => {
+      if (err) {
+        throw err;
+      } else {
+        console.log("File moved successfully");
+      }
+    });
+    switch (imageNb) {
+      case 0:
+        if (images.image0) clearImage(images.image0);
+        images.image0 = imageUrl;
+        break;
+      case 1:
+        if (images.image1) clearImage(images.image1);
+        images.image1 = imageUrl;
+        break;
+      case 2:
+        if (images.image2) clearImage(images.image2);
+        images.image2 = imageUrl;
+        break;
+      case 3:
+        if (images.image3) clearImage(images.image3);
+        images.image3 = imageUrl;
+        break;
+      case 4:
+        if (images.image4) clearImage(images.image4);
+        images.image4 = imageUrl;
+        break;
+    }
+    const updatedImages = new Image({ ...images });
+    await updatedImages.save();
+    res.status(201).json(updatedImages);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -250,20 +288,44 @@ exports.postImage = async (req, res, next) => {
 
 exports.deleteImage = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  const imageNb = +req.body.imageNb;
-  if (user.images[imageNb]) {
-    clearImage(user.images[imageNb]);
-  }
-  user.images[imageNb] = null;
-  const updatedUser = new User({ ...user });
-  await updatedUser.save();
   try {
-    res.status(201).json(updatedUser);
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const images = await Image.findByUser(user._id);
+    if (!images) {
+      const error = new Error("Images not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const imageNb = +req.body.imageNb;
+    switch (imageNb) {
+      case 0:
+        if (images.image0) clearImage(images.image0);
+        images.image0 = null;
+        break;
+      case 1:
+        if (images.image1) clearImage(images.image1);
+        images.image1 = null;
+        break;
+      case 2:
+        if (images.image2) clearImage(images.image2);
+        images.image2 = null;
+        break;
+      case 3:
+        if (images.image3) clearImage(images.image3);
+        images.image3 = null;
+        break;
+      case 4:
+        if (images.image4) clearImage(images.image4);
+        images.image4 = null;
+        break;
+    }
+    const updatedImages = new Image({ ...images });
+    await updatedImages.save();
+    res.status(201).json(updatedImages);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -288,7 +350,7 @@ exports.postLike = async (req, res, next) => {
   if (userId !== user._id.toString() && index < 0) {
     user.likes.push(userId);
     createMatch(user._id.toString(), userId);
-  }else if (index > -1 && !existingMatch) {
+  } else if (index > -1 && !existingMatch) {
     user.likes.splice(index, 1);
     // await Match.destroy(user._id.toString(), userId);
   }
@@ -308,7 +370,7 @@ const createMatch = async (userId, otherUserId) => {
   const otherUser = await User.findById(otherUserId);
   const matchExists = await Match.findByUsers(userId, otherUserId);
   if (otherUser.likes.includes(userId) && !matchExists) {
-    const match = new Match({user1: userId, user2: otherUserId});
+    const match = new Match({ user1: userId, user2: otherUserId });
     await match.save();
     io.getIO().emit("newMatch", {
       match: true,

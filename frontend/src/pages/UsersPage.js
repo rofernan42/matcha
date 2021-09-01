@@ -48,9 +48,9 @@ const UsersPage = (props) => {
   if (error) {
     return <p className={classes.error}>{error}</p>;
   }
-  if (status === "completed" && (!usersData || usersData.users.length === 0)) {
-    return <p className={classes.error}>No user found.</p>;
-  }
+  // if (status === "completed" && (!usersData || usersData.users.length === 0)) {
+  //   return <p className={classes.error}>No user found.</p>;
+  // }
   const profileCardHandler = (user) => {
     sendReqCurrentUser(authCtx.token);
     setUserProfile({ display: true, profile: user });
@@ -77,13 +77,17 @@ const UsersPage = (props) => {
               }}
             />
           )}
+          {status === "completed" &&
+            (!usersData || usersData.users.length === 0) && (
+              <p className={classes.error}>No user found.</p>
+            )}
           {usersData &&
             usersData.users.map((user) => (
               <UserCard
                 key={user._id}
                 user={user}
                 onProfileCard={profileCardHandler}
-                online={props.onlineUsers.some((e) => e.userId === user._id)}
+                online={props.onlineUsers.some((e) => e.userId === user._id.toString())}
               />
             ))}
         </div>
@@ -102,9 +106,9 @@ const UsersPage = (props) => {
           onCloseProfile={closeProfileHandler}
           user={userProfile.profile}
           token={authCtx.token}
-          liked={currentUser.likes.includes(userProfile.profile._id)}
+          // liked={currentUser.likes.includes(userProfile.profile._id)}
           online={props.onlineUsers.some(
-            (e) => e.userId === userProfile.profile._id
+            (e) => e.userId === userProfile.profile._id.toString()
           )}
         />
       )}

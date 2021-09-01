@@ -17,7 +17,7 @@ const ScoreFilter = (props) => {
         className={`${classes.label} ${filterByScore ? classes.selected : ""}`}
         onClick={activateFilterScore}
       >
-        Filter by age
+        Filter by score
       </div>
       {filterByScore && (
         <div className={classes.filterFields}>
@@ -25,14 +25,16 @@ const ScoreFilter = (props) => {
             type="number"
             placeholder="min"
             min={0}
-            max={10}
+            max={5}
+            step={0.1}
             onChange={props.onChangeMinScore}
           />
           <input
             type="number"
             placeholder="max"
             min={0}
-            max={10}
+            max={5}
+            step={0.1}
             onChange={props.onChangeMaxScore}
           />
         </div>

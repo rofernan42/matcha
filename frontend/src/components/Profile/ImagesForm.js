@@ -20,8 +20,8 @@ const ImagesForm = (props) => {
               {(props.status === "completed" ||
                 props.statusImg === "completed") && (
                 <Image
-                  key={image[0]}
-                  img={image[0]}
+                  key={image.image0}
+                  img={image.image0}
                   typeField="main"
                   imageNb={0}
                   onChangeImg={props.onChangeImg}
@@ -30,8 +30,8 @@ const ImagesForm = (props) => {
             </td>
             <td className={classes["td-small"]}>
               <Image
-                key={image[1]}
-                img={image[1]}
+                key={image.image1}
+                img={image.image1}
                 typeField="small"
                 imageNb={1}
                 onChangeImg={props.onChangeImg}
@@ -39,8 +39,8 @@ const ImagesForm = (props) => {
             </td>
             <td className={classes["td-small"]}>
               <Image
-                key={image[2]}
-                img={image[2]}
+                key={image.image2}
+                img={image.image2}
                 typeField="small"
                 imageNb={2}
                 onChangeImg={props.onChangeImg}
@@ -50,8 +50,8 @@ const ImagesForm = (props) => {
           <tr>
             <td className={classes["td-small"]}>
               <Image
-                key={image[3]}
-                img={image[3]}
+                key={image.image3}
+                img={image.image3}
                 typeField="small"
                 imageNb={3}
                 onChangeImg={props.onChangeImg}
@@ -59,8 +59,8 @@ const ImagesForm = (props) => {
             </td>
             <td className={classes["td-small"]}>
               <Image
-                key={image[4]}
-                img={image[4]}
+                key={image.image4}
+                img={image.image4}
                 typeField="small"
                 imageNb={4}
                 onChangeImg={props.onChangeImg}

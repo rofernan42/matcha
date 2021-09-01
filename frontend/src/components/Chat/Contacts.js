@@ -32,7 +32,7 @@ const Contacts = (props) => {
                 user={match.user}
                 onChangeRoom={props.onChangeRoom}
                 online={props.onlineUsers.some(
-                  (e) => e.userId === match.user._id
+                  (e) => e.userId === match.user._id.toString()
                 )}
               />
             );

@@ -45,7 +45,7 @@ const Filters = () => {
   //   const [currentPage, setCurrentPage] = useState(+queryParams.get("page") || 1);
 
   const options = [
-    { label: "Sort...", value: null },
+    { label: "Sort by location", value: "location" },
     { label: "Sort by age", value: "age" },
     { label: "Sort by popularity", value: "popularity" },
   ];

@@ -41,8 +41,8 @@ const ProfilePage = () => {
     <>
       {user && (
         <Profile
-          user={updatedUser ? updatedUser : user}
-          images={updatedImages ? updatedImages.images : user.images}
+          user={updatedUser ? updatedUser : user.user}
+          images={updatedImages ? updatedImages : user.images}
           status={status}
           onChangeUser={updateUserHandler}
           onChangeImg={imgHandler}

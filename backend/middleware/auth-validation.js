@@ -2,8 +2,8 @@ const User = require("../models/user");
 
 module.exports = async (username, name, lastname, email, password, currentUser) => {
   let errors = {};
-  userName = await User.findByUsername(username);
-  userEmail = await User.findByEmail(email);
+  const userName = await User.findByUsername(username);
+  const userEmail = await User.findByEmail(email);
   if (username.length === 0) {
     errors = { ...errors, errusername: "Username must not be empty" };
   }

@@ -1,67 +1,73 @@
-const mongodb = require("mongodb");
-const getDb = require("../util/database").getDb;
+const db = require("../util/database");
 
 class User {
   constructor(data) {
+    this._id = data._id;
     this.username = data.username;
     this.name = data.name;
     this.lastname = data.lastname;
     this.email = data.email;
     this.password = data.password;
-    this._id = data._id;
     this.age = data.age || null;
     this.gender = data.gender || "other";
-    this.attrMen = data.attrMen === null ? true : data.attrMen;
-    this.attrWomen = data.attrWomen === null ? true : data.attrWomen;
+    this.attrMen = (data.attrMen === null || data.attrMen === undefined) ? true : data.attrMen;
+    this.attrWomen = (data.attrWomen === null || data.attrWomen === undefined) ? true : data.attrWomen;
     this.bio = data.bio || "";
-    this.interests = data.interests || [];
-    this.images = data.images || [null, null, null, null, null];
-    this.likes = data.likes || [];
+    this.interests = data.interests || "";
+    // this.likes = data.likes || [];
     this.score = data.score || 0.0;
     this.lastConnection = Date.now();
   }
 
   save() {
-    const db = getDb();
     if (this._id) {
-      return db
-        .collection("users")
-        .updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
+      const values = Object.values(this);
+      return db.query(
+        "REPLACE INTO users (_id, username, name, lastname, email, password, age, gender, attrMen, attrWomen, bio, interests, score, lastConnection) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        [...values]
+      );
     } else {
-      return db.collection("users").insertOne(this);
+      return db.execute(
+        "INSERT INTO users (username, name, lastname, email, password, gender, attrMen, attrWomen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        [this.username, this.name, this.lastname, this.email, this.password, this.gender, this.attrMen, this.attrWomen]
+      );
     }
   }
 
-  static findById(id) {
-    const db = getDb();
-    return db
-      .collection("users")
-      .find({ _id: new mongodb.ObjectId(id) })
-      .next();
+  static async findById(id) {
+    const [user] = await db.execute("SELECT * FROM users WHERE _id=?", [id]);
+    const [images] = await db.execute("SELECT * FROM images WHERE user_id=?", [id]);
+    const extractedImages = Object.values((({image0, image1, image2, image3, image4}) => ({image0, image1, image2, image3, image4}))(images[0]));
+    return {...user[0], images: extractedImages};
   }
-  static findByEmail(email) {
-    const db = getDb();
-    return db.collection("users").findOne({ email: email });
+  static async findByEmail(email) {
+    const [res] = await db.execute("SELECT * FROM users WHERE email=?", [
+      email,
+    ]);
+    return res[0];
   }
-  static findByUsername(username) {
-    const db = getDb();
-    return db.collection("users").findOne({ username: username });
+  static async findByUsername(username) {
+    const [res] = await db.execute("SELECT * FROM users WHERE username=?", [
+      username,
+    ]);
+    return res[0];
   }
 
-  static fetchUsers() {
-    const db = getDb();
-    return db
-      .collection("users")
-      .find()
-      .toArray()
-      .then((users) => {
-        return users;
-      });
+  static async fetchUsers() {
+    const res = await db.execute("SELECT * FROM users");
+    return res;
   }
   static async fetchFilteredUsers(currentUserId) {
-    const db = getDb();
-    const users = await db.collection("users").find().toArray();
-    return users.filter((users) => users._id.toString() !== currentUserId);
+    const res = await db.execute("SELECT * FROM users WHERE _id!=?", [
+      currentUserId,
+    ]);
+    const [images] = await db.execute("SELECT * FROM images WHERE user_id!=?", [currentUserId]);
+    const data = res[0].map((user) => {
+      const imgs = images.find((img) => img.user_id === user._id);
+      const extractedImages = Object.values((({image0, image1, image2, image3, image4}) => ({image0, image1, image2, image3, image4}))(imgs));
+      return {...user, images: extractedImages}
+    })
+    return data;
   }
 }
 

@@ -1,22 +1,24 @@
-const mongodb = require("mongodb");
-const getDb = require("../util/database").getDb;
+const db = require("../util/database");
 
 class Match {
   constructor(data) {
-    this.user1 = new mongodb.ObjectId(data.user1);
-    this.user2 = new mongodb.ObjectId(data.user2);
     this._id = data._id;
-    this.messages = data.messages || [];
+    this.user1 = data.user1;
+    this.user2 = data.user2;
+    this.lastMessage = data.lastMessage;
   }
 
   save() {
-    const db = getDb();
     if (this._id) {
-      return db
-        .collection("matches")
-        .updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
+      return db.query(
+        "REPLACE INTO matches (_id, user1, user2, lastMessage) VALUES (?, ?, ?, ?);",
+        [this._id, this.user1, this.user2, this.lastMessage]
+      );
     } else {
-      return db.collection("matches").insertOne(this);
+      return db.execute("INSERT INTO matches (user1, user2) VALUES (?, ?)", [
+        this.user1,
+        this.user2,
+      ]);
     }
   }
 
@@ -30,35 +32,35 @@ class Match {
     });
   }
 
-  static findById(id) {
-    const db = getDb();
-    return db
-      .collection("matches")
-      .find({ _id: new mongodb.ObjectId(id) })
-      .next();
+  static async findById(id) {
+    const [res] = await db.execute("SELECT * FROM matches WHERE _id=?", [id]);
+    return res[0];
   }
 
-  static findByUsers(user1, user2) {
-    const db = getDb();
-    return db.collection("matches").findOne({
-      $or: [
-        { user1: mongodb.ObjectId(user1), user2: mongodb.ObjectId(user2) },
-        { user1: mongodb.ObjectId(user2), user2: mongodb.ObjectId(user1) },
-      ],
-    });
+  static async findByUsers(user1, user2) {
+    const [res] = await db.execute(
+      "SELECT * FROM matches WHERE (user1=? AND user2=?) OR (user1=? AND user2=?)",
+      [user1, user2, user2, user1]
+    );
+    return res[0];
   }
 
-  static fetchMatches(userId) {
-    const db = getDb();
-    return db
-      .collection("matches")
-      .find({
-        $or: [
-          { user1: mongodb.ObjectId(userId) },
-          { user2: mongodb.ObjectId(userId) },
-        ],
-      })
-      .toArray();
+  static async fetchMatches(userId) {
+    // const db = getDb();
+    // return db
+    //   .collection("matches")
+    //   .find({
+    //     $or: [
+    //       { user1: mongodb.ObjectId(userId) },
+    //       { user2: mongodb.ObjectId(userId) },
+    //     ],
+    //   })
+    //   .toArray();
+    const res = await db.execute(
+      "SELECT * FROM matches WHERE user1=? OR user2=?",
+      [userId, userId]
+    );
+    return res[0];
   }
 }
 

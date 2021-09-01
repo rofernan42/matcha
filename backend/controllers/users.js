@@ -26,6 +26,12 @@ exports.getFilteredUsers = async (req, res, next) => {
   }
   const users = await User.fetchFilteredUsers(req.userId);
   let filteredUsers = filterByAttraction(user, users);
+  if (req.query.minAge || req.query.maxAge) {
+    filteredUsers = filterByAge(req.query.minAge, req.query.maxAge, filteredUsers);
+  }
+  if (req.query.minScore || req.query.maxScore) {
+    console.log("filter by score");
+  }
   const totalItems = filteredUsers.length;
   const fetchedUsers = paginate(filteredUsers, perPage, currentPage);
   try {
@@ -46,11 +52,11 @@ const filterByAttraction = (user, users) => {
     }
     if (user.attrMen && !user.attrWomen) {
       filteredUsers = users.filter(
-        (usrs) => usrs.gender === "male" && usrs.attrMen
+        (usrs) => (usrs.gender === "male" || usrs.gender === "other") && usrs.attrMen
       );
     } else if (!user.attrMen && user.attrWomen) {
       filteredUsers = users.filter(
-        (usrs) => usrs.gender === "female" && usrs.attrMen
+        (usrs) => (usrs.gender === "female" || usrs.gender === "other") && usrs.attrMen
       );
     }
   } else if (user.gender === "female") {
@@ -59,28 +65,37 @@ const filterByAttraction = (user, users) => {
     }
     if (user.attrMen && !user.attrWomen) {
       filteredUsers = users.filter(
-        (usrs) => usrs.gender === "male" && usrs.attrWomen
+        (usrs) => (usrs.gender === "male" || usrs.gender === "other") && usrs.attrWomen
       );
     } else if (!user.attrMen && user.attrWomen) {
       filteredUsers = users.filter(
-        (usrs) => usrs.gender === "female" && usrs.attrWomen
+        (usrs) => (usrs.gender === "female" || usrs.gender === "other") && usrs.attrWomen
       );
     }
   }
   return filteredUsers;
 };
 
+const filterByAge = (minAge, maxAge, users) => {
+  let filteredUsers = users;
+  if (minAge) {
+    filteredUsers = filteredUsers.filter(
+      (usr) => usr.age && usr.age >= minAge
+    );
+  }
+  if (maxAge) {
+    filteredUsers = filteredUsers.filter(
+      (usr) => usr.age && usr.age <= maxAge
+    );
+  }
+  return filteredUsers;
+}
+
 const sortByAge = (order, users) => {
   if (order === "asc") {
     return users.sort((a, b) => a.age - b.age);
   }
   return users.sort((a, b) => b.age - a.age);
-};
-
-const filterByAgeInterval = (ageMin, ageMax, users) => {
-  return users.filter(
-    (usr) => usr.age && usr.age >= ageMin && usr.age <= ageMax
-  );
 };
 
 const paginate = (array, perPage, currentPage) => {
