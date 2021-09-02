@@ -10,6 +10,7 @@ import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
 
 import socket from "./util/socket";
+import { store } from "react-notifications-component";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -29,6 +30,7 @@ function App() {
   
   // navigator.geolocation.getCurrentPosition(success, error);
 
+  console.log(authCtx.currentUser);
   useEffect(() => {
     if (authCtx.userId) {
       socket.emit("addUser", authCtx.userId);
@@ -38,6 +40,27 @@ function App() {
       });
     }
   }, [authCtx.userId]);
+  useEffect(() => {
+    if (authCtx.userId) {
+      socket.off("notif").on("notif", (data) => {
+        if (data) {
+          store.addNotification({
+            title: data.message,
+            message: "lalala",
+            type: data.type,
+            insert: "top",
+            container: "top-center",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 5000,
+              onScreen: false,
+            },
+          });
+        }
+      });
+    }
+  }, [])
   return (
     <Layout>
       <Switch>

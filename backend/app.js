@@ -1,6 +1,5 @@
 const express = require("express");
-const db = require("./util/database");
-// const mongoConnect = require("./util/database").mongoConnect;
+// const db = require("./util/database");
 const multer = require("multer");
 const path = require("path");
 // const fs = require("fs");
@@ -12,10 +11,9 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const usersRoutes = require("./routes/users");
 const chatroomRoutes = require("./routes/chatroom");
+const likesRoutes = require("./routes/likes");
 
 const app = express();
-
-// db.execute("SELECT * FROM users");
 
 // const privateKey = fs.readFileSync("server.key");
 // const certificate = fs.readFileSync("server.cert");
@@ -68,6 +66,7 @@ app.use("/auth", authRoutes);
 app.use(userRoutes);
 app.use(usersRoutes);
 app.use("/chat", chatroomRoutes);
+app.use(likesRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -104,6 +103,19 @@ io.on("connection", (socket) => {
         text,
         fromRoom: roomId,
       });
+    }
+  });
+  socket.on("newMatch", (data) => {
+    if (data) {
+      const user = getUser(data.userId);
+      socket.emit("matchPopup", {
+        message: `You matched with ${data.user1} !`,
+      });
+      if (user)
+        io.to(user.socketId).emit("notif", {
+          message: `You matched with ${data.user2} !`,
+          type: "info"
+        });
     }
   });
   socket.on("disconnect", () => {

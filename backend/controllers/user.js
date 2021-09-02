@@ -2,11 +2,9 @@ const User = require("../models/user");
 const Image = require("../models/image");
 const fs = require("fs");
 const path = require("path");
-const Match = require("../models/match");
 const bcrypt = require("bcryptjs");
 const authValidation = require("../middleware/auth-validation");
-
-const io = require("../socket");
+const Like = require("../models/like");
 
 exports.getProfile = async (req, res, next) => {
   const user = await User.findById(req.userId);
@@ -16,13 +14,8 @@ exports.getProfile = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    const images = await Image.findByUser(user._id);
-    if (!images) {
-      const error = new Error("Images not found");
-      error.statusCode = 401;
-      throw error;
-    }
-    res.status(200).json({ user, images });
+    const likes = await Like.fetchLikes(user._id);
+    res.status(200).json({ user, likes });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -69,7 +62,6 @@ exports.editSettings = async (req, res, next) => {
     }
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-
     res.status(201).json(updatedUser);
   } catch (err) {
     if (!err.statusCode) {
@@ -81,19 +73,19 @@ exports.editSettings = async (req, res, next) => {
 
 exports.postAge = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  let age = +req.body.data;
-  if (age < 18 || age > 99) {
-    age = null;
-  }
-  user.age = age;
-  const updatedUser = new User({ ...user });
-  await updatedUser.save();
   try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    let age = +req.body.data;
+    if (age < 18 || age > 99) {
+      age = null;
+    }
+    user.age = age;
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
     res.status(201).json(updatedUser);
   } catch (err) {
     if (!err.statusCode) {
@@ -105,15 +97,15 @@ exports.postAge = async (req, res, next) => {
 
 exports.postGender = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  user.gender = req.body.data;
-  const updatedUser = new User({ ...user });
-  await updatedUser.save();
   try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    user.gender = req.body.data;
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
     res.status(201).json(updatedUser);
   } catch (err) {
     if (!err.statusCode) {
@@ -125,17 +117,17 @@ exports.postGender = async (req, res, next) => {
 
 exports.postAttraction = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  const attr = req.body.data;
-  user.attrMen = attr.men;
-  user.attrWomen = attr.women;
-  const updatedUser = new User({ ...user });
-  await updatedUser.save();
   try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const attr = req.body.data;
+    user.attrMen = attr.men;
+    user.attrWomen = attr.women;
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
     res.status(201).json(updatedUser);
   } catch (err) {
     if (!err.statusCode) {
@@ -147,15 +139,15 @@ exports.postAttraction = async (req, res, next) => {
 
 exports.postBio = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  user.bio = req.body.data;
-  const updatedUser = new User({ ...user });
-  await updatedUser.save();
   try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    user.bio = req.body.data;
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
     res.status(201).json(updatedUser);
   } catch (err) {
     if (!err.statusCode) {
@@ -167,16 +159,16 @@ exports.postBio = async (req, res, next) => {
 
 exports.postInterest = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  const interests = req.body.data.trim().split(/\s+/);
-  user.interests.push(...interests);
-  const updatedUser = new User({ ...user });
-  await updatedUser.save();
   try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const interests = req.body.data.trim().split(/\s+/);
+    user.interests.push(...interests);
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
     res.status(201).json(updatedUser);
   } catch (err) {
     if (!err.statusCode) {
@@ -277,7 +269,16 @@ exports.postImage = async (req, res, next) => {
     }
     const updatedImages = new Image({ ...images });
     await updatedImages.save();
-    res.status(201).json(updatedImages);
+    const extractedImages = Object.values(
+      (({ image0, image1, image2, image3, image4 }) => ({
+        image0,
+        image1,
+        image2,
+        image3,
+        image4,
+      }))(updatedImages)
+    );
+    res.status(201).json(extractedImages);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -325,57 +326,21 @@ exports.deleteImage = async (req, res, next) => {
     }
     const updatedImages = new Image({ ...images });
     await updatedImages.save();
-    res.status(201).json(updatedImages);
+    const extractedImages = Object.values(
+      (({ image0, image1, image2, image3, image4 }) => ({
+        image0,
+        image1,
+        image2,
+        image3,
+        image4,
+      }))(updatedImages)
+    );
+    res.status(201).json(extractedImages);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
     next(err);
-  }
-};
-
-exports.postLike = async (req, res, next) => {
-  const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  const userId = req.body.data;
-  if (!user.likes) {
-    user.likes = [];
-  }
-  const index = user.likes.indexOf(userId);
-  const existingMatch = await Match.findByUsers(user._id.toString(), userId);
-  if (userId !== user._id.toString() && index < 0) {
-    user.likes.push(userId);
-    createMatch(user._id.toString(), userId);
-  } else if (index > -1 && !existingMatch) {
-    user.likes.splice(index, 1);
-    // await Match.destroy(user._id.toString(), userId);
-  }
-  const updatedUser = new User({ ...user });
-  await updatedUser.save();
-  try {
-    res.status(201).json({ updatedUser });
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
-
-const createMatch = async (userId, otherUserId) => {
-  const otherUser = await User.findById(otherUserId);
-  const matchExists = await Match.findByUsers(userId, otherUserId);
-  if (otherUser.likes.includes(userId) && !matchExists) {
-    const match = new Match({ user1: userId, user2: otherUserId });
-    await match.save();
-    io.getIO().emit("newMatch", {
-      match: true,
-      message: `You matched with ${otherUser.username} !`,
-    });
   }
 };
 

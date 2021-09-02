@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import Select, { components } from "react-select";
+import Select from "react-select";
 import AgeFilter from "./AgeFilter";
 import classes from "./Filters.module.css";
 import ScoreFilter from "./ScoreFilter";

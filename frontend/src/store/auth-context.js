@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import socket from "../util/socket";
+import { fetchCurrentUser } from "../util/usersReq";
 
 let logoutTimer;
 
@@ -36,17 +37,21 @@ export const AuthContextProvider = (props) => {
   const data = retrieveAuthData();
   let initialToken;
   let initialUserId;
+  let initialCurrentUser = null;
   if (data && data.token) {
     initialToken = data.token;
     initialUserId = data.userId;
+    // initialCurrentUser = await fetchCurrentUser(initialToken);
   }
   const [token, setToken] = useState(initialToken);
   const [userId, setUserId] = useState(initialUserId);
+  // const [currentUser, setCurrentUser] = useState(null);
   const loggedIn = !!token;
 
   const logoutHandler = useCallback(() => {
     setToken(null);
     setUserId(null);
+    // setCurrentUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("expirationTime");
@@ -55,7 +60,8 @@ export const AuthContextProvider = (props) => {
     }
     socket.emit("logout");
   }, []);
-  const loginHandler = (token, userId, expirationTime) => {
+
+  const loginHandler = async (token, userId, expirationTime) => {
     setToken(token);
     setUserId(userId);
     localStorage.setItem("token", token);
@@ -63,6 +69,8 @@ export const AuthContextProvider = (props) => {
     localStorage.setItem("expirationTime", expirationTime);
     const remainingTime = calculateRemainingTime(expirationTime);
     logoutTimer = setTimeout(logoutHandler, remainingTime);
+    // const user = await fetchCurrentUser(token);
+    // setCurrentUser(user.user);
   };
 
   useEffect(() => {

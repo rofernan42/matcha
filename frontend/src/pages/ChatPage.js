@@ -1,12 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import Room from "../components/Chat/Room";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
 import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
 import { getRoom, fetchMatches } from "../util/chatsReq";
 import classes from "./Pages.module.css";
-
-// const fetchMessages = async () => {};
 
 const ChatPage = (props) => {
   const authCtx = useContext(AuthContext);

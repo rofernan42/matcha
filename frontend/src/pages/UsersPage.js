@@ -13,7 +13,6 @@ import Filters from "../components/Users/Filters";
 const UsersPage = (props) => {
   const loc = useLocation();
   const authCtx = useContext(AuthContext);
-  // const [lastPage, setLastPage] = useState(1);
   const [userProfile, setUserProfile] = useState({
     display: false,
     profile: null,
@@ -27,30 +26,9 @@ const UsersPage = (props) => {
     sendReq({ token: authCtx.token, path: "filtered-users" + loc.search });
     sendReqCurrentUser(authCtx.token);
   }, [sendReq, sendReqCurrentUser, authCtx.token, loc.search]);
-  // useEffect(() => {
-  //   setLastPage(Math.ceil(usersData.totalItems / usersData.perPage));
-  // });
-
-  // if (status === "pending") {
-  //   return (
-  //     <LoadingSpinner
-  //       styles={{
-  //         position: "absolute",
-  //         top: "50%",
-  //         left: "50%",
-  //         transform: `translate(-50%, -50%)`,
-  //         width: "200px",
-  //         height: "200px",
-  //       }}
-  //     />
-  //   );
-  // }
   if (error) {
     return <p className={classes.error}>{error}</p>;
   }
-  // if (status === "completed" && (!usersData || usersData.users.length === 0)) {
-  //   return <p className={classes.error}>No user found.</p>;
-  // }
   const profileCardHandler = (user) => {
     sendReqCurrentUser(authCtx.token);
     setUserProfile({ display: true, profile: user });
@@ -87,7 +65,9 @@ const UsersPage = (props) => {
                 key={user._id}
                 user={user}
                 onProfileCard={profileCardHandler}
-                online={props.onlineUsers.some((e) => e.userId === user._id.toString())}
+                online={props.onlineUsers.some(
+                  (e) => e.userId === user._id.toString()
+                )}
               />
             ))}
         </div>
@@ -106,7 +86,7 @@ const UsersPage = (props) => {
           onCloseProfile={closeProfileHandler}
           user={userProfile.profile}
           token={authCtx.token}
-          // liked={currentUser.likes.includes(userProfile.profile._id)}
+          liked={currentUser.likes.includes(userProfile.profile._id)}
           online={props.onlineUsers.some(
             (e) => e.userId === userProfile.profile._id.toString()
           )}

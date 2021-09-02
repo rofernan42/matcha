@@ -36,8 +36,8 @@ class User {
 
   static async findById(id) {
     const [user] = await db.execute("SELECT * FROM users WHERE _id=?", [id]);
-    const [images] = await db.execute("SELECT * FROM images WHERE user_id=?", [id]);
-    const extractedImages = Object.values((({image0, image1, image2, image3, image4}) => ({image0, image1, image2, image3, image4}))(images[0]));
+    const [images] = await db.execute("SELECT image0,image1,image2,image3,image4 FROM images WHERE user_id=?", [id]);
+    const extractedImages = Object.values(images[0]);
     return {...user[0], images: extractedImages};
   }
   static async findByEmail(email) {

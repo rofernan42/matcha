@@ -11,7 +11,6 @@ const ProfilePage = () => {
     sendReq,
     status,
     data: user,
-    error,
   } = useHttp(fetchCurrentUser, true);
   const { sendReq: sendUpdate, data: updatedUser, error: errorUpdate } = useHttp(updateUser, true);
   const {
@@ -42,7 +41,7 @@ const ProfilePage = () => {
       {user && (
         <Profile
           user={updatedUser ? updatedUser : user.user}
-          images={updatedImages ? updatedImages : user.images}
+          images={updatedImages ? updatedImages : user.user.images}
           status={status}
           onChangeUser={updateUserHandler}
           onChangeImg={imgHandler}

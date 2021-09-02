@@ -23,6 +23,4 @@ router.post("/post-image", isAuth, userController.postImage);
 
 router.delete("/delete-image", isAuth, userController.deleteImage);
 
-router.put("/send-like", isAuth, userController.postLike);
-
 module.exports = router;

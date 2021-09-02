@@ -162,6 +162,14 @@
   background-color: #ff725d;
 }
 
+.bgmatch {
+  animation: bgdClosing 1s linear forwards;
+}
+
+.match {
+  animation: matchClose 500ms linear forwards;
+}
+
 @keyframes profileOpening {
   0% {
     transform: translate(-50%, -50%) scale(0);
@@ -180,5 +188,26 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes bgdClosing {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes matchClose {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
   }
 }
