@@ -11,7 +11,7 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const usersRoutes = require("./routes/users");
 const chatroomRoutes = require("./routes/chatroom");
-const likesRoutes = require("./routes/likes");
+const actionsRoutes = require("./routes/actions");
 
 const app = express();
 
@@ -66,7 +66,7 @@ app.use("/auth", authRoutes);
 app.use(userRoutes);
 app.use(usersRoutes);
 app.use("/chat", chatroomRoutes);
-app.use(likesRoutes);
+app.use(actionsRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -118,6 +118,14 @@ io.on("connection", (socket) => {
         });
     }
   });
+  socket.on("blockUser", (data) => {
+    if (data) {
+      const user = getUser(data.userId);
+      if (user) {
+        io.to(user.socketId).emit("actualise");
+      }
+    }
+  })
   socket.on("disconnect", () => {
     removeUser(socket.id);
     io.emit("getUsers", users);

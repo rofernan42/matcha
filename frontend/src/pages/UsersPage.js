@@ -7,7 +7,7 @@ import { fetchCurrentUser, fetchUsers } from "../util/usersReq";
 import classes from "./Pages.module.css";
 import ProfileCard from "../components/Users/ProfileCard";
 import { useLocation } from "react-router-dom";
-import Pagination from "../components/Pagination/Pagination";
+import Pagination from "../components/ui/Pagination";
 import Filters from "../components/Users/Filters";
 
 const UsersPage = (props) => {
@@ -29,6 +29,10 @@ const UsersPage = (props) => {
   if (error) {
     return <p className={classes.error}>{error}</p>;
   }
+  // const actualisePage = () => {
+  //   sendReq({ token: authCtx.token, path: "filtered-users" + loc.search });
+  //   setUserProfile({ display: false, profile: null });
+  // }
   const profileCardHandler = (user) => {
     sendReqCurrentUser(authCtx.token);
     setUserProfile({ display: true, profile: user });
@@ -86,6 +90,7 @@ const UsersPage = (props) => {
           onCloseProfile={closeProfileHandler}
           user={userProfile.profile}
           token={authCtx.token}
+          // actualisePage={actualisePage}
           liked={currentUser.likes.includes(userProfile.profile._id)}
           online={props.onlineUsers.some(
             (e) => e.userId === userProfile.profile._id.toString()

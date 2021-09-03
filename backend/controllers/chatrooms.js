@@ -8,7 +8,11 @@ exports.getMatches = async (req, res, next) => {
   const matches = await Match.fetchMatches(req.userId);
   const usersMatched = matches.map((match) => {
     if (match.user1.toString() === req.userId) {
-      return { user: match.user2, id: match._id, lastMessage: match.lastMessage };
+      return {
+        user: match.user2,
+        id: match._id,
+        lastMessage: match.lastMessage,
+      };
     }
     return { user: match.user1, id: match._id, lastMessage: match.lastMessage };
   });
@@ -31,8 +35,13 @@ exports.getMatches = async (req, res, next) => {
 exports.getRoom = async (req, res, next) => {
   const id = req.params.id;
   const match = await Match.findById(id);
-  const messages = await Message.findByMatch(match._id);
   try {
+    if (!match) {
+      const error = new Error("Match not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const messages = await Message.findByMatch(match._id);
     res.status(200).json({ match, messages });
   } catch (err) {
     if (!err.statusCode) {
@@ -51,6 +60,11 @@ exports.postMessage = async (req, res, next) => {
       throw error;
     }
     const room = await Match.findById(req.params.id);
+    if (!room) {
+      const error = new Error("Match not found");
+      error.statusCode = 404;
+      throw error;
+    }
     if (req.body.content.length > 0) {
       const newMsg = new Message({
         user_id: user._id,

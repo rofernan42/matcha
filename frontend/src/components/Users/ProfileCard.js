@@ -1,23 +1,24 @@
 import classes from "./ProfileCard.module.css";
 import quotes from "../../images/left-quotes-sign.png";
 import ImageSlider from "./ImageSlider";
-import { url } from "../../util/usersReq";
+import { url, userAction } from "../../util/usersReq";
 import { useEffect, useState } from "react";
 import TimeAgo from "react-timeago";
 import { store } from "react-notifications-component";
 import socket from "../../util/socket";
 import LikeButton from "./LikeButton";
+import { useHistory } from "react-router-dom";
 
 const ProfileCard = (props) => {
   const [liked, setLiked] = useState(props.liked);
   const [match, setMatch] = useState(false);
+  const history = useHistory();
   const closeProfile = () => {
     props.onCloseProfile();
   };
   const sendLikeHandler = async () => {
-    const res = await fetch(url + "send-like", {
+    const res = await fetch(url + `send-like/${props.user._id}`, {
       method: "POST",
-      body: JSON.stringify({ data: props.user._id }),
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + props.token,
@@ -29,17 +30,29 @@ const ProfileCard = (props) => {
       error.data = resData.message;
       throw error;
     }
-    if (!resData.match) {
-      setLiked(() => {
-        return !liked;
-      });
-    } else {
+    setLiked(() => {
+      return !liked;
+    });
+    if (resData.match) {
       setMatch(resData.match);
-      socket.emit("newMatch", { userId: props.user._id, user1: props.user.username, user2: resData.currentUser });
+      socket.emit("newMatch", {
+        userId: props.user._id,
+        user1: props.user.username,
+        user2: resData.currentUser,
+      });
       setTimeout(() => {
         props.onCloseProfile();
       }, 1000);
     }
+  };
+  const blockUserHandler = async () => {
+    await userAction({
+      path: `block/${props.user._id}`,
+      method: "POST",
+      token: props.token,
+    });
+    // socket.emit("blockUser", { userId: props.user._id });
+    history.go(0);
   };
   useEffect(() => {
     socket.off("matchPopup").on("matchPopup", (data) => {
@@ -64,7 +77,10 @@ const ProfileCard = (props) => {
   const imgs = props.user.images.filter((img) => img !== null);
   return (
     <>
-      <div className={`${classes.background} ${match ? classes.bgmatch : ""}`} onClick={closeProfile} />
+      <div
+        className={`${classes.background} ${match ? classes.bgmatch : ""}`}
+        onClick={closeProfile}
+      />
       <div className={`${classes.card} ${match ? classes.match : ""}`}>
         <div className={classes["card-header"]}>
           <ImageSlider images={imgs} />
@@ -114,7 +130,9 @@ const ProfileCard = (props) => {
               <span className={classes["value"]}></span>
             </div>
             <div className={classes["stat"]}>
-              <span className={classes["label"]}>Block</span>
+              <span className={classes["label"]} onClick={blockUserHandler}>
+                Block
+              </span>
             </div>
           </div>
         </div>

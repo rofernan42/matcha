@@ -18,6 +18,13 @@ class Like {
     return db.execute("DELETE FROM likes WHERE _id=?", [id]);
   }
 
+  static async destroyByUsers(user1, user2) {
+    return db.execute(
+      "DELETE FROM likes WHERE (id_from=? AND id_towards=?) OR (id_from=? AND id_towards=?)",
+      [user1, user2, user2, user1]
+    );
+  }
+
   static async findByUsers(from, towards) {
     const [res] = await db.execute(
       "SELECT * FROM likes WHERE id_from=? AND id_towards=?",
@@ -27,7 +34,10 @@ class Like {
   }
 
   static async fetchLikes(id) {
-    const res = await db.execute("SELECT id_towards FROM likes WHERE id_from=?", [id]);
+    const res = await db.execute(
+      "SELECT id_towards FROM likes WHERE id_from=?",
+      [id]
+    );
     return res[0].map((lk) => lk.id_towards);
   }
 }

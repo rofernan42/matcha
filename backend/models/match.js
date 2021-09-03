@@ -22,13 +22,10 @@ class Match {
   }
 
   static destroy(user1, user2) {
-    const db = getDb();
-    return db.collection("matches").deleteOne({
-      $or: [
-        { user1: mongodb.ObjectId(user1), user2: mongodb.ObjectId(user2) },
-        { user1: mongodb.ObjectId(user2), user2: mongodb.ObjectId(user1) },
-      ],
-    });
+    return db.execute(
+      "DELETE FROM matches WHERE (user1=? AND user2=?) OR (user1=? AND user2=?)",
+      [user1, user2, user2, user1]
+    );
   }
 
   static async findById(id) {

@@ -8,7 +8,7 @@ import classes from "./Pages.module.css";
 const ChatPage = (props) => {
   const authCtx = useContext(AuthContext);
   const [user, setUser] = useState(null);
-  const { sendReq, status, data, error } = useHttp(fetchMatches, true);
+  const { sendReq, data, error } = useHttp(fetchMatches, true);
   const {
     sendReq: getRoomData,
     status: roomStatus,
@@ -20,10 +20,6 @@ const ChatPage = (props) => {
   if (error) {
     return <p className={classes.error}>{error}</p>;
   }
-  // if (status === "completed" && (!data.matches || data.matches.length === 0)) {
-  //   return <p className={classes.error}>No user found.</p>;
-  // }
-
   const loadRoomHandler = (id, user) => {
     getRoomData({ token: authCtx.token, path: `chat/room/${id}` });
     setUser(user);

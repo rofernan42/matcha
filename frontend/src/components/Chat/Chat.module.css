@@ -10,6 +10,84 @@
   position: relative;
 }
 
+.userInfo {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid white;
+}
+
+.settingsImg {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.settingsImg:hover {
+  cursor: pointer;
+  filter: invert(30%);
+}
+
+.linkProfile {
+  color: #9f5ccc;
+}
+
+.linkProfile:hover {
+  cursor: pointer;
+  color: #38015c;
+}
+
+.username {
+  font-size: larger;
+  font-weight: bold;
+}
+
+.username img {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+}
+
+.userSettings {
+  display: none;
+}
+
+.userSettings.active {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: #332e36;
+  color: white;
+  white-space: nowrap;
+  width: min-content;
+  right: 0;
+  top: 50px;
+  animation: settingsOpening 300ms ease-out forwards;
+  transform-origin: top center;
+}
+
+.userSettings div {
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
+.userSettings div:hover {
+  cursor: pointer;
+  color: #dabaf0;
+}
+
+.userSettings div:first-child {
+  margin-left: 0;
+}
+.userSettings div:last-child {
+  margin-right: 0;
+}
+
 .roomHeader {
   height: 100%;
   overflow-y: scroll;
@@ -23,7 +101,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 5px;
-  /* border-top: 2px solid white; */
+  border-top: 2px solid white;
 }
 
 .messageInput {
@@ -110,12 +188,23 @@
   color: #38015c96;
 }
 
-
 @keyframes opening {
   0% {
     opacity: 0;
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes settingsOpening {
+  0% {
+    transform: scaleY(0)
+  }
+  80% {
+    transform: scaleY(1.1)
+  }
+  100% {
+    transform: scaleY(1)
   }
 }

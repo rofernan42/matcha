@@ -109,6 +109,20 @@ conn.connect((err) => {
       console.log("Table likes created");
     }
   );
+  conn.query(
+    `
+    CREATE TABLE IF NOT EXISTS matcha.blocks (
+      _id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+      id_from INT UNSIGNED NOT NULL,
+      id_towards INT UNSIGNED NOT NULL,
+      PRIMARY KEY (_id),
+      UNIQUE INDEX _id_UNIQUE (_id ASC) VISIBLE);
+    `,
+    (err, res) => {
+      if (err) throw err;
+      console.log("Table blocks created");
+    }
+  );
 });
 
 exports.modules = conn;

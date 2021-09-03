@@ -1,4 +1,4 @@
-const Match = require("../models/match");
+const Block = require("../models/block");
 const User = require("../models/user");
 
 const NB_USERS_PER_PAGE = 10;
@@ -25,7 +25,8 @@ exports.getFilteredUsers = async (req, res, next) => {
     throw error;
   }
   const users = await User.fetchFilteredUsers(req.userId);
-  let filteredUsers = filterByAttraction(user, users);
+  const usersNotBlocked = await filterByBlockings(user, users);
+  let filteredUsers = filterByAttraction(user, usersNotBlocked);
   if (req.query.minAge || req.query.maxAge) {
     filteredUsers = filterByAge(req.query.minAge, req.query.maxAge, filteredUsers);
   }
@@ -43,6 +44,15 @@ exports.getFilteredUsers = async (req, res, next) => {
     next(err);
   }
 };
+
+const filterByBlockings = async (user, users) => {
+  const blocks = await Block.fetchByUser(user._id);
+  const usersNotBlocked = users.filter(
+    function(usr) { return this.indexOf(usr._id) < 0 },
+    blocks.map((block) => (block.id_from === user._id) ? block.id_towards : block.id_from)
+  );
+  return usersNotBlocked;
+}
 
 const filterByAttraction = (user, users) => {
   let filteredUsers = users;

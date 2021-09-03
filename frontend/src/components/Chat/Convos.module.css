@@ -1,7 +1,7 @@
 .convos {
   flex: 3;
   /* background-color: #d6d4d4; */
-  /* border-left: 2px solid white; */
+  border-left: 2px solid white;
 }
 
 .wrapper {

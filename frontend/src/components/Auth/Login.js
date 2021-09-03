@@ -84,7 +84,6 @@ const Login = () => {
                     verticalAlign: "middle",
                     position: "relative",
                     marginLeft: "15px",
-                    marginBottom: "3px",
                     width: "20px",
                     height: "20px",
                   }}

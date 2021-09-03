@@ -83,3 +83,20 @@ export const updateImage = async (data) => {
   }
   return resData;
 };
+
+export const userAction = async (data) => {
+  const res = await fetch(url + data.path, {
+    method: data.method,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + data.token,
+    },
+  });
+  const resData = await res.json();
+  if (!res.ok) {
+    const error = new Error("Something went wrong.");
+    error.data = resData.message;
+    throw error;
+  }
+  return resData;
+};

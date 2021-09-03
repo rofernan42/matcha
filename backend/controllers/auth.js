@@ -3,7 +3,6 @@ const Image = require("../models/image");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authValidation = require("../middleware/auth-validation");
-// const io = require("../socket")
 
 exports.signup = async (req, res, next) => {
   const username = req.body.username.trim();

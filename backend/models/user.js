@@ -10,11 +10,14 @@ class User {
     this.password = data.password;
     this.age = data.age || null;
     this.gender = data.gender || "other";
-    this.attrMen = (data.attrMen === null || data.attrMen === undefined) ? true : data.attrMen;
-    this.attrWomen = (data.attrWomen === null || data.attrWomen === undefined) ? true : data.attrWomen;
+    this.attrMen =
+      data.attrMen === null || data.attrMen === undefined ? true : data.attrMen;
+    this.attrWomen =
+      data.attrWomen === null || data.attrWomen === undefined
+        ? true
+        : data.attrWomen;
     this.bio = data.bio || "";
     this.interests = data.interests || "";
-    // this.likes = data.likes || [];
     this.score = data.score || 0.0;
     this.lastConnection = Date.now();
   }
@@ -29,16 +32,28 @@ class User {
     } else {
       return db.execute(
         "INSERT INTO users (username, name, lastname, email, password, gender, attrMen, attrWomen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        [this.username, this.name, this.lastname, this.email, this.password, this.gender, this.attrMen, this.attrWomen]
+        [
+          this.username,
+          this.name,
+          this.lastname,
+          this.email,
+          this.password,
+          this.gender,
+          this.attrMen,
+          this.attrWomen,
+        ]
       );
     }
   }
 
   static async findById(id) {
     const [user] = await db.execute("SELECT * FROM users WHERE _id=?", [id]);
-    const [images] = await db.execute("SELECT image0,image1,image2,image3,image4 FROM images WHERE user_id=?", [id]);
+    const [images] = await db.execute(
+      "SELECT image0,image1,image2,image3,image4 FROM images WHERE user_id=?",
+      [id]
+    );
     const extractedImages = Object.values(images[0]);
-    return {...user[0], images: extractedImages};
+    return { ...user[0], images: extractedImages };
   }
   static async findByEmail(email) {
     const [res] = await db.execute("SELECT * FROM users WHERE email=?", [
@@ -61,12 +76,22 @@ class User {
     const res = await db.execute("SELECT * FROM users WHERE _id!=?", [
       currentUserId,
     ]);
-    const [images] = await db.execute("SELECT * FROM images WHERE user_id!=?", [currentUserId]);
+    const [images] = await db.execute("SELECT * FROM images WHERE user_id!=?", [
+      currentUserId,
+    ]);
     const data = res[0].map((user) => {
       const imgs = images.find((img) => img.user_id === user._id);
-      const extractedImages = Object.values((({image0, image1, image2, image3, image4}) => ({image0, image1, image2, image3, image4}))(imgs));
-      return {...user, images: extractedImages}
-    })
+      const extractedImages = Object.values(
+        (({ image0, image1, image2, image3, image4 }) => ({
+          image0,
+          image1,
+          image2,
+          image3,
+          image4,
+        }))(imgs)
+      );
+      return { ...user, images: extractedImages };
+    });
     return data;
   }
 }
