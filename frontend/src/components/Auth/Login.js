@@ -12,7 +12,6 @@ const Login = () => {
   const passwordRef = useRef();
   const history = useHistory();
   const authCtx = useContext(AuthContext);
-  // const btnClasses = {isLoading }
 
   const formSubmit = async (e) => {
     e.preventDefault();

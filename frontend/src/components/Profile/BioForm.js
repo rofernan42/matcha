@@ -21,8 +21,8 @@ const BioForm = (props) => {
     }
   };
   return (
-    <>
-      <div>About myself:</div>
+    <div className={classes.bioField}>
+      <div>About myself</div>
       <form onSubmit={bioHandler}>
         <textarea
           type="textarea"
@@ -32,6 +32,7 @@ const BioForm = (props) => {
           onChange={saveBtnHandler}
           ref={bioRef}
         />
+        <div className={classes.counter}>{counter} characters left</div>
         <button
           id="save"
           name="save"
@@ -44,8 +45,7 @@ const BioForm = (props) => {
           Save
         </button>
       </form>
-      {counter} characters left
-    </>
+    </div>
   );
 };
 

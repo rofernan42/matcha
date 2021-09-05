@@ -8,6 +8,34 @@
   height: 100%;
 }
 
+.typeConvos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min-content;
+  border: none;
+  border-bottom: 1px solid gray;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.typeConvos div {
+  padding: 10px;
+  color: #9f5ccc;
+}
+
+.typeConvos div:hover {
+  padding: 10px;
+  color: #38015c;
+  cursor: pointer;
+}
+
+.typeConvos div.selected {
+  padding: 10px;
+  color: #38015c;
+  cursor: default;
+}
+
 .convo {
   display: flex;
   align-items: center;

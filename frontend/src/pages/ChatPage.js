@@ -9,7 +9,6 @@ const ChatPage = (props) => {
   const authCtx = useContext(AuthContext);
   const [user, setUser] = useState(null);
   const [matches, setMatches] = useState(null);
-  // const { sendReq, data, error } = useHttp(fetchMatches, true);
   const {
     sendReq: getRoomData,
     status: roomStatus,
@@ -58,6 +57,7 @@ const ChatPage = (props) => {
           onChangeRoom={loadRoomHandler}
           onlineUsers={props.onlineUsers}
           onUpdateConvos={updateConvos}
+          token={authCtx.token}
         />
       )}
     </>

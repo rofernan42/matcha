@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import LoadingSpinner from "../ui/LoadingSpinner";
 import Image from "./Image";
 import classes from "./Images.module.css";
 
@@ -14,19 +13,14 @@ const ImagesForm = (props) => {
         <tbody>
           <tr>
             <td rowSpan="2" className={classes["td-main"]}>
-              {props.statusImg === "pending" && (
-                <LoadingSpinner loadingScreen={true} />
-              )}
-              {(props.status === "completed" ||
-                props.statusImg === "completed") && (
-                <Image
-                  key={image[0]}
-                  img={image[0]}
-                  typeField="main"
-                  imageNb={0}
-                  onChangeImg={props.onChangeImg}
-                />
-              )}
+              <Image
+                key={image[0]}
+                img={image[0]}
+                typeField="main"
+                imageNb={0}
+                onChangeImg={props.onChangeImg}
+                token={props.token}
+              />
             </td>
             <td className={classes["td-small"]}>
               <Image
@@ -35,6 +29,7 @@ const ImagesForm = (props) => {
                 typeField="small"
                 imageNb={1}
                 onChangeImg={props.onChangeImg}
+                token={props.token}
               />
             </td>
             <td className={classes["td-small"]}>
@@ -44,6 +39,7 @@ const ImagesForm = (props) => {
                 typeField="small"
                 imageNb={2}
                 onChangeImg={props.onChangeImg}
+                token={props.token}
               />
             </td>
           </tr>
@@ -55,6 +51,7 @@ const ImagesForm = (props) => {
                 typeField="small"
                 imageNb={3}
                 onChangeImg={props.onChangeImg}
+                token={props.token}
               />
             </td>
             <td className={classes["td-small"]}>
@@ -64,6 +61,7 @@ const ImagesForm = (props) => {
                 typeField="small"
                 imageNb={4}
                 onChangeImg={props.onChangeImg}
+                token={props.token}
               />
             </td>
           </tr>

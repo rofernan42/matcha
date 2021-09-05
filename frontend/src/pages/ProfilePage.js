@@ -1,9 +1,8 @@
 import { useContext, useEffect } from "react";
 import Profile from "../components/Profile/Profile";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
 import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
-import { fetchCurrentUser, updateImage, updateUser } from "../util/usersReq";
+import { fetchCurrentUser, updateUser } from "../util/usersReq";
 
 const ProfilePage = () => {
   const authCtx = useContext(AuthContext);
@@ -13,11 +12,6 @@ const ProfilePage = () => {
     data: user,
   } = useHttp(fetchCurrentUser, true);
   const { sendReq: sendUpdate, data: updatedUser, error: errorUpdate } = useHttp(updateUser, true);
-  const {
-    sendReq: sendImage,
-    statusImages,
-    data: updatedImages,
-  } = useHttp(updateImage, true);
 
   const updateUserHandler = (attr) => {
     sendUpdate({
@@ -25,27 +19,20 @@ const ProfilePage = () => {
       ...attr,
     });
   };
-  const imgHandler = (img) => {
-    sendImage({ token: authCtx.token, ...img });
-  };
 
   useEffect(() => {
     sendReq(authCtx.token);
   }, [sendReq, authCtx.token]);
 
-  if (status === "pending") {
-    return <LoadingSpinner loadingScreen={true} />;
-  }
   return (
     <>
       {user && (
         <Profile
           user={updatedUser ? updatedUser : user.user}
-          images={updatedImages ? updatedImages : user.user.images}
+          images={user.user.images}
           status={status}
           onChangeUser={updateUserHandler}
-          onChangeImg={imgHandler}
-          statusImg={statusImages}
+          token={authCtx.token}
           error={errorUpdate ? errorUpdate : {}}
         />
       )}

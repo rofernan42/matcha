@@ -2,15 +2,18 @@ const Match = require("../models/match");
 const User = require("../models/user");
 const Message = require("../models/message");
 
-const io = require("../socket");
-
 exports.getMatches = async (req, res, next) => {
-  const matches = await Match.fetchMatches(req.userId);
+  let matches = await Match.fetchMatches(req.userId);
+  if (req.query.unread) {
+    matches = matches.filter(
+      (match) => !match.msgRead && match.msgAuthor && match.msgAuthor !== +req.userId
+    );
+  }
   const usersMatched = matches.map((match) => {
     if (match.user1.toString() === req.userId) {
       return {
         user: match.user2,
-        match
+        match,
       };
     }
     return { user: match.user1, match };
@@ -71,10 +74,10 @@ exports.postMessage = async (req, res, next) => {
         content: req.body.content,
       });
       await newMsg.save();
+      room.lastMessage = req.body.content;
+      room.msgRead = false;
+      room.msgAuthor = user._id;
     }
-    room.lastMessage = req.body.content;
-    room.msgRead = false;
-    room.msgAuthor = user._id
     const updatedRoom = new Match({ ...room });
     await updatedRoom.save();
     const messages = await Message.findByMatch(room._id);

@@ -74,10 +74,6 @@
   animation: notifOpen 200ms ease-in-out;
 }
 
-.appear {
-  
-}
-
 @keyframes notifOpen {
   0% {
     transform: scale(0.5);

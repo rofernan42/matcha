@@ -16,26 +16,30 @@ const Profile = (props) => {
           onChangeImg={props.onChangeImg}
           status={props.status}
           statusImg={props.statusImg}
+          token={props.token}
         />
         <SettingsForm
           user={props.user}
           onChangeSettings={props.onChangeUser}
           error={props.error}
+          token={props.token}
         />
       </div>
-      <AgeForm age={props.user.age} onChangeAge={props.onChangeUser} />
-      <GenderForm
-        gender={props.user.gender}
-        onChangeGender={props.onChangeUser}
-      />
-      <AttractionForm user={props.user} onChangeAttr={props.onChangeUser} />
-      <BioForm bio={props.user.bio} onChangeBio={props.onChangeUser} />
-      <InterestsForm
-        interests={props.user.interests.split(" ")}
-        onChangeInt={props.onChangeUser}
-      />
-      <div>People who have seen your profile</div>
-      <div>People who liked you</div>
+      <div className={classes.settingsField}>
+        <AgeForm age={props.user.age} onChangeAge={props.onChangeUser} />
+        <GenderForm
+          gender={props.user.gender}
+          onChangeGender={props.onChangeUser}
+        />
+        <AttractionForm user={props.user} onChangeAttr={props.onChangeUser} />
+        <BioForm bio={props.user.bio} onChangeBio={props.onChangeUser} />
+        <InterestsForm
+          interests={props.user.interests.split(" ")}
+          onChangeInt={props.onChangeUser}
+        />
+        <div>People who have seen your profile</div>
+        <div>People who liked you</div>
+      </div>
     </div>
   );
 };

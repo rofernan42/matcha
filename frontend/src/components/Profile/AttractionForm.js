@@ -10,6 +10,7 @@ const checkedReducer = (state, action) => {
   }
   return state;
 };
+
 const AttractionForm = (props) => {
   const [isSending, setIsSending] = useState(false);
   const [checkedAttr, dispatch] = useReducer(checkedReducer, {

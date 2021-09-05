@@ -58,12 +58,6 @@ const Chat = (props) => {
   const formSubmitHandler = async (e) => {
     e.preventDefault();
     if (newMsg.length > 0) {
-      socket.emit("sendMessage", {
-        senderId: authCtx.userId,
-        receiverId: props.room.user._id,
-        text: newMsg,
-        roomId: currentRoom._id,
-      });
       try {
         const res = await fetch(
           url + `chat/room/${props.room.roomData.match._id}/message`,
@@ -80,6 +74,13 @@ const Chat = (props) => {
         if (!res.ok) {
           throw new Error(resData.message || "Could not send message");
         }
+        await props.onUpdateConvos(currentRoom._id);
+        socket.emit("sendMessage", {
+          senderId: authCtx.userId,
+          receiverId: props.room.user._id,
+          text: newMsg,
+          roomId: currentRoom._id,
+        });
         setMessages(resData.messages);
         setNewMsg("");
       } catch (err) {

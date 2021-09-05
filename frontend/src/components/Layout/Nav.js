@@ -18,16 +18,22 @@ const Nav = () => {
       setPushNotif(classes.pushNotif);
     }
   });
-  const getMatches = async () => {
-    const data = await fetchMatches({
-      token: authCtx.token,
-      path: "chat/matches",
-    });
-    const newMsgs = data.matches.find((match) => !match.match.msgRead);
-    if (newMsgs && loc.pathname !== "/chat") setPushNotif(classes.pushNotif);
-    else setPushNotif("");
-  };
-  if (isAuth) getMatches();
+  useEffect(() => {
+    const getMatches = async () => {
+      const data = await fetchMatches({
+        token: authCtx.token,
+        path: "chat/matches",
+      });
+      const newMsgs = data.matches.find(
+        (match) =>
+          !match.match.msgRead && match.match.msgAuthor !== +authCtx.userId
+      );
+      if (newMsgs && loc.pathname !== "/chat") setPushNotif(classes.pushNotif);
+      else setPushNotif("");
+    };
+    if (isAuth) getMatches();
+  }, [authCtx, isAuth, loc.pathname]);
+
   return (
     <header className={classes.header}>
       <div className={classes.logo}>

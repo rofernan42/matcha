@@ -31,7 +31,7 @@ const Convo = (props) => {
     if (props.match.match._id === props.currentRoom) {
       setData(null);
     }
-  }, [data, props.currentRoom, props.match.match._id]);
+  }, [data, props.currentRoom, props.match]);
 
   return (
     <div className={classes.convo} onClick={changeRoomHandler}>

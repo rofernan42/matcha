@@ -1,11 +1,6 @@
 .images-field {
-    /* flex: 1; */
-  width: max-content;
+  width: auto;
   height: max-content;
-  margin-right: 30px;
-  /* padding: 10px; */
-  /* margin-top: 20px; */
-  /* margin-left: 10px; */
 }
 
 table {
@@ -90,7 +85,7 @@ table {
 .cross {
   position: absolute;
   border: 2px solid #c52b2b;
-  transform: rotate(45deg);
+  transform: translate(-50%, -125%);
   border-radius: 50%;
   background-color: #c52b2b48;
   color: #c52b2b;
@@ -98,27 +93,19 @@ table {
 }
 
 .cross.main {
-  margin-top: -50px;
-  margin-left: 100px;
   height: 40px;
   width: 40px;
-  font-size: 40px;
+  font-size: 50px;
   line-height: 24px;
   padding: 0;
 }
 
 .cross.small {
-  margin-top: -35px;
-  margin-left: 40px;
-  height: 30px;
-  width: 30px;
-  font-size: 30px;
-  line-height: 11px;
+  height: 32px;
+  width: 32px;
+  font-size: 40px;
+  line-height: 15px;
   padding: 0;
-}
-
-.cross::before {
-  content: "+";
 }
 
 .cross:hover {

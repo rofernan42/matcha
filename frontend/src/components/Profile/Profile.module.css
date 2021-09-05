@@ -1,26 +1,32 @@
 .profilePage {
-  background-color: #311547;
+  /* background-color: #311547; */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  animation: profileOpening 1s linear forwards;
 }
 
 .settingsField {
-  display: flex;
-  flex-wrap: wrap;
-  background-color: #e0dbe6;
+  background: white;
   width: fit-content;
   text-align: center;
   margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
   padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
 }
 
 .btn {
-  margin: 10px;
+  /* margin: 10px; */
   width: 75px;
   font-size: 15px;
   white-space: nowrap;
   padding: 5px;
   cursor: default;
   color: white;
-  /* border-radius: 4px; */
   border: none;
   background: linear-gradient(127deg, #cec9d1, #c0aecc);
   transition: all 50ms linear;
@@ -29,10 +35,6 @@
 .btn.active:hover {
   cursor: pointer;
   transform: scale(1.1);
-  /* color: white;
-  background-color: #c0aecc;
-  border-color: #c0aecc;
-  background: linear-gradient(127deg, #6b4f7e, #c0aecc); */
 }
 
 .btn.selected {
@@ -42,4 +44,30 @@
 
 .btn.inactive:hover {
   cursor: default;
+}
+
+.bioField {
+  border: 1px solid black;
+  text-align: left;
+}
+
+.bioField textarea {
+  resize: none;
+  border: none;
+  outline: none;
+}
+
+.counter {
+  display: inline-block;
+  font-size: 12px;
+  margin-right: 10px;
+}
+
+@keyframes profileOpening {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

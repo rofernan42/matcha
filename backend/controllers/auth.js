@@ -75,12 +75,12 @@ exports.login = async (req, res, next) => {
         userId: loadedUser._id.toString(),
       },
       "matchasecrettoken",
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
     // io.getIO().emit('test', {message: `${loadedUser.username} is conected`})
     res
       .status(200)
-      .json({ token, userId: loadedUser._id.toString(), expiresIn: 3600 });
+      .json({ token, userId: loadedUser._id.toString(), expiresIn: 86400 });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

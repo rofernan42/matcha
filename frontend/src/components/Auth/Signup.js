@@ -16,7 +16,6 @@ const Signup = () => {
 
   const formSubmit = async (e) => {
     e.preventDefault();
-    // setError({});
     setIsLoading(true);
     const entUsername = usernameRef.current.value;
     const entName = nameRef.current.value;
