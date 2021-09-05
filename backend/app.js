@@ -103,6 +103,11 @@ io.on("connection", (socket) => {
         text,
         fromRoom: roomId,
       });
+      io.to(user.socketId).emit(`getMessageConvo${roomId}`, {
+        roomId,
+        text,
+      });
+      io.to(user.socketId).emit(`getPushNotif`);
     }
   });
   socket.on("newMatch", (data) => {
@@ -114,7 +119,7 @@ io.on("connection", (socket) => {
       if (user)
         io.to(user.socketId).emit("notif", {
           message: `You matched with ${data.user2} !`,
-          type: "info"
+          type: "info",
         });
     }
   });
@@ -125,7 +130,7 @@ io.on("connection", (socket) => {
         io.to(user.socketId).emit("actualise");
       }
     }
-  })
+  });
   socket.on("disconnect", () => {
     removeUser(socket.id);
     io.emit("getUsers", users);

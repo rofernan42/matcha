@@ -13,7 +13,7 @@ const Room = (props) => {
         onlineUsers={props.onlineUsers}
       />
       {!props.room.roomData && <Pending noMatch={!props.matches || props.matches.length === 0} />}
-      {props.room.roomData && <Chat room={props.room} />}
+      {props.room.roomData && <Chat room={props.room} onUpdateConvos={props.onUpdateConvos} />}
       <Convos matches={props.matches} room={props.room.roomData} onChangeRoom={props.onChangeRoom} />
     </div>
   );

@@ -36,13 +36,12 @@ function App() {
 
   // navigator.geolocation.getCurrentPosition(success, error);
 
-  console.log(authCtx.currentUser);
   useEffect(() => {
     if (authCtx.userId) {
       socket.emit("addUser", authCtx.userId);
       socket.off("getUsers").on("getUsers", (users) => {
         setOnlineUsers(users);
-        console.log(users);
+        // console.log(users);
       });
     }
   }, [authCtx.userId]);

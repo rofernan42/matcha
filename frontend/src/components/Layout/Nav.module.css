@@ -64,3 +64,28 @@
   background-color: #c79ee2;
   color: #38015c;
 }
+
+.pushNotif {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: red;
+  animation: notifOpen 200ms ease-in-out;
+}
+
+.appear {
+  
+}
+
+@keyframes notifOpen {
+  0% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

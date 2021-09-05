@@ -6,12 +6,14 @@ class Match {
     this.user1 = data.user1;
     this.user2 = data.user2;
     this.lastMessage = data.lastMessage;
+    this.msgRead = data.msgRead || false;
+    this.msgAuthor = data.msgAuthor;
   }
 
   save() {
     if (this._id) {
       return db.query(
-        "UPDATE matches SET lastMessage=? WHERE _id=?;", [this.lastMessage, this._id]
+        "UPDATE matches SET lastMessage=?,msgRead=?,msgAuthor=? WHERE _id=?;", [this.lastMessage, this.msgRead, this.msgAuthor, this._id]
       );
     } else {
       return db.execute("INSERT INTO matches (user1, user2) VALUES (?, ?)", [

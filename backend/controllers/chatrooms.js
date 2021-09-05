@@ -10,16 +10,15 @@ exports.getMatches = async (req, res, next) => {
     if (match.user1.toString() === req.userId) {
       return {
         user: match.user2,
-        id: match._id,
-        lastMessage: match.lastMessage,
+        match
       };
     }
-    return { user: match.user1, id: match._id, lastMessage: match.lastMessage };
+    return { user: match.user1, match };
   });
   const resMatches = await Promise.all(
     usersMatched.map(async (elem) => {
       const user = await User.findById(elem.user);
-      return { user, matchId: elem.id, lastMessage: elem.lastMessage };
+      return { user, match: elem.match };
     })
   );
   try {
@@ -74,6 +73,8 @@ exports.postMessage = async (req, res, next) => {
       await newMsg.save();
     }
     room.lastMessage = req.body.content;
+    room.msgRead = false;
+    room.msgAuthor = user._id
     const updatedRoom = new Match({ ...room });
     await updatedRoom.save();
     const messages = await Message.findByMatch(room._id);
@@ -85,5 +86,25 @@ exports.postMessage = async (req, res, next) => {
     next(err);
   }
 };
-exports.postMarkAsRead = (req, res, next) => {};
-exports.deleteRoom = (req, res, next) => {};
+exports.markAsRead = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const room = await Match.findById(req.params.id);
+    if (user._id !== room.msgAuthor) {
+      room.msgRead = true;
+    }
+    const updatedRoom = new Match({ ...room });
+    await updatedRoom.save();
+    res.status(200).json({ match: updatedRoom });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};

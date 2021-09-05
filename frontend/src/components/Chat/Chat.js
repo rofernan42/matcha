@@ -48,8 +48,12 @@ const Chat = (props) => {
         _id: Math.random(),
         fromRoom: data.fromRoom,
       });
+      props.onUpdateConvos(currentRoom._id);
     });
-  }, []);
+    return () => {
+      socket.off("getMessage");
+    }
+  }, [currentRoom._id, props]);
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
@@ -117,6 +121,7 @@ const Chat = (props) => {
   // const closeProfileHandler = () => {
   //   setProfileActive(false);
   // };
+
   const imgProfile = props.room.user.images.find((img) => img !== null);
   return (
     <div className={classes.room}>

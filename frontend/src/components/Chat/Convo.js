@@ -1,26 +1,38 @@
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { url } from "../../util/usersReq";
 import classes from "./Convos.module.css";
-// import socket from "../../util/socket";
+import socket from "../../util/socket";
 
 const Convo = (props) => {
-//   const [data, setData] = useState(null);
-//   const [lastMessage, setLastMessage] = useState(props.match.lastMessage);
-//   useEffect(() => {
-//     data && data.roomId === +props.match.matchId && setLastMessage(data.content);
-//   }, [data, props.match.matchId]);
-//   console.log(data);
-  
-//   console.log(lastMessage)
-//   useEffect(() => {
-//     socket.off("getMessage").on("getMessage", (data) => {
-//         console.log(props.match.matchId)
-//       setData({ content: data.text, roomId: data.fromRoom });
-//     });
-//   }, []);
+  const [data, setData] = useState(null);
+  const [msgUnread, setMsgUnread] = useState(false);
+
+  useEffect(() => {
+    socket
+      .off(`getMessageConvo${props.match.match._id}`)
+      .on(`getMessageConvo${props.match.match._id}`, (msgReceived) => {
+        setData({ content: msgReceived.text, roomId: msgReceived.roomId });
+      });
+    return () => {
+      socket.off(`getMessageConvo${props.match.match._id}`);
+    };
+  });
   const changeRoomHandler = () => {
-    props.onChangeRoom(props.match.matchId, props.match.user);
+    props.onChangeRoom(props.match.match._id, props.match.user);
   };
+  useEffect(() => {
+    const isUnread =
+      !props.match.match.msgRead &&
+      props.match.match.msgAuthor === props.match.user._id;
+    setMsgUnread(
+      (data && data.roomId !== props.currentRoom) ||
+        (isUnread && props.match.match._id !== props.currentRoom)
+    );
+    if (props.match.match._id === props.currentRoom) {
+      setData(null);
+    }
+  }, [data, props.currentRoom, props.match.match._id]);
+
   return (
     <div className={classes.convo} onClick={changeRoomHandler}>
       <img
@@ -28,7 +40,11 @@ const Convo = (props) => {
         src={`${url}${props.imgProfile}`}
         alt=""
       />
-      <div className={classes.lastMessage}>{props.lastMessage}</div>
+      <div
+        className={`${classes.lastMessage} ${msgUnread ? classes.unread : ""}`}
+      >
+        {data ? data.content : props.match.match.lastMessage}
+      </div>
     </div>
   );
 };

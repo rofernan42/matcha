@@ -12,7 +12,7 @@ export const fetchMatches = async (data) => {
   }
   const matchesData = [];
   for (const elem of resData.matches) {
-    matchesData.push({ key: elem.matchId, ...elem });
+    matchesData.push({ key: elem.match._id, ...elem });
   }
   return {
     matches: matchesData,

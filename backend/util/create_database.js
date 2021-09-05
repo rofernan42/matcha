@@ -66,6 +66,8 @@ conn.connect((err) => {
       user1 INT NOT NULL,
       user2 INT NOT NULL,
       lastMessage VARCHAR(255) NULL,
+      msgRead TINYINT NULL,
+      msgAuthor INT NULL,
       PRIMARY KEY (_id),
       UNIQUE INDEX _id_UNIQUE (_id ASC) VISIBLE);
     `,

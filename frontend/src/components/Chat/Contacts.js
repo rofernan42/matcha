@@ -27,7 +27,7 @@ const Contacts = (props) => {
             return (
               <Contact
                 key={match.user._id}
-                matchId={match.matchId}
+                matchId={match.match._id}
                 imgProfile={imgProfile}
                 user={match.user}
                 onChangeRoom={props.onChangeRoom}

@@ -22,6 +22,11 @@ class Message {
     ]);
     return res[0];
   }
+
+  static async findById(id) {
+    const [res] = await db.execute("SELECT * FROM messages WHERE _id=?", [id]);
+    return res[0];
+  }
 }
 
 module.exports = Message;

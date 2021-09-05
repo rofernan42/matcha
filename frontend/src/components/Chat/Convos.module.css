@@ -37,3 +37,8 @@
   text-overflow: ellipsis;
   color: rgb(151, 151, 151);
 }
+
+.lastMessage.unread {
+  color: black;
+  font-weight: bold;
+}
