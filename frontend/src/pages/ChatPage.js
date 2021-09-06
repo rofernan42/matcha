@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Room from "../components/Chat/Room";
 import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
@@ -14,16 +14,19 @@ const ChatPage = (props) => {
     status: roomStatus,
     data: roomData,
   } = useHttp(getRoom, true);
-  useEffect(() => {
-    const getMatches = async () => {
-      const data = await fetchMatches({
-        token: authCtx.token,
-        path: "chat/matches",
-      });
-      setMatches(data.matches);
-    };
-    getMatches();
+
+  const getMatches = useCallback(async () => {
+    const data = await fetchMatches({
+      token: authCtx.token,
+      path: "chat/matches",
+    });
+    setMatches(data.matches);
   }, [authCtx.token]);
+
+  useEffect(() => {
+    getMatches();
+  }, [getMatches]);
+
   const loadRoomHandler = (id, user) => {
     updateConvos(id);
     getRoomData({ token: authCtx.token, path: `chat/room/${id}` });
@@ -57,7 +60,8 @@ const ChatPage = (props) => {
           onChangeRoom={loadRoomHandler}
           onlineUsers={props.onlineUsers}
           onUpdateConvos={updateConvos}
-          token={authCtx.token}
+          authCtx={authCtx}
+          onGetMatches={getMatches}
         />
       )}
     </>

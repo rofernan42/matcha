@@ -29,10 +29,6 @@ const UsersPage = (props) => {
   if (error) {
     return <p className={classes.error}>{error}</p>;
   }
-  // const actualisePage = () => {
-  //   sendReq({ token: authCtx.token, path: "filtered-users" + loc.search });
-  //   setUserProfile({ display: false, profile: null });
-  // }
   const profileCardHandler = (user) => {
     sendReqCurrentUser(authCtx.token);
     setUserProfile({ display: true, profile: user });
@@ -40,6 +36,7 @@ const UsersPage = (props) => {
   const closeProfileHandler = () => {
     setUserProfile({ display: false, profile: null });
   };
+
   return (
     <>
       <div className={classes.container}>
@@ -64,10 +61,15 @@ const UsersPage = (props) => {
               <p className={classes.error}>No user found.</p>
             )}
           {usersData &&
+            currentUser &&
             usersData.users.map((user) => (
               <UserCard
                 key={user._id}
                 user={user}
+                currentLoc={{
+                  lat: currentUser.user.lat,
+                  lon: currentUser.user.lon,
+                }}
                 onProfileCard={profileCardHandler}
                 online={props.onlineUsers.some(
                   (e) => e.userId === user._id.toString()
@@ -90,7 +92,6 @@ const UsersPage = (props) => {
           onCloseProfile={closeProfileHandler}
           user={userProfile.profile}
           token={authCtx.token}
-          // actualisePage={actualisePage}
           liked={currentUser.likes.includes(userProfile.profile._id)}
           online={props.onlineUsers.some(
             (e) => e.userId === userProfile.profile._id.toString()

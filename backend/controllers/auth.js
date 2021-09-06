@@ -24,6 +24,8 @@ exports.signup = async (req, res, next) => {
       error.statusCode = 422;
       throw error;
     }
+    const lat = req.body.lat;
+    const lon = req.body.lon;
     const hashedPwd = await bcrypt.hash(password, 12);
     const user = new User({
       username,
@@ -31,6 +33,8 @@ exports.signup = async (req, res, next) => {
       lastname,
       email,
       password: hashedPwd,
+      lat,
+      lon,
     });
     await user.save();
     const createdUser = await User.findByEmail(user.email);
@@ -65,10 +69,8 @@ exports.login = async (req, res, next) => {
       error.error = "Wrong password";
       throw error;
     }
-    const loadedUser = new User({ ...user });
+    const loadedUser = new User({ ...user, lat: req.body.lat, lon: req.body.lon });
     await loadedUser.save();
-    // user.lastConnection = Date.now();
-    // await user.save();
     const token = jwt.sign(
       {
         email: loadedUser.email,
@@ -77,7 +79,6 @@ exports.login = async (req, res, next) => {
       "matchasecrettoken",
       { expiresIn: "24h" }
     );
-    // io.getIO().emit('test', {message: `${loadedUser.username} is conected`})
     res
       .status(200)
       .json({ token, userId: loadedUser._id.toString(), expiresIn: 86400 });

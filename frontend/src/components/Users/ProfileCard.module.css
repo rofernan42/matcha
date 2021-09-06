@@ -121,7 +121,7 @@
   float: left;
   text-align: center;
   border-left: 1px solid #ebebeb;
-  height: 50px;
+  height: 60px;
 }
 
 .stat:first-child {
@@ -147,6 +147,29 @@
   display: block;
   font-weight: 700;
   font-size: 20px;
+}
+
+.likedIconFalse {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #9b8ba5, #e5d0f3);
+  margin: auto;
+  margin-top: 10px;
+}
+
+.likedIconTrue {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #8344ad;
+  margin: auto;
+}
+
+.heart {
+  width: 18px;
+  height: 17px;
+  margin-top: 7px;
 }
 
 .status {

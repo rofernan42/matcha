@@ -1,4 +1,5 @@
 const db = require("../util/database");
+const Like = require("./like");
 
 class User {
   constructor(data) {
@@ -19,6 +20,8 @@ class User {
     this.bio = data.bio || "";
     this.interests = data.interests || "";
     this.score = data.score || 0.0;
+    this.lat = data.lat;
+    this.lon = data.lon;
     this.lastConnection = Date.now();
   }
 
@@ -26,12 +29,12 @@ class User {
     if (this._id) {
       const values = Object.values(this);
       return db.query(
-        "REPLACE INTO users (_id, username, name, lastname, email, password, age, gender, attrMen, attrWomen, bio, interests, score, lastConnection) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        "REPLACE INTO users (_id, username, name, lastname, email, password, age, gender, attrMen, attrWomen, bio, interests, score, lat, lon, lastConnection) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
         [...values]
       );
     } else {
       return db.execute(
-        "INSERT INTO users (username, name, lastname, email, password, gender, attrMen, attrWomen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO users (username, name, lastname, email, password, gender, attrMen, attrWomen, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
           this.username,
           this.name,
@@ -41,6 +44,8 @@ class User {
           this.gender,
           this.attrMen,
           this.attrWomen,
+          this.lat,
+          this.lon
         ]
       );
     }
@@ -79,7 +84,8 @@ class User {
     const [images] = await db.execute("SELECT * FROM images WHERE user_id!=?", [
       currentUserId,
     ]);
-    const data = res[0].map((user) => {
+    const data = await Promise.all(res[0].map(async (user) => {
+      const likesMe = await Like.findByUsers(user._id, currentUserId);
       const imgs = images.find((img) => img.user_id === user._id);
       const extractedImages = Object.values(
         (({ image0, image1, image2, image3, image4 }) => ({
@@ -90,8 +96,8 @@ class User {
           image4,
         }))(imgs)
       );
-      return { ...user, images: extractedImages };
-    });
+      return { ...user, images: extractedImages, likesMe: likesMe ? true : false };
+    }));
     return data;
   }
 }

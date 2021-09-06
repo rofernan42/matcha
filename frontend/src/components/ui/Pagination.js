@@ -14,9 +14,11 @@ const Pagination = (props) => {
   // }, [])
   const changePage = (pageNb) => {
     setCurrentPage(pageNb);
+    queryParams.set("page", pageNb);
+    const queries = queryParams.toString();
     history.push({
       pathname: loc.pathname,
-      search: `?page=${pageNb}`,
+      search: queries,
     });
   };
   const prevPage = (

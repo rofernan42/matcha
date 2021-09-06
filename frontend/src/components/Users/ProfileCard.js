@@ -8,6 +8,7 @@ import { store } from "react-notifications-component";
 import socket from "../../util/socket";
 import LikeButton from "./LikeButton";
 import { useHistory } from "react-router-dom";
+import heart from "../../images/heart.png";
 
 const ProfileCard = (props) => {
   const [liked, setLiked] = useState(props.liked);
@@ -51,7 +52,6 @@ const ProfileCard = (props) => {
       method: "POST",
       token: props.token,
     });
-    // socket.emit("blockUser", { userId: props.user._id });
     history.go(0);
   };
   useEffect(() => {
@@ -73,7 +73,6 @@ const ProfileCard = (props) => {
       }
     });
   }, []);
-
   const imgs = props.user.images.filter((img) => img !== null);
   return (
     <>
@@ -85,9 +84,6 @@ const ProfileCard = (props) => {
         <div className={classes["card-header"]}>
           <ImageSlider images={imgs} />
           <div className={classes["card-header-bar"]}>
-            <a href="/" className={classes["btn-message"]}>
-              <span className={classes["sr-only"]}>Message</span>
-            </a>
             <div className={classes["user-status"]}>
               <span
                 className={`${classes.status} ${
@@ -126,8 +122,10 @@ const ProfileCard = (props) => {
               <span className={classes["value"]}></span>
             </div>
             <div className={classes["stat"]}>
-              <span className={classes["label"]}>Likes you</span>
-              <span className={classes["value"]}></span>
+              <div className={`${props.user.likesMe ? classes.likedIconTrue : classes.likedIconFalse}`}>
+                <img alt="" src={heart} className={classes.heart} />
+              </div>
+              {props.user.likesMe && <span className={classes["label"]}>Likes you !</span>}
             </div>
             <div className={classes["stat"]}>
               <span className={classes["label"]} onClick={blockUserHandler}>

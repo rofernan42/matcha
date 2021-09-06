@@ -3,12 +3,7 @@ const User = require("../models/user");
 const Message = require("../models/message");
 
 exports.getMatches = async (req, res, next) => {
-  let matches = await Match.fetchMatches(req.userId);
-  if (req.query.unread) {
-    matches = matches.filter(
-      (match) => !match.msgRead && match.msgAuthor && match.msgAuthor !== +req.userId
-    );
-  }
+  const matches = await Match.fetchMatches(req.userId);
   const usersMatched = matches.map((match) => {
     if (match.user1.toString() === req.userId) {
       return {

@@ -3,7 +3,7 @@
   white-space: nowrap;
   color: #38015c;
   font-size: 3rem;
-  margin-top: 10rem;
+  margin-top: calc(40vh - 60px);
   text-align: center;
   animation: titleOpening 1.5s ease-out forwards;
 }
@@ -17,10 +17,11 @@
 .options a {
   display: inline-flex;
   text-decoration: none;
+  opacity: 0;
   color: #b571e2;
   font-size: 2rem;
   margin-top: 2rem;
-  animation: elemOpening 1.5s ease-out forwards;
+  animation: titleOpening 1.5s 0.5s ease-out forwards;
 }
 
 .options a:hover {
@@ -33,21 +34,6 @@
 
 @keyframes titleOpening {
   0% {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes elemOpening {
-  0% {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  30% {
     opacity: 0;
     transform: translateY(100%);
   }

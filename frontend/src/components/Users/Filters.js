@@ -3,6 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import Select from "react-select";
 import AgeFilter from "./AgeFilter";
 import classes from "./Filters.module.css";
+import LocFilter from "./LocFilter";
 import ScoreFilter from "./ScoreFilter";
 
 const colourStyles = {
@@ -40,9 +41,6 @@ const Filters = () => {
   const loc = useLocation();
   const [sortBy, setSortBy] = useState(null);
   const queryParams = new URLSearchParams(loc.search);
-  //   const [queries, setQueries] = useState(loc.search);
-
-  //   const [currentPage, setCurrentPage] = useState(+queryParams.get("page") || 1);
 
   const options = [
     { label: "Sort by location", value: "location" },
@@ -50,37 +48,31 @@ const Filters = () => {
     { label: "Sort by popularity", value: "popularity" },
   ];
   const typeSortAge = [
-    { label: "Youngest to oldest", value: "increase" },
-    { label: "Oldest to youngest", value: "decrease" },
+    { label: "Youngest to oldest", value: "ageIncrease" },
+    { label: "Oldest to youngest", value: "ageDecrease" },
   ];
   const typeSortPopularity = [
-    { label: "Most to least popular", value: "decrease" },
-    { label: "Least to most popular", value: "increase" },
+    { label: "Most to least popular", value: "scoreDecrease" },
+    { label: "Least to most popular", value: "scoreIncrease" },
   ];
   const changeSort = (e) => {
     setSortBy(e.value);
   };
 
-  const changeMinAge = (e) => {
-    queryParams.set("minAge", e.target.value);
+  const changeSortOrder = (e) => {
+    queryParams.set("sort", e.value);
   };
-  const changeMaxAge = (e) => {
-    queryParams.set("maxAge", e.target.value);
+
+  const changeFilter = (e, query) => {
+    queryParams.set(query, e.target.value);
   };
-  const changeMinScore = (e) => {
-    queryParams.set("minScore", e.target.value);
-  };
-  const changeMaxScore = (e) => {
-    queryParams.set("maxScore", e.target.value);
-  };
-  const changeLoc = (e) => {
-    queryParams.set("loc", e.target.value);
-  }
 
   const applyFilters = (e) => {
     e.preventDefault();
+    if (sortBy === "location") {
+      queryParams.delete("sort");
+    }
     const queries = queryParams.toString();
-    console.log(queries);
     history.push({
       pathname: loc.pathname,
       search: queries,
@@ -89,13 +81,25 @@ const Filters = () => {
   return (
     <>
       <div className={classes.filters}>
-        <AgeFilter queryParams={queryParams} onChangeMinAge={changeMinAge} onChangeMaxAge={changeMaxAge} />
+        <AgeFilter
+          queryParams={queryParams}
+          onChangeMinAge={(e) => changeFilter(e, "minAge")}
+          onChangeMaxAge={(e) => changeFilter(e, "maxAge")}
+        />
       </div>
       <div className={classes.filters}>
-        <ScoreFilter queryParams={queryParams} onChangeMinScore={changeMinScore} onChangeMaxScore={changeMaxScore} />
+        <ScoreFilter
+          queryParams={queryParams}
+          onChangeMinScore={(e) => changeFilter(e, "minScore")}
+          onChangeMaxScore={(e) => changeFilter(e, "maxScore")}
+        />
       </div>
       <div className={classes.filters}>
-        <input placeholder="Search by location..." type="text" onChange={changeLoc} />
+        <LocFilter
+          queryParams={queryParams}
+          onChangeMinLoc={(e) => changeFilter(e, "minDist")}
+          onChangeMaxLoc={(e) => changeFilter(e, "maxDist")}
+        />
       </div>
       <div className={classes.sortMenu}>
         <Select
@@ -112,6 +116,7 @@ const Filters = () => {
             styles={colourStyles}
             options={typeSortAge}
             value={typeSortAge.value}
+            onChange={changeSortOrder}
           />
         </div>
       )}

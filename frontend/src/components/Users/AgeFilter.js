@@ -23,14 +23,14 @@ const AgeFilter = (props) => {
         <div className={classes.filterFields}>
           <input
             type="number"
-            placeholder="min. age"
+            placeholder="min"
             min={18}
             max={99}
             onChange={props.onChangeMinAge}
           />
           <input
             type="number"
-            placeholder="max. age"
+            placeholder="max"
             min={18}
             max={99}
             onChange={props.onChangeMaxAge}

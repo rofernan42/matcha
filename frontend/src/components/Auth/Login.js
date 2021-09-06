@@ -1,6 +1,7 @@
 import { useContext, useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
+import { geolocUrl } from "../../util/geolocation";
 import { url } from "../../util/usersReq";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
@@ -18,11 +19,15 @@ const Login = () => {
     setIsLoading(true);
     const entEmail = emailRef.current.value;
     const entPassword = passwordRef.current.value;
+    const coords = await fetch(geolocUrl);
+    const coordsData = await coords.json();
     const res = await fetch(url + "auth/login", {
       method: "POST",
       body: JSON.stringify({
         email: entEmail,
         password: entPassword,
+        lat: coordsData.lat,
+        lon: coordsData.lon
       }),
       headers: {
         "Content-Type": "application/json",
