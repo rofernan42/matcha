@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
+import { updateUser } from "../../util/usersReq";
 import classes from "./Profile.module.css";
 
 const InterestsForm = (props) => {
   const [addActive, setAddActive] = useState(false);
+  const [interests, setInterests] = useState(props.interests);
   const intRef = useRef();
   const addBtnHandler = () => {
     if (intRef.current.value.length > 0) {
@@ -11,19 +13,26 @@ const InterestsForm = (props) => {
       setAddActive(false);
     }
   };
-  const InterestsHandler = (e) => {
+  const InterestsHandler = async (e) => {
     e.preventDefault();
     if (addActive) {
-      props.onChangeInt({
+      const res = await updateUser({
         toUpdate: intRef.current.value,
         path: "add-interest",
+        token: props.token,
       });
+      setInterests(res.interests.split(";"));
       setAddActive(false);
       intRef.current.value = "";
     }
   };
-  const removeIntHandler = (int) => {
-    props.onChangeInt({ toUpdate: int, path: "remove-interest" });
+  const removeIntHandler = async (int) => {
+    const res = await updateUser({
+      toUpdate: int,
+      path: "remove-interest",
+      token: props.token,
+    });
+    setInterests(res.interests.split(";"));
   };
   return (
     <>
@@ -42,12 +51,17 @@ const InterestsForm = (props) => {
           Add
         </button>
       </form>
-      {props.interests.map((int) => (
-        <div key={int}>
-          <span>#{int}</span>
-          <button onClick={() => removeIntHandler(int)}>x</button>
-        </div>
-      ))}
+      <div className={classes.interestsList}>
+        {interests.map(
+          (int) =>
+            int.length > 0 && (
+              <div className={classes.interestOption} key={int}>
+                <span>{int}</span>
+                <button onClick={() => removeIntHandler(int)}>&times;</button>
+              </div>
+            )
+        )}
+      </div>
     </>
   );
 };

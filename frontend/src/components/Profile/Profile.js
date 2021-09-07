@@ -34,8 +34,9 @@ const Profile = (props) => {
         <AttractionForm user={props.user} onChangeAttr={props.onChangeUser} />
         <BioForm bio={props.user.bio} onChangeBio={props.onChangeUser} />
         <InterestsForm
-          interests={props.user.interests.split(" ")}
+          interests={props.user.interests.split(";")}
           onChangeInt={props.onChangeUser}
+          token={props.token}
         />
         <div>People who have seen your profile</div>
         <div>People who liked you</div>

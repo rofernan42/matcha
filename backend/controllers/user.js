@@ -5,6 +5,7 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 const authValidation = require("../middleware/auth-validation");
 const Like = require("../models/like");
+const { tmpdir } = require("os");
 
 exports.getProfile = async (req, res, next) => {
   const user = await User.findById(req.userId);
@@ -165,9 +166,17 @@ exports.postInterest = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    const interests = req.body.data.trim().split(/\s+/);
-    user.interests.push(...interests);
-    const updatedUser = new User({ ...user });
+    const interests = (
+      user.interests + ";" +
+      req.body.data.trim().split(/\s+/).join(";")
+    ).split(/[\s;]+/);
+    const removeDuplicates = interests.filter(
+      (item, pos) => interests.indexOf(item) === pos && item.length > 0
+    );
+    const updatedUser = new User({
+      ...user,
+      interests: removeDuplicates.join(";"),
+    });
     await updatedUser.save();
     res.status(201).json(updatedUser);
   } catch (err) {
@@ -187,11 +196,12 @@ exports.removeInterest = async (req, res, next) => {
       throw error;
     }
     const intToRemove = req.body.data;
-    const index = user.interests.indexOf(intToRemove);
+    const temp = user.interests.split(";");
+    const index = temp.indexOf(intToRemove);
     if (index > -1) {
-      user.interests.splice(index, 1);
+      temp.splice(index, 1);
     }
-    const updatedUser = new User({ ...user });
+    const updatedUser = new User({ ...user, interests: temp.join(";") });
     await updatedUser.save();
 
     res.status(201).json(updatedUser);
