@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
 import { url } from "../../util/usersReq";
+import { geolocUrl } from "../../util/geolocation";
 
 const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +23,8 @@ const Signup = () => {
     const entLastname = lastnameRef.current.value;
     const entEmail = emailRef.current.value;
     const entPassword = passwordRef.current.value;
+    const coords = await fetch(geolocUrl);
+    const coordsData = await coords.json();
     const res = await fetch(url + "auth/signup", {
       method: "POST",
       body: JSON.stringify({
@@ -30,6 +33,8 @@ const Signup = () => {
         lastname: entLastname,
         email: entEmail,
         password: entPassword,
+        lat: coordsData.lat,
+        lon: coordsData.lon,
       }),
       headers: {
         "Content-Type": "application/json",

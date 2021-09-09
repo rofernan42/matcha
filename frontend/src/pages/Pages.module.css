@@ -19,18 +19,14 @@
   text-align: center;
   line-height: 0;
   padding: 20px;
-  background: #ffffff;
-  box-shadow: 5px 5px 20px rgba(80, 80, 80, 0.466);
+  /* background: #ffffff; */
+  /* box-shadow: 5px 5px 20px rgba(80, 80, 80, 0.466); */
   /* width: fit-content; */
-}
-
-.pagination {
-  /* background: chocolate; */
 }
 
 .error {
   text-align: center;
   font-size: 40px;
   font-weight: bold;
-  /* margin-top: 100px; */
+  color: #929292;
 }

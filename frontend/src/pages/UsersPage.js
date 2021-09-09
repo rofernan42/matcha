@@ -17,26 +17,31 @@ const UsersPage = (props) => {
     display: false,
     profile: null,
   });
-  const { sendReq, status, data: usersData, error } = useHttp(fetchUsers, true);
+  const [usersData, setUsersData] = useState(null);
+  // const { sendReq, status, data: usersData, error } = useHttp(fetchUsers, true);
   const { sendReq: sendReqCurrentUser, data: currentUser } = useHttp(
     fetchCurrentUser,
     true
   );
   useEffect(() => {
-    sendReq({ token: authCtx.token, path: "filtered-users" + loc.search });
-    sendReqCurrentUser(authCtx.token);
-  }, [sendReq, sendReqCurrentUser, authCtx.token, loc.search]);
-  if (error) {
-    return <p className={classes.error}>{error}</p>;
-  }
+    // sendReq({ token: authCtx.token, path: "filtered-users" + loc.search });
+    const getUsers = async () => {
+      const users = await fetchUsers({ token: authCtx.token, path: "filtered-users" + loc.search });
+      await sendReqCurrentUser(authCtx.token);
+      setUsersData(users);
+    }
+    getUsers();
+  }, [sendReqCurrentUser, authCtx.token, loc.search]);
+  // if (error) {
+  //   return <p className={classes.error}>{error}</p>;
+  // }
   const profileCardHandler = (user) => {
-    sendReqCurrentUser(authCtx.token);
+    // sendReqCurrentUser(authCtx.token);
     setUserProfile({ display: true, profile: user });
   };
   const closeProfileHandler = () => {
     setUserProfile({ display: false, profile: null });
   };
-
   return (
     <>
       <div className={classes.container}>
@@ -47,8 +52,8 @@ const UsersPage = (props) => {
           {!usersData && (
             <LoadingSpinner
               styles={{
-                position: "absolute",
-                top: "50%",
+                position: "relative",
+                top: "40vh",
                 left: "50%",
                 transform: `translate(-50%, -50%)`,
                 width: "200px",
@@ -56,8 +61,8 @@ const UsersPage = (props) => {
               }}
             />
           )}
-          {status === "completed" &&
-            (!usersData || usersData.users.length === 0) && (
+          {
+            (usersData && usersData.users.length === 0) && (
               <p className={classes.error}>No user found.</p>
             )}
           {usersData &&

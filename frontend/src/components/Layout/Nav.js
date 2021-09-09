@@ -4,14 +4,21 @@ import AuthContext from "../../store/auth-context";
 import classes from "./Nav.module.css";
 import socket from "../../util/socket";
 import { fetchMatches } from "../../util/chatsReq";
+import notifs from "../../images/notification.png";
+import { fetchCurrentUser, url } from "../../util/usersReq";
+import UserOptions from "./UserOptions";
 
-const Nav = () => {
+const Nav = (props) => {
   const authCtx = useContext(AuthContext);
   const [pushNotif, setPushNotif] = useState("");
+
+  const [currentUser, setCurrentUser] = useState(null);
   const loc = useLocation();
   const isAuth = authCtx.isAuth;
+
   const logoutHandler = () => {
     authCtx.logout();
+    props.onSetUserOptions();
   };
   socket.off("getPushNotif").on("getPushNotif", () => {
     if (loc.pathname !== "/chat") {
@@ -20,19 +27,33 @@ const Nav = () => {
   });
   useEffect(() => {
     const getMatches = async () => {
-      const data = await fetchMatches({
-        token: authCtx.token,
-        path: "chat/matches",
-      });
-      const newMsgs = data.matches.find(
-        (match) =>
-          !match.match.msgRead && match.match.msgAuthor !== +authCtx.userId
-      );
-      if (newMsgs && loc.pathname !== "/chat") setPushNotif(classes.pushNotif);
-      else setPushNotif("");
+      try {
+        const data = await fetchMatches({
+          token: authCtx.token,
+          path: "chat/matches",
+        });
+        const newMsgs = data.matches.find(
+          (match) =>
+            !match.match.msgRead && match.match.msgAuthor !== +authCtx.userId
+        );
+        if (newMsgs && loc.pathname !== "/chat")
+          setPushNotif(classes.pushNotif);
+        else setPushNotif("");
+      } catch (err) {
+        console.log(err);
+        authCtx.logout();
+      }
     };
     if (isAuth) getMatches();
   }, [authCtx, isAuth, loc.pathname]);
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const data = await fetchCurrentUser(authCtx.token);
+      setCurrentUser(data.user);
+    };
+    if (isAuth) getCurrentUser();
+  }, [isAuth, authCtx.token]);
 
   return (
     <header className={classes.header}>
@@ -67,19 +88,19 @@ const Nav = () => {
           )}
           {isAuth && (
             <li>
-              <NavLink activeClassName={classes.active} to="/profile">
-                Profile
-              </NavLink>
+              <img className={classes.navIcon} alt="" src={notifs} />
             </li>
           )}
-          {isAuth && (
-            <li>
-              <button type="button" onClick={logoutHandler}>
-                Logout
-              </button>
+          {isAuth && currentUser && (
+            <li onClick={() => props.onSetUserOptions()}>
+              <div>
+                {currentUser.username}{" "}
+                <img alt="" src={url + currentUser.images[0]} className={classes.avatar} />
+              </div>
             </li>
           )}
         </ul>
+        {props.currentUserOptions && <UserOptions onLogout={logoutHandler} />}
       </nav>
     </header>
   );

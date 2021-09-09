@@ -4,22 +4,27 @@ const Message = require("../models/message");
 
 exports.getMatches = async (req, res, next) => {
   const matches = await Match.fetchMatches(req.userId);
-  const usersMatched = matches.map((match) => {
-    if (match.user1.toString() === req.userId) {
-      return {
-        user: match.user2,
-        match,
-      };
-    }
-    return { user: match.user1, match };
-  });
-  const resMatches = await Promise.all(
-    usersMatched.map(async (elem) => {
-      const user = await User.findById(elem.user);
-      return { user, match: elem.match };
-    })
-  );
   try {
+    if (!matches) {
+      const error = new Error("Matches not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const usersMatched = matches.map((match) => {
+      if (match.user1.toString() === req.userId) {
+        return {
+          user: match.user2,
+          match,
+        };
+      }
+      return { user: match.user1, match };
+    });
+    const resMatches = await Promise.all(
+      usersMatched.map(async (elem) => {
+        const user = await User.findById(elem.user);
+        return { user, match: elem.match };
+      })
+    );
     res.status(200).json({ matches: resMatches });
   } catch (err) {
     if (!err.statusCode) {

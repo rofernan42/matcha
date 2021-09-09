@@ -20,8 +20,8 @@ class User {
     this.bio = data.bio || "";
     this.interests = data.interests || "";
     this.score = data.score || 0.0;
-    this.lat = data.lat;
-    this.lon = data.lon;
+    this.lat = data.lat || null;
+    this.lon = data.lon || null;
     this.lastConnection = Date.now();
   }
 

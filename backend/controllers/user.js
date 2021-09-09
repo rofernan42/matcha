@@ -5,7 +5,6 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 const authValidation = require("../middleware/auth-validation");
 const Like = require("../models/like");
-const { tmpdir } = require("os");
 
 exports.getProfile = async (req, res, next) => {
   const user = await User.findById(req.userId);
