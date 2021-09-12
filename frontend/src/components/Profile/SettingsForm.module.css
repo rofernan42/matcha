@@ -1,6 +1,9 @@
 .edit-settings {
-  /* flex: 0.5; */
   height: auto;
+}
+
+.edit-settings h1 {
+  color: #8969a1;
 }
 
 .settings {
@@ -49,6 +52,8 @@ input.error::placeholder {
 
 .label {
   flex: 1;
+  font-weight: bold;
+  color: #8969a1;
 }
 
 .passInfo {

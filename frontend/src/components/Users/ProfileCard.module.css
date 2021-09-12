@@ -1,5 +1,5 @@
 .background {
-  z-index: 2;
+  z-index: 150;
   position: fixed;
   top: 0;
   left: 0;
@@ -10,7 +10,7 @@
 }
 
 .card {
-  z-index: 3;
+  z-index: 200;
   left: 50%;
   top: 45%;
   transform: translate(-50%, -50%);
@@ -150,26 +150,40 @@
 }
 
 .likedIconFalse {
-  width: 30px;
+  /* width: 30px;
   height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(to right, #9b8ba5, #e5d0f3);
+  border-radius: 50%; */
+  /* background: linear-gradient(to right, #9b8ba5, #e5d0f3); */
   margin: auto;
   margin-top: 10px;
 }
 
 .likedIconTrue {
-  width: 30px;
+  /* width: 30px;
   height: 30px;
-  border-radius: 50%;
-  background: #8344ad;
+  border-radius: 50%; */
+  /* background: #8344ad; */
   margin: auto;
 }
 
 .heart {
-  width: 18px;
-  height: 17px;
-  margin-top: 7px;
+  display: block;
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  margin-top: 12px;
+  filter: invert(100%);
+}
+
+.heart.color {
+  filter: hue-rotate(270deg);
+  margin-top: 6px;
+}
+
+.blockField {
+  margin: auto;
+  width: fit-content;
+  cursor: pointer;
 }
 
 .status {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import heart from "../../images/heart.png";
+import heartFull from "../../images/heart-full.png"
 import classes from "./LikeButton.module.css";
 
 const LikeButton = (props) => {
@@ -21,7 +22,8 @@ const LikeButton = (props) => {
   }, [props.liked]);
   return (
     <div className={btnClasses} onClick={props.sendLikeHandler}>
-      <img alt="" src={heart} className={classes.heart} />
+      {!props.liked && <img alt="" src={heart} className={classes.heart} />}
+      {props.liked && <img alt="" src={heartFull} className={classes.heart} />}
     </div>
   );
 };

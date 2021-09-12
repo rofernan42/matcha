@@ -15,6 +15,42 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
+exports.getBlockedUsers = async (req, res, next) => {
+  const blockedUsers = await User.fetchBlockedUsers(req.userId);
+  try {
+    res.status(200).json({ users: blockedUsers });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.getLikedUsers = async (req, res, next) => {
+  const likedUsers = await User.fetchLikedUsers(req.userId);
+  try {
+    res.status(200).json({ users: likedUsers });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.getUsersWhoLikeMe = async (req, res, next) => {
+  const usersWhoLikeMe = await User.fetchUsersWhoLikeMe(req.userId);
+  try {
+    res.status(200).json({ users: usersWhoLikeMe });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
 exports.getFilteredUsers = async (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = NB_USERS_PER_PAGE;
@@ -117,7 +153,7 @@ const filterByAttraction = (user, users) => {
 const sortByAge = (order, users) => {
   if (order === "ageIncrease") {
     return users.sort((a, b) => a.age - b.age);
-  } else if (order === "ageDecrease"){
+  } else if (order === "ageDecrease") {
     return users.sort((a, b) => b.age - a.age);
   }
   return users;

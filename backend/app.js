@@ -75,9 +75,8 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message });
 });
 
-// mongoConnect((client) => {
 // const server = https.createServer({key: privateKey, cert: certificate}, app).listen(8000);
-const server = app.listen(8000, "192.168.1.44");
+const server = app.listen(8000, "192.168.1.14");
 const io = require("./socket").init(server);
 let users = [];
 const addUser = (userId, socketId) => {
@@ -140,4 +139,3 @@ io.on("connection", (socket) => {
     io.emit("getUsers", users);
   });
 });
-// });

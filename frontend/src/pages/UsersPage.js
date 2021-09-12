@@ -98,6 +98,10 @@ const UsersPage = (props) => {
           user={userProfile.profile}
           token={authCtx.token}
           liked={currentUser.likes.includes(userProfile.profile._id)}
+          currentLoc={{
+            lat: currentUser.user.lat,
+            lon: currentUser.user.lon,
+          }}
           online={props.onlineUsers.some(
             (e) => e.userId === userProfile.profile._id.toString()
           )}

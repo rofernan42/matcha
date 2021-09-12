@@ -5,7 +5,6 @@ const UserOptions = (props) => {
   return (
     <div
       className={classes.currentUserOptions}
-      onClick={(e) => e.stopPropagation()}
     >
       <NavLink
         className={classes.optionLink}

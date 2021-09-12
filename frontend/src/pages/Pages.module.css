@@ -24,6 +24,10 @@
   /* width: fit-content; */
 }
 
+.profilePage {
+  background-color: #e2d2ee;
+}
+
 .error {
   text-align: center;
   font-size: 40px;

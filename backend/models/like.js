@@ -40,6 +40,14 @@ class Like {
     );
     return res[0].map((lk) => lk.id_towards);
   }
+
+  static async fetchLikesTowards(id) {
+    const res = await db.execute(
+      "SELECT id_from FROM likes WHERE id_towards=?",
+      [id]
+    );
+    return res[0].map((lk) => lk.id_from);
+  }
 }
 
 module.exports = Like;

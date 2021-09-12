@@ -26,6 +26,13 @@ class Block {
     return res[0];
   }
 
+  static async fetchByBlockFrom(userId) {
+    const res = await db.execute("SELECT id_towards FROM blocks WHERE id_from=?", [
+      userId,
+    ]);
+    return res[0].map((obj) => obj.id_towards);
+  }
+
   // static async findByUsers(from, towards) {
   //   const [res] = await db.execute(
   //     "SELECT * FROM likes WHERE id_from=? AND id_towards=?",

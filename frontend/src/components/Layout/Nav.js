@@ -7,18 +7,17 @@ import { fetchMatches } from "../../util/chatsReq";
 import notifs from "../../images/notification.png";
 import { fetchCurrentUser, url } from "../../util/usersReq";
 import UserOptions from "./UserOptions";
+import blankPicture from "../../images/blank-profile-picture.jpg"
 
 const Nav = (props) => {
   const authCtx = useContext(AuthContext);
   const [pushNotif, setPushNotif] = useState("");
-
   const [currentUser, setCurrentUser] = useState(null);
   const loc = useLocation();
   const isAuth = authCtx.isAuth;
 
   const logoutHandler = () => {
     authCtx.logout();
-    props.onSetUserOptions();
   };
   socket.off("getPushNotif").on("getPushNotif", () => {
     if (loc.pathname !== "/chat") {
@@ -93,9 +92,10 @@ const Nav = (props) => {
           )}
           {isAuth && currentUser && (
             <li onClick={() => props.onSetUserOptions()}>
-              <div>
+              <div className={classes.userField}>
                 {currentUser.username}{" "}
-                <img alt="" src={url + currentUser.images[0]} className={classes.avatar} />
+                {currentUser.images[0] && <img alt="" src={url + currentUser.images[0]} className={classes.avatar} />}
+                {!currentUser.images[0] && <img alt="" src={blankPicture} className={classes.avatar} />}
               </div>
             </li>
           )}

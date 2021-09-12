@@ -1,4 +1,5 @@
 const db = require("../util/database");
+const Block = require("./block");
 const Like = require("./like");
 
 class User {
@@ -45,7 +46,7 @@ class User {
           this.attrMen,
           this.attrWomen,
           this.lat,
-          this.lon
+          this.lon,
         ]
       );
     }
@@ -77,6 +78,37 @@ class User {
     const res = await db.execute("SELECT * FROM users");
     return res;
   }
+
+  static async fetchBlockedUsers(userId) {
+    const blockings = await Block.fetchByBlockFrom(userId);
+    if (blockings.length === 0) {
+      return [];
+    }
+    const query = "SELECT * from users WHERE _id IN (" + blockings.join() + ")";
+    const res = await db.execute(query);
+    return res[0];
+  }
+
+  static async fetchLikedUsers(userId) {
+    const likes = await Like.fetchLikes(userId);
+    if (likes.length === 0) {
+      return [];
+    }
+    const query = "SELECT * from users WHERE _id IN (" + likes.join() + ")";
+    const res = await db.execute(query);
+    return res[0];
+  }
+
+  static async fetchUsersWhoLikeMe(userId) {
+    const likes = await Like.fetchLikesTowards(userId);
+    if (likes.length === 0) {
+      return [];
+    }
+    const query = "SELECT * from users WHERE _id IN (" + likes.join() + ")";
+    const res = await db.execute(query);
+    return res[0];
+  }
+
   static async fetchFilteredUsers(currentUserId) {
     const res = await db.execute("SELECT * FROM users WHERE _id!=?", [
       currentUserId,
@@ -84,20 +116,26 @@ class User {
     const [images] = await db.execute("SELECT * FROM images WHERE user_id!=?", [
       currentUserId,
     ]);
-    const data = await Promise.all(res[0].map(async (user) => {
-      const likesMe = await Like.findByUsers(user._id, currentUserId);
-      const imgs = images.find((img) => img.user_id === user._id);
-      const extractedImages = Object.values(
-        (({ image0, image1, image2, image3, image4 }) => ({
-          image0,
-          image1,
-          image2,
-          image3,
-          image4,
-        }))(imgs)
-      );
-      return { ...user, images: extractedImages, likesMe: likesMe ? true : false };
-    }));
+    const data = await Promise.all(
+      res[0].map(async (user) => {
+        const likesMe = await Like.findByUsers(user._id, currentUserId);
+        const imgs = images.find((img) => img.user_id === user._id);
+        const extractedImages = Object.values(
+          (({ image0, image1, image2, image3, image4 }) => ({
+            image0,
+            image1,
+            image2,
+            image3,
+            image4,
+          }))(imgs)
+        );
+        return {
+          ...user,
+          images: extractedImages,
+          likesMe: likesMe ? true : false,
+        };
+      })
+    );
     return data;
   }
 }

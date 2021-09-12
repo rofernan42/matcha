@@ -9,6 +9,9 @@ import socket from "../../util/socket";
 import LikeButton from "./LikeButton";
 import { useHistory } from "react-router-dom";
 import heart from "../../images/heart.png";
+import heartColor from "../../images/heart-color.png";
+import block from "../../images/block.png";
+import { calculateDistance } from "../../util/geolocation";
 
 const ProfileCard = (props) => {
   const [liked, setLiked] = useState(props.liked);
@@ -74,6 +77,7 @@ const ProfileCard = (props) => {
     });
   }, []);
   const imgs = props.user.images.filter((img) => img !== null);
+  const distance = calculateDistance(props.currentLoc.lat, props.user.lat, props.currentLoc.lon, props.user.lon)
   return (
     <>
       <div
@@ -104,7 +108,7 @@ const ProfileCard = (props) => {
         <div className={classes["card-body"]}>
           <h2 className={classes["name"]}>{props.user.username}</h2>
           <h2 className={classes["location"]}>
-            {props.user.age && <>{props.user.age} yo - </>}1km away
+            {props.user.age && <>{props.user.age} yo - </>}{distance} km away
           </h2>
           <img src={quotes} className={classes["bio-img"]} alt="" />
           <div className={classes["bio"]}>
@@ -122,15 +126,37 @@ const ProfileCard = (props) => {
               <span className={classes["value"]}></span>
             </div>
             <div className={classes["stat"]}>
-              <div className={`${props.user.likesMe ? classes.likedIconTrue : classes.likedIconFalse}`}>
-                <img alt="" src={heart} className={classes.heart} />
+              <div
+                className={`${
+                  props.user.likesMe
+                    ? classes.likedIconTrue
+                    : classes.likedIconFalse
+                }`}
+              >
+                {!props.user.likesMe && (
+                  <img alt="" src={heart} className={classes.heart} />
+                )}
+                {props.user.likesMe && (
+                  <img
+                    alt=""
+                    src={heartColor}
+                    className={`${classes.heart} ${classes.color}`}
+                  />
+                )}
+                {props.user.likesMe && (
+                  <span className={classes["label"]}>Likes you</span>
+                )}
               </div>
-              {props.user.likesMe && <span className={classes["label"]}>Likes you !</span>}
             </div>
             <div className={classes["stat"]}>
-              <span className={classes["label"]} onClick={blockUserHandler}>
-                Block
-              </span>
+              <div className={classes.blockField}>
+                <img
+                  alt=""
+                  src={block}
+                  className={classes.heart}
+                  onClick={blockUserHandler}
+                />
+              </div>
             </div>
           </div>
         </div>

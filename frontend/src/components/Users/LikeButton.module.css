@@ -23,11 +23,12 @@
 .heart {
   position: absolute;
   width: 25px;
-  height: 23px;
+  height: 25px;
   left: 50%;
   top: 53%;
   transform: translate(-50%, -50%);
   object-fit: cover;
+  filter: invert(100%);
 }
 
 .bump {
