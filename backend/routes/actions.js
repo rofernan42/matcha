@@ -9,4 +9,6 @@ router.delete("/cancel-match/:id", isAuth, actionsController.cancelMatch);
 
 router.post("/block/:id", isAuth, actionsController.postBlock);
 
+router.delete("/block/:id", isAuth, actionsController.destroyBlock);
+
 module.exports = router;

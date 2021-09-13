@@ -39,8 +39,8 @@ exports.signup = async (req, res, next) => {
     await user.save();
     const createdUser = await User.findByEmail(user.email);
     const userImgs = new Image({
-      user_id: createdUser._id
-    })
+      user_id: createdUser._id,
+    });
     await userImgs.save();
     console.log(user);
     res.status(201).json({ userId: createdUser._id, message: "User created" });
@@ -69,7 +69,11 @@ exports.login = async (req, res, next) => {
       error.error = "Wrong password";
       throw error;
     }
-    const loadedUser = new User({ ...user, lat: req.body.lat, lon: req.body.lon });
+    const loadedUser = new User({
+      ...user,
+      lat: req.body.lat,
+      lon: req.body.lon,
+    });
     await loadedUser.save();
     const token = jwt.sign(
       {

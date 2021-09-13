@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { calculateDistance } from "../../util/geolocation";
 import { url } from "../../util/usersReq";
 import classes from "./UserCard.module.css";
@@ -11,11 +12,11 @@ const UserCard = (props) => {
   return (
     <div className={classes.container} onClick={displayProfile}>
       <div className={classes["profile-card-2"]}>
-        <span
+        <div
           className={`${classes.status} ${
             props.online ? classes.green : classes.orange
           }`}
-        ></span>
+        ></div>
         {imgProfile && (
           <img
             src={`${url}${imgProfile}`}
@@ -25,6 +26,7 @@ const UserCard = (props) => {
         )}
         <div className={classes["profile-username"]}>{props.user.username}</div>
         <div className={classes["profile-location"]}>{props.user.age && <>{props.user.age} yo - </>}{distance} km away</div>
+        <div className={classes["profile-detailed"]}><Link to= {`/users/${props.user._id}`}>See detailed profile</Link></div>
       </div>
     </div>
   );

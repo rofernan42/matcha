@@ -102,13 +102,14 @@
   z-index: 100;
   position: absolute;
   right: 0;
-  top: 65px;
+  top: 60px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  background-color: #3a1755;
+  background-color: #332e36f3;
   animation: userOptionsOpening 300ms ease-out forwards;
   transform-origin: top center;
+  border: 1px solid #706675f3;
 }
 
 .avatar {
@@ -120,22 +121,38 @@
 }
 
 .dropDownOption {
-  border: 1px solid #6c2b9b;
-  border-bottom: none;
+  /* border: 1px solid #706675f3; */
+  /* border-bottom: none; */
+  white-space: nowrap;
   flex: 1;
-  color: #d3b2e9;
+  color: #cececea9;
   padding: 5px 20px;
   font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropDownOption img {
+  width: 20px;
+  height: 20px;
+  filter: invert(70%);
+  vertical-align: middle;
+  margin-right: 20px;
+  flex: 1;
+}
+
+.dropDownOption span {
+  flex: 3;
 }
 
 .dropDownOption:last-child {
-  border-bottom: 1px solid #6c2b9b;
+  /* border-bottom: 1px solid #706675f3; */
 }
 
 .dropDownOption:hover {
   color: white;
   cursor: pointer;
-  background-color: rgba(139, 108, 163, 0.525)
+  background-color: #d3b2e95b
 }
 
 .optionLink {

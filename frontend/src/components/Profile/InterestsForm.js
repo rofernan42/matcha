@@ -56,7 +56,7 @@ const InterestsForm = (props) => {
           (int) =>
             int.length > 0 && (
               <div className={classes.interestOption} key={int}>
-                <span>{int}</span>
+                <span>#{int}</span>
                 <button onClick={() => removeIntHandler(int)}>&times;</button>
               </div>
             )

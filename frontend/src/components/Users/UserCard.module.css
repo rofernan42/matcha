@@ -14,9 +14,7 @@
   background-position: center;
   overflow: hidden;
   position: relative;
-  /* margin: 10px auto; */
   cursor: pointer;
-  /* border-radius: 10px; */
   background-color: #332e36;
   box-shadow: 5px 5px 20px rgba(61, 61, 61, 0.644);
   animation: usersOpening 1s ease-in;
@@ -43,14 +41,6 @@
   width: 90%;
 }
 
-/* .profile-card-2 .profile-icons {
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  color: #fff;
-  transition: all linear 0.25s;
-} */
-
 .profile-card-2 .profile-location {
   position: absolute;
   bottom: 15px;
@@ -60,8 +50,22 @@
   transition: all linear 0.25s;
 }
 
-.profile-card-2 .profile-icons .fa {
-  margin: 5px;
+.profile-card-2 .profile-detailed {
+  opacity: 0;
+  left: 50px;
+  position: absolute;
+  bottom: 12px;
+  transition: all linear 0.25s;
+}
+
+.profile-card-2 .profile-detailed a {
+  color: #fff;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.profile-card-2 .profile-detailed a:hover {
+  color: #d3b2e9;
 }
 
 .profile-card-2:hover img {
@@ -69,16 +73,16 @@
 }
 
 .profile-card-2:hover .profile-username {
-  bottom: 50px;
+  bottom: 55px;
 }
 
 .profile-card-2:hover .profile-location {
-  bottom: 30px;
+  bottom: 35px;
 }
 
-/* .profile-card-2:hover .profile-icons {
-  right: 40px;
-} */
+.profile-card-2:hover .profile-detailed {
+  opacity: 1;
+}
 
 .status {
   z-index: 1;

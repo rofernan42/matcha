@@ -18,13 +18,11 @@ const UsersPage = (props) => {
     profile: null,
   });
   const [usersData, setUsersData] = useState(null);
-  // const { sendReq, status, data: usersData, error } = useHttp(fetchUsers, true);
   const { sendReq: sendReqCurrentUser, data: currentUser } = useHttp(
     fetchCurrentUser,
     true
   );
   useEffect(() => {
-    // sendReq({ token: authCtx.token, path: "filtered-users" + loc.search });
     const getUsers = async () => {
       const users = await fetchUsers({ token: authCtx.token, path: "filtered-users" + loc.search });
       await sendReqCurrentUser(authCtx.token);
@@ -32,11 +30,11 @@ const UsersPage = (props) => {
     }
     getUsers();
   }, [sendReqCurrentUser, authCtx.token, loc.search]);
-  // if (error) {
-  //   return <p className={classes.error}>{error}</p>;
-  // }
+
+  const setLikes = (likes) => {
+    currentUser.likes = likes;
+  }
   const profileCardHandler = (user) => {
-    // sendReqCurrentUser(authCtx.token);
     setUserProfile({ display: true, profile: user });
   };
   const closeProfileHandler = () => {
@@ -98,6 +96,7 @@ const UsersPage = (props) => {
           user={userProfile.profile}
           token={authCtx.token}
           liked={currentUser.likes.includes(userProfile.profile._id)}
+          onSetLikes={setLikes}
           currentLoc={{
             lat: currentUser.user.lat,
             lon: currentUser.user.lon,

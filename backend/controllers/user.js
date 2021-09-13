@@ -166,8 +166,12 @@ exports.postInterest = async (req, res, next) => {
       throw error;
     }
     const interests = (
-      user.interests + ";" +
-      req.body.data.trim().split(/\s+/).join(";")
+      user.interests +
+      ";" +
+      req.body.data
+        .trim()
+        .split(/[^A-Za-z]/)
+        .join(";")
     ).split(/[\s;]+/);
     const removeDuplicates = interests.filter(
       (item, pos) => interests.indexOf(item) === pos && item.length > 0

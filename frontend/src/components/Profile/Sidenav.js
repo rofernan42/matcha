@@ -10,27 +10,31 @@ const Sidenav = (props) => {
       <div className="container">
         <div className="nav__cont">
           <div className="nav">
-            <div className="nav__items ">
+            <div
+              className={`nav__items ${props.page.settings ? "active" : ""}`}
+            >
               <img alt="" src={settings} />
               <div onClick={() => props.onChangePage("SETTINGS")}>Settings</div>
             </div>
           </div>
           <div className="nav">
-            <div className="nav__items ">
+            <div className={`nav__items ${props.page.options ? "active" : ""}`}>
               <img alt="" src={profil} />
               <div onClick={() => props.onChangePage("OPTIONS")}>Options</div>
             </div>
           </div>
           <div className="nav">
-            <div className="nav__items ">
+            <div className={`nav__items ${props.page.likes ? "active" : ""}`}>
               <img alt="" src={heart} />
               <div onClick={() => props.onChangePage("LIKES")}>Likes</div>
             </div>
           </div>
           <div className="nav">
-            <div className="nav__items ">
+            <div className={`nav__items ${props.page.blocked ? "active" : ""}`}>
               <img alt="" src={block} />
-              <div onClick={() => props.onChangePage("BLOCKED")}>Users blocked</div>
+              <div onClick={() => props.onChangePage("BLOCKED")}>
+                Users blocked
+              </div>
             </div>
           </div>
         </div>

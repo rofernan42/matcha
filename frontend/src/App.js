@@ -1,9 +1,4 @@
-import {
-  Switch,
-  Route,
-  Redirect,
-  useHistory,
-} from "react-router-dom";
+import { Switch, Route, Redirect, useHistory } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
@@ -16,6 +11,7 @@ import UsersPage from "./pages/UsersPage";
 
 import socket from "./util/socket";
 import { store } from "react-notifications-component";
+import UserProfile from "./components/Users/UserProfile";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -97,9 +93,14 @@ function App() {
           </Route>
         )}
         {authCtx.isAuth && (
-          <Route path="/users">
-            <UsersPage onlineUsers={onlineUsers} />
-          </Route>
+          <Switch>
+            <Route path="/users" exact>
+              <UsersPage onlineUsers={onlineUsers} />
+            </Route>
+            <Route path="/users/:userId">
+              <UserProfile onlineUsers={onlineUsers} />
+            </Route>
+          </Switch>
         )}
         <Route path="*">
           <Redirect to="/" />

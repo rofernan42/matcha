@@ -20,6 +20,12 @@ const BioForm = (props) => {
       setSaveActive(false);
     }
   };
+  // const handleKeyPress = (e) => {
+  //   if (e.target.value.length >= 200) {
+  //     e.preventDefault();
+  //     e.stopPropagation();
+  //   }
+  // };
   return (
     <div className={classes.bioField}>
       <div>About myself</div>
@@ -28,9 +34,11 @@ const BioForm = (props) => {
           type="textarea"
           rows="7"
           cols="35"
+          maxLength={200}
           defaultValue={props.bio}
           onChange={saveBtnHandler}
           ref={bioRef}
+          // onKeyPress={handleKeyPress}
         />
         <div className={classes.counter}>{counter} characters left</div>
         <button

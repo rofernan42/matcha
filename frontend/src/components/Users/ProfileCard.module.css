@@ -36,23 +36,17 @@
   width: 100%;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  clip: rect(0, 0, 0, 0);
-  border: none;
-  overflow: hidden;
-}
-.btn-message {
-  background: url(https://res.cloudinary.com/dj14cmwoz/image/upload/v1491077483/profile-card/images/message.svg)
-    no-repeat;
-  width: 19.37px;
-  height: 16.99px;
-  margin-right: 10px;
-  margin-top: 10px;
+.card-header-bar .cross {
+  color: #b6b6b6;
   float: right;
+  margin-right: 10px;
 }
+
+.card-header-bar .cross:hover {
+  color: white;
+  cursor: pointer;
+}
+
 .user-status {
   display: inline-block;
   margin-left: 10px;
@@ -172,7 +166,7 @@
   width: 30px;
   height: 30px;
   margin-top: 12px;
-  filter: invert(100%);
+  filter: invert(60%);
 }
 
 .heart.color {
@@ -184,6 +178,10 @@
   margin: auto;
   width: fit-content;
   cursor: pointer;
+}
+
+.blockField img:hover {
+  filter: invert(100%);
 }
 
 .status {

@@ -1,11 +1,13 @@
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import Settings from "../components/Profile/Settings";
 import Sidenav from "../components/Profile/Sidenav";
 import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
 import classes from "./Pages.module.css";
-import { fetchCurrentUser, fetchUsers, updateUser } from "../util/usersReq";
+import { fetchCurrentUser, updateUser } from "../util/usersReq";
 import Options from "../components/Profile/Options";
+import Likes from "../components/Profile/Likes";
+import Blocked from "../components/Profile/Blocked";
 
 const setPageActive = (state, action) => {
   if (action.type === "SETTINGS") {
@@ -51,7 +53,6 @@ const ProfilePage = () => {
     likes: false,
     blocked: false,
   });
-  // const [blockedUsers, setBlockedUsers] = useState(null);
   const { sendReq, status, data: user } = useHttp(fetchCurrentUser, true);
   const {
     sendReq: sendUpdate,
@@ -73,32 +74,12 @@ const ProfilePage = () => {
   const changePage = (page) => {
     dispatch({ type: page });
   };
-
-  // useEffect(() => {
-  //   const fetchAll = async () => {
-  //     const fetchBlocked = await fetchUsers({
-  //       token: authCtx.token,
-  //       path: "blocked-users",
-  //     });
-  //     const fetchLiked = await fetchUsers({
-  //       token: authCtx.token,
-  //       path: "liked-users",
-  //     });
-  //     const fetchLiking = await fetchUsers({
-  //       token: authCtx.token,
-  //       path: "users-liking",
-  //     });
-  //     setBlockedUsers(fetchBlocked);
-  //   };
-  //   fetchAll();
-  // }, [authCtx.token]);
-
   return (
     <>
       <div className={classes.profilePage}>
         {user && (
           <>
-            <Sidenav onChangePage={changePage} />
+            <Sidenav onChangePage={changePage} page={pageActive} />
             {pageActive.settings && (
               <Settings
                 user={updatedUser ? updatedUser : user.user}
@@ -116,6 +97,24 @@ const ProfilePage = () => {
                 onChangeUser={updateUserHandler}
                 token={authCtx.token}
                 error={errorUpdate ? errorUpdate : {}}
+              />
+            )}
+            {pageActive.likes && (
+              <Likes
+                // user={updatedUser ? updatedUser : user.user}
+                // status={status}
+                // onChangeUser={updateUserHandler}
+                token={authCtx.token}
+                // error={errorUpdate ? errorUpdate : {}}
+              />
+            )}
+            {pageActive.blocked && (
+              <Blocked
+                // user={updatedUser ? updatedUser : user.user}
+                // status={status}
+                // onChangeUser={updateUserHandler}
+                token={authCtx.token}
+                // error={errorUpdate ? errorUpdate : {}}
               />
             )}
           </>

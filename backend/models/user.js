@@ -54,6 +54,7 @@ class User {
 
   static async findById(id) {
     const [user] = await db.execute("SELECT * FROM users WHERE _id=?", [id]);
+    if (user.length === 0) return null;
     const [images] = await db.execute(
       "SELECT image0,image1,image2,image3,image4 FROM images WHERE user_id=?",
       [id]

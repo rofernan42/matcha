@@ -22,6 +22,11 @@
   justify-content: space-around;
 }
 
+.noUser {
+  font-size: 40px;
+  color: rgb(165, 165, 165);
+}
+
 .btn {
   /* margin: 10px; */
   width: 75px;

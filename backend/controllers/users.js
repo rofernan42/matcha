@@ -1,7 +1,48 @@
 const Block = require("../models/block");
+const Like = require("../models/like");
 const User = require("../models/user");
 
 const NB_USERS_PER_PAGE = 10;
+
+exports.getSingleUser = async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const isBlockedOrBlocking = await Block.findByUsers(
+      req.userId,
+      req.params.id
+    );
+    let resData;
+    if (isBlockedOrBlocking.length > 0) resData = null;
+    else {
+      const like = await Like.findByUsers(req.params.id, req.userId);
+      const likesMe = !!like;
+      resData = {
+        username: user.username,
+        name: user.name,
+        lastname: user.lastname,
+        age: user.age,
+        bio: user.bio,
+        interests: user.interests.split(";"),
+        lat: user.lat,
+        lon: user.lon,
+        lastConnection: user.lastConnection,
+        images: user.images.filter((img) => img),
+        likesMe,
+      };
+    }
+    res.status(200).json(resData);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
 
 exports.getUsers = async (req, res, next) => {
   const users = await User.fetchUsers();
@@ -144,6 +185,16 @@ const filterByAttraction = (user, users) => {
         (usrs) =>
           (usrs.gender === "female" || usrs.gender === "other") &&
           usrs.attrWomen
+      );
+    }
+  } else if (user.gender === "other") {
+    if (user.attrMen && !user.attrWomen) {
+      filteredUsers = users.filter(
+        (usrs) => usrs.gender === "male" || usrs.gender === "other"
+      );
+    } else if (!user.attrMen && user.attrWomen) {
+      filteredUsers = users.filter(
+        (usrs) => usrs.gender === "female" || usrs.gender === "other"
       );
     }
   }

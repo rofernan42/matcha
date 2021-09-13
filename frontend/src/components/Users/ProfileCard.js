@@ -21,32 +21,37 @@ const ProfileCard = (props) => {
     props.onCloseProfile();
   };
   const sendLikeHandler = async () => {
-    const res = await fetch(url + `send-like/${props.user._id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + props.token,
-      },
-    });
-    const resData = await res.json();
-    if (!res.ok) {
-      const error = new Error("Something went wrong.");
-      error.data = resData.message;
-      throw error;
-    }
-    setLiked(() => {
-      return !liked;
-    });
-    if (resData.match) {
-      setMatch(resData.match);
-      socket.emit("newMatch", {
-        userId: props.user._id,
-        user1: props.user.username,
-        user2: resData.currentUser,
+    try {
+      const res = await fetch(url + `send-like/${props.user._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + props.token,
+        },
       });
-      setTimeout(() => {
-        props.onCloseProfile();
-      }, 1000);
+      const resData = await res.json();
+      if (!res.ok) {
+        const error = new Error("Something went wrong.");
+        error.data = resData.message;
+        throw error;
+      }
+      setLiked(() => {
+        return !liked;
+      });
+      props.onSetLikes(resData.likes);
+      if (resData.match) {
+        setMatch(resData.match);
+        socket.emit("newMatch", {
+          userId: props.user._id,
+          user1: props.user.username,
+          user2: resData.currentUser,
+        });
+        setTimeout(() => {
+          props.onCloseProfile();
+        }, 1000);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
   const blockUserHandler = async () => {
@@ -77,7 +82,12 @@ const ProfileCard = (props) => {
     });
   }, []);
   const imgs = props.user.images.filter((img) => img !== null);
-  const distance = calculateDistance(props.currentLoc.lat, props.user.lat, props.currentLoc.lon, props.user.lon)
+  const distance = calculateDistance(
+    props.currentLoc.lat,
+    props.user.lat,
+    props.currentLoc.lon,
+    props.user.lon
+  );
   return (
     <>
       <div
@@ -103,12 +113,16 @@ const ProfileCard = (props) => {
                 </span>
               )}
             </div>
+            <div className={classes.cross} onClick={closeProfile}>
+              &times;
+            </div>
           </div>
         </div>
         <div className={classes["card-body"]}>
           <h2 className={classes["name"]}>{props.user.username}</h2>
           <h2 className={classes["location"]}>
-            {props.user.age && <>{props.user.age} yo - </>}{distance} km away
+            {props.user.age && <>{props.user.age} yo - </>}
+            {distance} km away
           </h2>
           <img src={quotes} className={classes["bio-img"]} alt="" />
           <div className={classes["bio"]}>

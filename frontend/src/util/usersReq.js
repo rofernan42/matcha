@@ -36,6 +36,19 @@ export const fetchCurrentUser = async (token) => {
   return data;
 };
 
+export const fetchUser = async (data) => {
+  const res = await fetch(url + data.path, {
+    headers: {
+      Authorization: "Bearer " + data.token,
+    },
+  });
+  const resData = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message || "Failed to fetch user data.");
+  }
+  return resData;
+};
+
 export const updateUser = async (data) => {
   const res = await fetch(url + data.path, {
     method: "PUT",

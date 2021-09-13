@@ -72,6 +72,18 @@ exports.postBlock = async (req, res, next) => {
   }
 };
 
+exports.destroyBlock = async (req, res, next) => {
+  try {
+    await Block.destroyByUsers(req.userId, req.params.id);
+    res.status(201).json({ message: "User unblocked" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
 const createMatch = async (user1, user2) => {
   const mutualLike = await Like.findByUsers(user2, user1);
   if (mutualLike) {

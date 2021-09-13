@@ -3,6 +3,8 @@ const usersController = require("../controllers/users");
 const isAuth = require("../middleware/is-auth");
 const router = express.Router();
 
+router.get("/users/:id", isAuth, usersController.getSingleUser);
+
 router.get("/all-users", isAuth, usersController.getUsers);
 
 router.get("/blocked-users", isAuth, usersController.getBlockedUsers);

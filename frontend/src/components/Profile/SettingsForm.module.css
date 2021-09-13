@@ -54,6 +54,7 @@ input.error::placeholder {
   flex: 1;
   font-weight: bold;
   color: #8969a1;
+  margin-right: 10px;
 }
 
 .passInfo {

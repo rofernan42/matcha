@@ -18,6 +18,14 @@ class Block {
     return db.execute("DELETE FROM blocks WHERE _id=?", [id]);
   }
 
+  static async destroyByUsers(from, towards) {
+    const [res] = await db.execute(
+      "DELETE FROM blocks WHERE id_from=? AND id_towards=?",
+      [from, towards]
+    );
+    return res[0];
+  }
+
   static async fetchByUser(userId) {
     const res = await db.execute(
       "SELECT * FROM blocks WHERE id_from=? OR id_towards=?",
@@ -27,10 +35,19 @@ class Block {
   }
 
   static async fetchByBlockFrom(userId) {
-    const res = await db.execute("SELECT id_towards FROM blocks WHERE id_from=?", [
-      userId,
-    ]);
+    const res = await db.execute(
+      "SELECT id_towards FROM blocks WHERE id_from=?",
+      [userId]
+    );
     return res[0].map((obj) => obj.id_towards);
+  }
+
+  static async findByUsers(from, towards) {
+    const res = await db.execute(
+      "SELECT * FROM blocks WHERE (id_from=? AND id_towards=?) OR (id_from=? AND id_towards=?)",
+      [from, towards, towards, from]
+    );
+    return res[0];
   }
 
   // static async findByUsers(from, towards) {

@@ -32,6 +32,7 @@
   margin-top: 20px;
 }
 
+.nav__items.active,
 .nav__items:hover {
   background-color: #d3b2e95b;
   cursor: pointer;
