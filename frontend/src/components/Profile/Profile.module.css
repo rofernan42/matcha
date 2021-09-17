@@ -109,6 +109,64 @@
   background-color: rgba(255, 0, 0, 0.514);
 }
 
+.listField {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
+
+.listTitle {
+  border-bottom: 2px solid #8969a1;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #8969a1;
+  margin-bottom: 10px;
+}
+
+.listOption {
+  text-decoration: none;
+  margin: 5px 10px;
+  color: #6b6b6b;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.listOption:last-child {
+  margin-bottom: 20px;
+}
+
+.listOption:hover {
+  background-color: #d3b2e95b;
+}
+
+.listOption span {
+  flex: 1;
+  font-size: 20px;
+}
+
+.listOption img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
+.listOption button {
+  border: none;
+  background: none;
+  font-size: 17px;
+  color: #9f5ccc;
+}
+
+.listOption button:hover {
+  cursor: pointer;
+  color: #38015c;
+}
+
 @keyframes profileOpening {
   0% {
     opacity: 0;

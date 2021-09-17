@@ -31,6 +31,7 @@
 
 .linkProfile {
   color: #9f5ccc;
+  text-decoration: none;
 }
 
 .linkProfile:hover {

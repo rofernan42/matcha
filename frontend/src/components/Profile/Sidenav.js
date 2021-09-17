@@ -3,38 +3,44 @@ import settings from "../../images/settings.png";
 import profil from "../../images/profil.png";
 import heart from "../../images/heart.png";
 import block from "../../images/block.png";
+import { Link, useLocation } from "react-router-dom";
 
-const Sidenav = (props) => {
+const Sidenav = () => {
+  const loc = useLocation();
   return (
     <>
       <div className="container">
         <div className="nav__cont">
           <div className="nav">
-            <div
-              className={`nav__items ${props.page.settings ? "active" : ""}`}
-            >
+            <div className={`nav__items ${loc.hash === "" ? "active" : ""}`}>
               <img alt="" src={settings} />
-              <div onClick={() => props.onChangePage("SETTINGS")}>Settings</div>
+              <Link to="#">Settings</Link>
             </div>
           </div>
           <div className="nav">
-            <div className={`nav__items ${props.page.options ? "active" : ""}`}>
+            <div
+              className={`nav__items ${
+                loc.hash === "#options" ? "active" : ""
+              }`}
+            >
               <img alt="" src={profil} />
-              <div onClick={() => props.onChangePage("OPTIONS")}>Options</div>
+              <Link to="#options">Options</Link>
             </div>
           </div>
           <div className="nav">
-            <div className={`nav__items ${props.page.likes ? "active" : ""}`}>
+            <div
+              className={`nav__items ${loc.hash === "#likes" ? "active" : ""}`}
+            >
               <img alt="" src={heart} />
-              <div onClick={() => props.onChangePage("LIKES")}>Likes</div>
+              <Link to="#likes">Likes</Link>
             </div>
           </div>
           <div className="nav">
-            <div className={`nav__items ${props.page.blocked ? "active" : ""}`}>
+            <div
+              className={`nav__items ${loc.hash === "#blocks" ? "active" : ""}`}
+            >
               <img alt="" src={block} />
-              <div onClick={() => props.onChangePage("BLOCKED")}>
-                Users blocked
-              </div>
+              <Link to="#blocks">Users blocked</Link>
             </div>
           </div>
         </div>

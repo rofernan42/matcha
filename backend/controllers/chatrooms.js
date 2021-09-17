@@ -22,7 +22,10 @@ exports.getMatches = async (req, res, next) => {
     const resMatches = await Promise.all(
       usersMatched.map(async (elem) => {
         const user = await User.findById(elem.user);
-        return { user, match: elem.match };
+        return {
+          user: { _id: user._id, username: user.username, images: user.images },
+          match: elem.match,
+        };
       })
     );
     res.status(200).json({ matches: resMatches });

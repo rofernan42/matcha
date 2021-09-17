@@ -1,6 +1,7 @@
 .userProfile {
   display: flex;
   height: calc(100vh - 60px);
+  animation: pageOpening 1s ease-in-out;
 }
 
 .userNotFound {
@@ -117,6 +118,88 @@
   border-radius: 3px;
 }
 
+.additional {
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.additional div {
+  margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.additional .label {
+  width: 100%;
+  font-size: 25px;
+  border-bottom: 2px solid #543b68;
+}
+
+.likeButton {
+  display: inline-block;
+}
+
+.matchField {
+  background: #f1eef3;
+  box-shadow: 1px 1px 10px #00000062;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.matchField div {
+  text-align: center;
+  font-size: 30px;
+  color: #646168;
+  font-weight: bold;
+  display: inline;
+}
+
+.matchField .matchHeart {
+  width: 20px;
+  height: 20px;
+  filter: hue-rotate(280deg);
+}
+
+.matchField .cancelMatch {
+  font-size: 20px;
+  font-weight: unset;
+  color: #9f5ccc;
+}
+
+.matchField .cancelMatch:hover {
+  cursor: pointer;
+  color: #38015c;
+}
+
+.additional .score {
+  font-size: 40px;
+  font-weight: bold;
+  color: #827092;
+  display: inline-grid;
+}
+.score .num {
+  position: relative;
+  padding: 0 10px;
+}
+.score .denum {
+  grid-column: 2;
+  grid-row: 2;
+  padding: 0 10px;
+}
+.score .num:after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  bottom: -50%;
+  width: 2px;
+  background: #827092;
+  transform: rotate(45deg);
+}
+
 .userDetails .footer {
   position: fixed;
   bottom: 0;
@@ -152,4 +235,13 @@
 
 .status-label {
   margin-left: 5px;
+}
+
+@keyframes pageOpening {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

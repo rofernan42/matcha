@@ -1,5 +1,5 @@
+exports.DOMAIN = "192.168.1.14";
 const express = require("express");
-// const db = require("./util/database");
 const multer = require("multer");
 const path = require("path");
 // const fs = require("fs");
@@ -76,7 +76,7 @@ app.use((error, req, res, next) => {
 });
 
 // const server = https.createServer({key: privateKey, cert: certificate}, app).listen(8000);
-const server = app.listen(8000, "192.168.1.14");
+const server = app.listen(8000, this.DOMAIN);
 const io = require("./socket").init(server);
 let users = [];
 const addUser = (userId, socketId) => {

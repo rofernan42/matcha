@@ -1,5 +1,6 @@
 const Block = require("../models/block");
 const Like = require("../models/like");
+const Match = require("../models/match");
 const User = require("../models/user");
 
 const NB_USERS_PER_PAGE = 10;
@@ -21,18 +22,22 @@ exports.getSingleUser = async (req, res, next) => {
     else {
       const like = await Like.findByUsers(req.params.id, req.userId);
       const likesMe = !!like;
+      const match = await Match.findByUsers(req.params.id, req.userId);
+      const matchedMe = !!match;
       resData = {
         username: user.username,
         name: user.name,
         lastname: user.lastname,
         age: user.age,
         bio: user.bio,
-        interests: user.interests.split(";"),
+        interests: user.interests.length > 0 ? user.interests.split(";") : null,
+        score: user.score,
         lat: user.lat,
         lon: user.lon,
         lastConnection: user.lastConnection,
         images: user.images.filter((img) => img),
         likesMe,
+        matchedMe,
       };
     }
     res.status(200).json(resData);
@@ -132,7 +137,28 @@ exports.getFilteredUsers = async (req, res, next) => {
   const totalItems = filteredUsers.length;
   const fetchedUsers = paginate(filteredUsers, perPage, currentPage);
   try {
-    res.status(200).json({ users: fetchedUsers, totalItems, perPage });
+    res.status(200).json({
+      users: fetchedUsers.map((user) => {
+        return {
+          _id: user._id,
+          username: user.username,
+          name: user.name,
+          lastname: user.lastname,
+          age: user.age,
+          gender: user.gender,
+          bio: user.bio,
+          interests: user.interests,
+          score: user.score,
+          lat: user.lat,
+          lon: user.lon,
+          lastConnection: user.lastConnection,
+          likesMe: user.likesMe,
+          images: user.images,
+        };
+      }),
+      totalItems,
+      perPage,
+    });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

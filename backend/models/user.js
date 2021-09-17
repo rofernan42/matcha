@@ -24,18 +24,20 @@ class User {
     this.lat = data.lat || null;
     this.lon = data.lon || null;
     this.lastConnection = Date.now();
+    this.resetToken = data.resetToken || null;
+    this.resetTokenExpiry = data.resetTokenExpiry || null;
   }
 
   save() {
     if (this._id) {
       const values = Object.values(this);
       return db.query(
-        "REPLACE INTO users (_id, username, name, lastname, email, password, age, gender, attrMen, attrWomen, bio, interests, score, lat, lon, lastConnection) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        "REPLACE INTO users (_id, username, name, lastname, email, password, age, gender, attrMen, attrWomen, bio, interests, score, lat, lon, lastConnection, resetToken, resetTokenExpiry) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
         [...values]
       );
     } else {
       return db.execute(
-        "INSERT INTO users (username, name, lastname, email, password, gender, attrMen, attrWomen, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO users (username, name, lastname, email, password, gender, attrMen, attrWomen, bio, interests, score, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
           this.username,
           this.name,
@@ -45,6 +47,9 @@ class User {
           this.gender,
           this.attrMen,
           this.attrWomen,
+          this.bio,
+          this.interests,
+          this.score,
           this.lat,
           this.lon,
         ]
@@ -74,6 +79,13 @@ class User {
     ]);
     return res[0];
   }
+  static async findByToken(token) {
+    const date = Date.now();
+    const [res] = await db.execute("SELECT * FROM users WHERE resetToken=? AND resetTokenExpiry>?", [
+      token, date,
+    ]);
+    return res[0];
+  }
 
   static async fetchUsers() {
     const res = await db.execute("SELECT * FROM users");
@@ -85,9 +97,28 @@ class User {
     if (blockings.length === 0) {
       return [];
     }
-    const query = "SELECT * from users WHERE _id IN (" + blockings.join() + ")";
-    const res = await db.execute(query);
-    return res[0];
+    const queryImgs =
+      "SELECT * FROM images WHERE user_id IN (" + blockings.join() + ")";
+    const [images] = await db.execute(queryImgs);
+    const queryUsers =
+      "SELECT _id,username FROM users WHERE _id IN (" + blockings.join() + ")";
+    const res = await db.execute(queryUsers);
+    const data = res[0].map((user) => {
+      const imgs = images.find((img) => img.user_id === user._id);
+      return {
+        ...user,
+        image: Object.values(
+          (({ image0, image1, image2, image3, image4 }) => ({
+            image0,
+            image1,
+            image2,
+            image3,
+            image4,
+          }))(imgs)
+        ).find((img) => img),
+      };
+    });
+    return data;
   }
 
   static async fetchLikedUsers(userId) {
@@ -95,9 +126,28 @@ class User {
     if (likes.length === 0) {
       return [];
     }
-    const query = "SELECT * from users WHERE _id IN (" + likes.join() + ")";
-    const res = await db.execute(query);
-    return res[0];
+    const queryImgs =
+      "SELECT * FROM images WHERE user_id IN (" + likes.join() + ")";
+    const [images] = await db.execute(queryImgs);
+    const queryUsers =
+      "SELECT _id,username FROM users WHERE _id IN (" + likes.join() + ")";
+    const res = await db.execute(queryUsers);
+    const data = res[0].map((user) => {
+      const imgs = images.find((img) => img.user_id === user._id);
+      return {
+        ...user,
+        image: Object.values(
+          (({ image0, image1, image2, image3, image4 }) => ({
+            image0,
+            image1,
+            image2,
+            image3,
+            image4,
+          }))(imgs)
+        ).find((img) => img),
+      };
+    });
+    return data;
   }
 
   static async fetchUsersWhoLikeMe(userId) {
@@ -105,9 +155,28 @@ class User {
     if (likes.length === 0) {
       return [];
     }
-    const query = "SELECT * from users WHERE _id IN (" + likes.join() + ")";
-    const res = await db.execute(query);
-    return res[0];
+    const queryImgs =
+      "SELECT * FROM images WHERE user_id IN (" + likes.join() + ")";
+    const [images] = await db.execute(queryImgs);
+    const queryUsers =
+      "SELECT _id,username FROM users WHERE _id IN (" + likes.join() + ")";
+    const res = await db.execute(queryUsers);
+    const data = res[0].map((user) => {
+      const imgs = images.find((img) => img.user_id === user._id);
+      return {
+        ...user,
+        image: Object.values(
+          (({ image0, image1, image2, image3, image4 }) => ({
+            image0,
+            image1,
+            image2,
+            image3,
+            image4,
+          }))(imgs)
+        ).find((img) => img),
+      };
+    });
+    return data;
   }
 
   static async fetchFilteredUsers(currentUserId) {

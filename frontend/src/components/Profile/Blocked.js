@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchUsers, userAction } from "../../util/usersReq";
+import { fetchUsers, url, userAction } from "../../util/usersReq";
 import classes from "./Profile.module.css";
+import profil from "../../images/blank-profile-picture.jpg";
 
 const Blocked = (props) => {
   const [usersBlocked, setUsersBlocked] = useState(null);
@@ -32,15 +33,23 @@ const Blocked = (props) => {
         {(!usersBlocked || usersBlocked.length === 0) && (
           <div className={classes.noUser}>You haven't blocked any user.</div>
         )}
-        {usersBlocked &&
-          usersBlocked.map((user) => {
-            return (
-              <div key={user._id}>
-                {user.username}{" "}
-                <span onClick={() => unblockHandler(user._id)}>unblock</span>
-              </div>
-            );
-          })}
+        {usersBlocked && usersBlocked.length > 0 && (
+          <div className={classes.listField}>
+            <div className={classes.listTitle}>Users blocked</div>
+            {usersBlocked.map((user) => {
+              return (
+                <div className={classes.listOption} key={user._id}>
+                  {user.image && <img alt="" src={url + user.image} />}
+                  {!user.image && <img alt="" src={profil} />}
+                  <span>{user.username}</span>
+                  <button onClick={() => unblockHandler(user._id)}>
+                    Unblock
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

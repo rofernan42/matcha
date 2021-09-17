@@ -1,22 +1,27 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { url } from "../../util/usersReq";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
 
-const ResetPassword = () => {
+const NewPassword = () => {
+  const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const emailRef = useRef();
   const [error, setError] = useState(null);
+  const passwordRef = useRef();
+  const repPasswordRef = useRef();
+  const history = useHistory();
 
   const formSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const entEmail = emailRef.current.value;
-    const res = await fetch(url + "auth/reset-password", {
+    const entPassword = passwordRef.current.value;
+    const entRepPassword = repPasswordRef.current.value;
+    const res = await fetch(url + `auth/new-password/${params.token}`, {
       method: "POST",
       body: JSON.stringify({
-        email: entEmail,
+        password: entPassword,
+        repPassword: entRepPassword,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -30,28 +35,36 @@ const ResetPassword = () => {
         error.data = data;
         throw error;
       }
+      history.replace("/login");
     } catch (err) {
-      setError({ ...err.data });
+      setError(err.data.message);
     }
   };
   return (
     <section className={classes.auth}>
-      <h1>Reset your password</h1>
+      <h1>New Password</h1>
       <form onSubmit={formSubmit}>
         <div className={classes.control}>
           <input
             className={`${error ? classes.error : ""}`}
-            placeholder="Please enter your email"
-            ref={emailRef}
-            type="email"
-            id="email"
+            placeholder="Type your new password..."
+            ref={passwordRef}
+            type="password"
+            id="password"
           />
-          {error && (
-            <span className={classes.error}>This email does not exist</span>
-          )}
         </div>
+        <div className={classes.control}>
+          <input
+            className={`${error ? classes.error : ""}`}
+            placeholder="Confirm password..."
+            ref={repPasswordRef}
+            type="password"
+            id="repPassword"
+          />
+        </div>
+        {error && <span className={classes.errorMsg}>{error}</span>}
         <div className={classes.actions}>
-          {!isLoading && <button>Reset Password</button>}
+          {!isLoading && <button>Set Password</button>}
           {isLoading && (
             <div className={classes.loadingContainer}>
               <button className={classes.loading}>
@@ -69,13 +82,10 @@ const ResetPassword = () => {
               </button>
             </div>
           )}
-          <div className={classes.footer}>
-            <Link to="/login">Cancel</Link>
-          </div>
         </div>
       </form>
     </section>
   );
 };
 
-export default ResetPassword;
+export default NewPassword;

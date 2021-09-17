@@ -1,7 +1,7 @@
 import classes from "./ProfileCard.module.css";
 import quotes from "../../images/left-quotes-sign.png";
 import ImageSlider from "./ImageSlider";
-import { url, userAction } from "../../util/usersReq";
+import { userAction } from "../../util/usersReq";
 import { useEffect, useState } from "react";
 import TimeAgo from "react-timeago";
 import { store } from "react-notifications-component";
@@ -22,19 +22,11 @@ const ProfileCard = (props) => {
   };
   const sendLikeHandler = async () => {
     try {
-      const res = await fetch(url + `send-like/${props.user._id}`, {
+      const resData = await userAction({
+        path: `send-like/${props.user._id}`,
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + props.token,
-        },
+        token: props.token,
       });
-      const resData = await res.json();
-      if (!res.ok) {
-        const error = new Error("Something went wrong.");
-        error.data = resData.message;
-        throw error;
-      }
       setLiked(() => {
         return !liked;
       });
@@ -108,9 +100,16 @@ const ProfileCard = (props) => {
                 <span className={classes["status-label"]}>online</span>
               )}
               {!props.online && (
-                <span className={classes["status-label"]}>
-                  <TimeAgo date={props.user.lastConnection} />
-                </span>
+                <>
+                  {props.user.lastConnection && (
+                    <span className={classes["status-label"]}>
+                      <TimeAgo date={props.user.lastConnection} />
+                    </span>
+                  )}
+                  {!props.user.lastConnection && (
+                    <span className={classes["status-label"]}>offline</span>
+                  )}
+                </>
               )}
             </div>
             <div className={classes.cross} onClick={closeProfile}>
@@ -132,7 +131,9 @@ const ProfileCard = (props) => {
             )}
           </div>
         </div>
-        <LikeButton sendLikeHandler={sendLikeHandler} liked={liked} />
+        <div style={{ position: "absolute", top: "240px", right: "25px" }}>
+          <LikeButton sendLikeHandler={sendLikeHandler} liked={liked} />
+        </div>
         <div className={classes["card-footer"]}>
           <div className={classes["stats"]}>
             <div className={classes["stat"]}>

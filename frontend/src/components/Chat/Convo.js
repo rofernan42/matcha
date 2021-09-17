@@ -43,6 +43,7 @@ const Convo = (props) => {
       <div
         className={`${classes.lastMessage} ${msgUnread ? classes.unread : ""}`}
       >
+        {!data && !props.match.match.lastMessage && <i>No message</i>}
         {data ? data.content : props.match.match.lastMessage}
       </div>
     </div>

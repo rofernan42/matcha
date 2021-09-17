@@ -33,7 +33,7 @@ const Nav = (props) => {
         });
         const newMsgs = data.matches.find(
           (match) =>
-            !match.match.msgRead && match.match.msgAuthor !== +authCtx.userId
+            match.match.lastMessage && !match.match.msgRead && match.match.msgAuthor !== +authCtx.userId
         );
         if (newMsgs && loc.pathname !== "/chat")
           setPushNotif(classes.pushNotif);
@@ -53,7 +53,6 @@ const Nav = (props) => {
     };
     if (isAuth) getCurrentUser();
   }, [isAuth, authCtx.token]);
-
   return (
     <header className={classes.header}>
       <div className={classes.logo}>

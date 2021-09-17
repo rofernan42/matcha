@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer } from "react";
+import { useContext, useEffect } from "react";
 import Settings from "../components/Profile/Settings";
 import Sidenav from "../components/Profile/Sidenav";
 import useHttp from "../hooks/use-http";
@@ -8,51 +8,11 @@ import { fetchCurrentUser, updateUser } from "../util/usersReq";
 import Options from "../components/Profile/Options";
 import Likes from "../components/Profile/Likes";
 import Blocked from "../components/Profile/Blocked";
-
-const setPageActive = (state, action) => {
-  if (action.type === "SETTINGS") {
-    return {
-      settings: true,
-      options: false,
-      likes: false,
-      blocked: false,
-    };
-  }
-  if (action.type === "OPTIONS") {
-    return {
-      settings: false,
-      options: true,
-      likes: false,
-      blocked: false,
-    };
-  }
-  if (action.type === "LIKES") {
-    return {
-      settings: false,
-      options: false,
-      likes: true,
-      blocked: false,
-    };
-  }
-  if (action.type === "BLOCKED") {
-    return {
-      settings: false,
-      options: false,
-      likes: false,
-      blocked: true,
-    };
-  }
-  return state;
-};
+import { useLocation } from "react-router-dom";
 
 const ProfilePage = () => {
   const authCtx = useContext(AuthContext);
-  const [pageActive, dispatch] = useReducer(setPageActive, {
-    settings: true,
-    options: false,
-    likes: false,
-    blocked: false,
-  });
+  const loc = useLocation();
   const { sendReq, status, data: user } = useHttp(fetchCurrentUser, true);
   const {
     sendReq: sendUpdate,
@@ -71,16 +31,13 @@ const ProfilePage = () => {
     sendReq(authCtx.token);
   }, [sendReq, authCtx.token]);
 
-  const changePage = (page) => {
-    dispatch({ type: page });
-  };
   return (
     <>
       <div className={classes.profilePage}>
         {user && (
           <>
-            <Sidenav onChangePage={changePage} page={pageActive} />
-            {pageActive.settings && (
+            <Sidenav />
+            {loc.hash === "" && (
               <Settings
                 user={updatedUser ? updatedUser : user.user}
                 images={user.user.images}
@@ -90,7 +47,7 @@ const ProfilePage = () => {
                 error={errorUpdate ? errorUpdate : {}}
               />
             )}
-            {pageActive.options && (
+            {loc.hash === "#options" && (
               <Options
                 user={updatedUser ? updatedUser : user.user}
                 status={status}
@@ -99,7 +56,7 @@ const ProfilePage = () => {
                 error={errorUpdate ? errorUpdate : {}}
               />
             )}
-            {pageActive.likes && (
+            {loc.hash === "#likes" && (
               <Likes
                 // user={updatedUser ? updatedUser : user.user}
                 // status={status}
@@ -108,7 +65,7 @@ const ProfilePage = () => {
                 // error={errorUpdate ? errorUpdate : {}}
               />
             )}
-            {pageActive.blocked && (
+            {loc.hash === "#blocks" && (
               <Blocked
                 // user={updatedUser ? updatedUser : user.user}
                 // status={status}

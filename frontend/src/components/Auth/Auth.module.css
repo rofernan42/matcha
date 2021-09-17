@@ -42,6 +42,10 @@
   -webkit-box-shadow: 0 0 0px 1000px rgb(253, 190, 190) inset;
 }
 
+.errorMsg {
+  color: red;
+}
+
 .control span.error {
   color: rgb(223, 45, 45);
   font-size: 12px;

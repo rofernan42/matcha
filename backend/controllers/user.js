@@ -14,6 +14,9 @@ exports.getProfile = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
+    user.lastConnection = Date.now();
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
     const likes = await Like.fetchLikes(user._id);
     res.status(200).json({ user, likes });
   } catch (err) {

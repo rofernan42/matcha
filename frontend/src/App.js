@@ -11,7 +11,9 @@ import UsersPage from "./pages/UsersPage";
 
 import socket from "./util/socket";
 import { store } from "react-notifications-component";
-import UserProfile from "./components/Users/UserProfile";
+import UserProfile from "./components/Users/UserProfile/UserProfile";
+import ResetPassword from "./components/Auth/ResetPassword";
+import NewPassword from "./components/Auth/NewPassword";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -80,6 +82,16 @@ function App() {
         {!authCtx.isAuth && (
           <Route path="/login" exact>
             <LoginPage />
+          </Route>
+        )}
+        {!authCtx.isAuth && (
+          <Route path="/reset-password" exact>
+            <ResetPassword />
+          </Route>
+        )}
+        {!authCtx.isAuth && (
+          <Route path="/reset-password/:token">
+            <NewPassword />
           </Route>
         )}
         {authCtx.isAuth && (

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { fetchUsers } from "../../util/usersReq";
+import { Link } from "react-router-dom";
+import { fetchUsers, url } from "../../util/usersReq";
 import classes from "./Profile.module.css";
+import profil from "../../images/blank-profile-picture.jpg";
 
 const Likes = (props) => {
   const [usersLiked, setUsersLiked] = useState(null);
@@ -27,18 +29,37 @@ const Likes = (props) => {
   return (
     <div className={classes.profilePage}>
       <div className={classes.settingsField}>
-        <div>
-            Users I like
+        <div className={classes.listField}>
+          <div className={classes.listTitle}>Profiles you liked</div>
           {usersLiked &&
             usersLiked.map((user) => {
-              return <div key={user._id}>{user.username}</div>;
+              return (
+                <Link
+                  to={`/users/${user._id}`}
+                  key={user._id}
+                  className={classes.listOption}
+                >
+                  {user.image && <img alt="" src={url + user.image} />}
+                  {!user.image && <img alt="" src={profil} />}
+                  <span>{user.username}</span>
+                </Link>
+              );
             })}
         </div>
-        <div>
-            Users who like me
+        <div className={classes.listField}>
+          <div className={classes.listTitle}>They liked you</div>
           {usersLiking &&
             usersLiking.map((user) => {
-              return <div key={user._id}>{user.username}</div>;
+              return (
+                <Link
+                  to={`/users/${user._id}`}
+                  key={user._id}
+                  className={classes.listOption}
+                >
+                  <img alt="" src={url + user.image} />
+                  <span>{user.username}</span>
+                </Link>
+              );
             })}
         </div>
       </div>

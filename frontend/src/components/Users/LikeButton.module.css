@@ -1,7 +1,4 @@
 .btn-follow {
-  position: absolute;
-  top: 240px;
-  right: 25px;
   width: 45px;
   height: 45px;
   background: linear-gradient(to left, #786186, #d2b4e6);
@@ -21,12 +18,10 @@
 }
 
 .heart {
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  left: 50%;
-  top: 53%;
-  transform: translate(-50%, -50%);
+  width: 27px;
+  height: 27px;
+  padding: 9px;
+  margin-top: 1px;
   object-fit: cover;
   filter: invert(100%);
 }

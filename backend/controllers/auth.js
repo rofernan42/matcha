@@ -3,6 +3,22 @@ const Image = require("../models/image");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authValidation = require("../middleware/auth-validation");
+const crypto = require("crypto");
+const DOMAIN = require("../app").DOMAIN;
+const nodemailer = require("nodemailer");
+const emailPassword = require("../../credentials").emailPassword;
+
+const transporter = nodemailer.createTransport({
+  // name: "gmail.com",
+  // host: "smtp.gmail.com",
+  // port: 587,
+  // secure: false,
+  service: "Gmail",
+  auth: {
+    user: "matcha.rofernan@gmail.com",
+    pass: emailPassword,
+  },
+});
 
 exports.signup = async (req, res, next) => {
   const username = req.body.username.trim();
@@ -86,6 +102,84 @@ exports.login = async (req, res, next) => {
     res
       .status(200)
       .json({ token, userId: loadedUser._id.toString(), expiresIn: 86400 });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.reset = async (req, res, next) => {
+  const email = req.body.email;
+  const user = await User.findByEmail(email);
+  try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    const buf = crypto.randomBytes(32);
+    const token = buf.toString("hex");
+    const updatedUser = new User({
+      ...user,
+      resetToken: token,
+      resetTokenExpiry: Date.now() + 3600000,
+    });
+    await updatedUser.save();
+    const mailOptions = {
+      from: "matcha.rofernan@gmail.com",
+      to: "romain.fndz42@gmail.com",
+      subject: "Reset your password",
+      html: `
+        <h1>You requested a password reset</h1>
+        <p>Click this <a href="http://${DOMAIN}:3000/reset-password/${token}">link</a> to set a new password.</p>
+      `,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        throw error;
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+    res.status(200).json({ message: "Email sent" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.setPassword = async (req, res, next) => {
+  const token = req.params.token.toString();
+  const user = await User.findByToken(token);
+  try {
+    if (!user) {
+      const error = new Error("User not found or token expired");
+      error.statusCode = 404;
+      error.error = "Token expired. Please make another reset request.";
+      throw error;
+    }
+    const password = req.body.password;
+    const repPassword = req.body.repPassword;
+    if (password !== repPassword) {
+      const error = new Error("Passwords must be the same");
+      error.statusCode = 422;
+      error.error = "Passwords must be the same in each field.";
+      throw error;
+    }
+    if (password.length < 6) {
+      const error = new Error("Invalid password");
+      error.statusCode = 422;
+      error.error = "Invalid password (minimum 6 characters).";
+      throw error;
+    }
+    const hashedPwd = await bcrypt.hash(password, 12);
+    const updatedUser = new User({ ...user, password: hashedPwd });
+    await updatedUser.save();
+    res.status(200).json({ message: "Password changed" });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

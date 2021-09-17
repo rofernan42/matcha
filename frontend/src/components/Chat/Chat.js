@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import AuthContext from "../../store/auth-context";
 import Message from "./Message";
 import classes from "./Chat.module.css";
@@ -10,15 +10,37 @@ import Modal from "../ui/Modal";
 // import cross from "../../images/cancel.png";
 // import { Link } from "react-router-dom";
 
-const cancelModalData = {
-  title: "Cancel match?",
-  content: `You won't be able to communicate with this user anymore.
-  All the messages you exchanged will be deleted.`,
-};
-const blockModalData = {
-  title: "Are you sure?",
-  content: `You won't be able to communicate with this user and see his profile anymore.
-You can unblock this user from your profile page.`,
+const setModalActive = (state, action) => {
+  if (action.type === "BLOCK") {
+    return {
+      blockModal: true,
+      cancelModal: false,
+      modalData: {
+        title: "Are you sure?",
+        content: `You won't be able to communicate with this user and see his profile anymore.
+        You can unblock this user from your profile page.`,
+      },
+    };
+  }
+  if (action.type === "CANCEL") {
+    return {
+      blockModal: false,
+      cancelModal: true,
+      modalData: {
+        title: "Cancel match?",
+        content: `You won't be able to communicate with this user anymore.
+        All the messages you exchanged will be deleted.`,
+      },
+    };
+  }
+  if (action.type === "CLOSE") {
+    return {
+      blockModal: false,
+      cancelModal: false,
+      modalData: null,
+    };
+  }
+  return state;
 };
 
 const Chat = (props) => {
@@ -27,10 +49,12 @@ const Chat = (props) => {
   const scrollRef = useRef();
   const [newMsg, setNewMsg] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const [blockModalActive, setBlockModalActive] = useState(false);
-  const [cancelModalActive, setCancelModalActive] = useState(false);
+  const [modal, dispatch] = useReducer(setModalActive, {
+    blockModal: false,
+    cancelModal: false,
+    modalData: null,
+  });
   const history = useHistory();
-  // const [profileActive, setProfileActive] = useState(false);
   const currentRoom = props.room.roomData.match;
 
   useEffect(() => {
@@ -52,7 +76,7 @@ const Chat = (props) => {
     });
     return () => {
       socket.off("getMessage");
-    }
+    };
   }, [currentRoom._id, props]);
 
   const formSubmitHandler = async (e) => {
@@ -99,9 +123,9 @@ const Chat = (props) => {
   };
 
   const closeModal = () => {
-    setCancelModalActive(false);
-    setBlockModalActive(false);
+    dispatch({ type: "CLOSE" });
   };
+
   const blockUserHandler = async () => {
     await userAction({
       path: `block/${props.room.user._id}`,
@@ -119,9 +143,6 @@ const Chat = (props) => {
     });
     history.go(0);
   };
-  // const closeProfileHandler = () => {
-  //   setProfileActive(false);
-  // };
 
   const imgProfile = props.room.user.images.find((img) => img !== null);
   return (
@@ -130,8 +151,8 @@ const Chat = (props) => {
         <ChatHeader
           user={props.room.user}
           imgProfile={imgProfile}
-          onBlockModal={() => setBlockModalActive(true)}
-          onCancelModal={() => setCancelModalActive(true)}
+          onBlockModal={() => dispatch({ type: "BLOCK" })}
+          onCancelModal={() => dispatch({ type: "CANCEL" })}
         />
         <div className={classes.roomHeader}>
           {messages &&
@@ -160,28 +181,11 @@ const Chat = (props) => {
         </form>
       </div>
 
-      {/* {profileActive && <ProfileCard key={props.room.user._id}
-          onCloseProfile={closeProfileHandler}
-          user={props.room.user}
-          token={authCtx.token}
-          // actualisePage={actualisePage}
-          // liked={currentUser.likes.includes(userProfile.profile._id)}
-          // online={props.onlineUsers.some(
-          //   (e) => e.userId === userProfile.profile._id.toString()
-          // )}
-          />} */}
-      {blockModalActive && (
+      {(modal.blockModal || modal.cancelModal) && (
         <Modal
-          onConfirm={blockUserHandler}
+          onConfirm={modal.blockModal ? blockUserHandler : cancelMatchHandler}
           onCloseModal={closeModal}
-          data={blockModalData}
-        />
-      )}
-      {cancelModalActive && (
-        <Modal
-          onConfirm={cancelMatchHandler}
-          onCloseModal={closeModal}
-          data={cancelModalData}
+          data={modal.modalData}
         />
       )}
     </div>

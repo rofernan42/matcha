@@ -1,5 +1,6 @@
 .edit-settings {
   height: auto;
+  padding: 10px;
 }
 
 .edit-settings h1 {
@@ -31,6 +32,7 @@
 }
 
 .settings input.error {
+  box-shadow: 0 0 0px 1000px rgb(253, 190, 190) inset;
   -webkit-box-shadow: 0 0 0px 1000px rgb(253, 190, 190) inset;
   -moz-box-shadow: 0 0 0px 1000px rgb(253, 190, 190) inset;
 }
