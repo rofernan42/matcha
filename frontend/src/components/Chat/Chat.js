@@ -7,16 +7,15 @@ import socket from "../../util/socket";
 import ChatHeader from "./ChatHeader";
 import { useHistory } from "react-router-dom";
 import Modal from "../ui/Modal";
-// import cross from "../../images/cancel.png";
-// import { Link } from "react-router-dom";
 
 const setModalActive = (state, action) => {
   if (action.type === "BLOCK") {
     return {
       blockModal: true,
       cancelModal: false,
+      reportModal: false,
       modalData: {
-        title: "Are you sure?",
+        title: "Block this user?",
         content: `You won't be able to communicate with this user and see his profile anymore.
         You can unblock this user from your profile page.`,
       },
@@ -26,6 +25,7 @@ const setModalActive = (state, action) => {
     return {
       blockModal: false,
       cancelModal: true,
+      reportModal: false,
       modalData: {
         title: "Cancel match?",
         content: `You won't be able to communicate with this user anymore.
@@ -33,10 +33,23 @@ const setModalActive = (state, action) => {
       },
     };
   }
+  if (action.type === "REPORT") {
+    return {
+      blockModal: false,
+      cancelModal: false,
+      reportModal: true,
+      modalData: {
+        title: "Does this profile seem suspect to you?",
+        content: `An email will be sent to the admin and this profile will be reviewed before further action.
+        You can block this user or cancel the match.`,
+      },
+    };
+  }
   if (action.type === "CLOSE") {
     return {
       blockModal: false,
       cancelModal: false,
+      reportModal: false,
       modalData: null,
     };
   }
@@ -52,6 +65,7 @@ const Chat = (props) => {
   const [modal, dispatch] = useReducer(setModalActive, {
     blockModal: false,
     cancelModal: false,
+    reportModal: false,
     modalData: null,
   });
   const history = useHistory();
@@ -132,7 +146,6 @@ const Chat = (props) => {
       method: "POST",
       token: authCtx.token,
     });
-    // socket.emit("blockUser", { userId: props.user._id });
     history.go(0);
   };
   const cancelMatchHandler = async () => {
@@ -142,6 +155,14 @@ const Chat = (props) => {
       token: authCtx.token,
     });
     history.go(0);
+  };
+  const reportUserHandler = async () => {
+    await userAction({
+      path: `report/${props.room.user._id}`,
+      method: "POST",
+      token: authCtx.token,
+    });
+    dispatch({ type: "CLOSE" });
   };
 
   const imgProfile = props.room.user.images.find((img) => img !== null);
@@ -153,6 +174,7 @@ const Chat = (props) => {
           imgProfile={imgProfile}
           onBlockModal={() => dispatch({ type: "BLOCK" })}
           onCancelModal={() => dispatch({ type: "CANCEL" })}
+          onReportModal={() => dispatch({ type: "REPORT" })}
         />
         <div className={classes.roomHeader}>
           {messages &&
@@ -181,9 +203,15 @@ const Chat = (props) => {
         </form>
       </div>
 
-      {(modal.blockModal || modal.cancelModal) && (
+      {(modal.blockModal || modal.cancelModal || modal.reportModal) && (
         <Modal
-          onConfirm={modal.blockModal ? blockUserHandler : cancelMatchHandler}
+          onConfirm={
+            modal.blockModal
+              ? blockUserHandler
+              : (modal.cancelModal
+              ? cancelMatchHandler
+              : reportUserHandler)
+          }
           onCloseModal={closeModal}
           data={modal.modalData}
         />

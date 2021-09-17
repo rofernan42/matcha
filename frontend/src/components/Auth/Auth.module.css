@@ -38,12 +38,15 @@
 }
 
 .control input.error {
-  /* background-color: rgba(255, 2, 2, 0.247); */
+  box-shadow: 0 0 0px 1000px rgb(253, 190, 190) inset;
   -webkit-box-shadow: 0 0 0px 1000px rgb(253, 190, 190) inset;
+  -moz-box-shadow: 0 0 0px 1000px rgb(253, 190, 190) inset;
 }
 
 .errorMsg {
   color: red;
+  font-size: 14px;
+  text-align: center;
 }
 
 .control span.error {

@@ -8,7 +8,7 @@ const DOMAIN = require("../app").DOMAIN;
 const nodemailer = require("nodemailer");
 const emailPassword = require("../../credentials").emailPassword;
 
-const transporter = nodemailer.createTransport({
+exports.transporter = nodemailer.createTransport({
   // name: "gmail.com",
   // host: "smtp.gmail.com",
   // port: 587,
@@ -129,7 +129,7 @@ exports.reset = async (req, res, next) => {
     await updatedUser.save();
     const mailOptions = {
       from: "matcha.rofernan@gmail.com",
-      to: "romain.fndz42@gmail.com",
+      to: email,
       subject: "Reset your password",
       html: `
         <h1>You requested a password reset</h1>

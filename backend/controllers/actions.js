@@ -2,6 +2,8 @@ const User = require("../models/user");
 const Like = require("../models/like");
 const Match = require("../models/match");
 const Block = require("../models/block");
+const DOMAIN = require("../app").DOMAIN;
+const transporter = require("./auth").transporter;
 
 exports.postLike = async (req, res, next) => {
   const user = await User.findById(req.userId);
@@ -76,6 +78,36 @@ exports.destroyBlock = async (req, res, next) => {
   try {
     await Block.destroyByUsers(req.userId, req.params.id);
     res.status(201).json({ message: "User unblocked" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.postReport = async (req, res, next) => {
+  const userId = req.params.id;
+  const user = await User.findById(userId);
+  try {
+    const mailOptions = {
+      from: "matcha.rofernan@gmail.com",
+      to: "matcha.rofernan@gmail.com",
+      subject: "A user has been reported",
+      html: `
+        <h1>User id: ${userId} has been reported.</h1>
+        <p>Click this <a href="http://${DOMAIN}:3000/users/${userId}">link</a> to visit the user's profile page.</p>
+        <p>User info - id: ${userId} - email: ${user.email} - username: ${user.username} - name: ${user.name} - last name: ${user.lastname}</p>
+      `,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        throw error;
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+    res.status(200).json({ message: "Email sent" });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

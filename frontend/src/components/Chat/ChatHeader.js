@@ -26,7 +26,8 @@ const ChatHeader = (props) => {
           userSettings ? classes.active : ""
         }`}
       >
-        <div onClick={props.onBlockModal}>Block</div>-<div>Report</div>-
+        <div onClick={props.onBlockModal}>Block</div>-
+        <div onClick={props.onReportModal}>Report</div>-
         <div onClick={props.onCancelModal}>Cancel match</div>
       </div>
     </>

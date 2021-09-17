@@ -62,7 +62,7 @@ const NewPassword = () => {
             id="repPassword"
           />
         </div>
-        {error && <span className={classes.errorMsg}>{error}</span>}
+        {error && <div className={classes.errorMsg}>{error}</div>}
         <div className={classes.actions}>
           {!isLoading && <button>Set Password</button>}
           {isLoading && (

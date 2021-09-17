@@ -11,4 +11,6 @@ router.post("/block/:id", isAuth, actionsController.postBlock);
 
 router.delete("/block/:id", isAuth, actionsController.destroyBlock);
 
+router.post("/report/:id", isAuth, actionsController.postReport);
+
 module.exports = router;

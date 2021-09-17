@@ -14,6 +14,7 @@ import heart from "../../../images/heart.png";
 import heartFull from "../../../images/heart-full.png";
 import heartColor from "../../../images/heart-color.png";
 import block from "../../../images/block.png";
+import report from "../../../images/report.png";
 import Modal from "../../ui/Modal";
 import LikeButton from "../LikeButton";
 import Footer from "./Footer";
@@ -23,6 +24,7 @@ const setModalActive = (state, action) => {
     return {
       blockModal: true,
       cancelModal: false,
+      reportModal: false,
       modalData: {
         title: "Block this user?",
         content: `You won't be able to communicate with this user and see his profile anymore.
@@ -34,6 +36,7 @@ const setModalActive = (state, action) => {
     return {
       blockModal: false,
       cancelModal: true,
+      reportModal: false,
       modalData: {
         title: "Cancel match?",
         content: `You won't be able to communicate with this user anymore.
@@ -41,10 +44,23 @@ const setModalActive = (state, action) => {
       },
     };
   }
+  if (action.type === "REPORT") {
+    return {
+      blockModal: false,
+      cancelModal: false,
+      reportModal: true,
+      modalData: {
+        title: "Does this profile seem suspect to you?",
+        content: `An email will be sent to the admin and this profile will be reviewed before further action.
+        You can block this user or cancel the match.`,
+      },
+    };
+  }
   if (action.type === "CLOSE") {
     return {
       blockModal: false,
       cancelModal: false,
+      reportModal: false,
       modalData: null,
     };
   }
@@ -58,6 +74,7 @@ const UserProfile = (props) => {
   const [modal, dispatch] = useReducer(setModalActive, {
     blockModal: false,
     cancelModal: false,
+    reportModal: false,
     modalData: null,
   });
   const [liked, setLiked] = useState(null);
@@ -98,6 +115,14 @@ const UserProfile = (props) => {
     } catch (err) {
       console.log(err);
     }
+  };
+  const reportUserHandler = async () => {
+    await userAction({
+      path: `report/${params.userId}`,
+      method: "POST",
+      token: authCtx.token,
+    });
+    dispatch({ type: "CLOSE" });
   };
 
   const closeModal = () => {
@@ -166,6 +191,13 @@ const UserProfile = (props) => {
                   alt=""
                   src={block}
                   onClick={() => dispatch({ type: "BLOCK" })}
+                  style={{ cursor: "pointer" }}
+                />
+                <img
+                  className={classes.icon}
+                  alt=""
+                  src={report}
+                  onClick={() => dispatch({ type: "REPORT" })}
                   style={{ cursor: "pointer" }}
                 />
               </div>
@@ -245,10 +277,14 @@ const UserProfile = (props) => {
               onlineUsers={props.onlineUsers}
             />
           </div>
-          {(modal.blockModal || modal.cancelModal) && (
+          {(modal.blockModal || modal.cancelModal || modal.reportModal) && (
             <Modal
               onConfirm={
-                modal.blockModal ? blockUserHandler : cancelMatchHandler
+                modal.blockModal
+                  ? blockUserHandler
+                  : modal.cancelModal
+                  ? cancelMatchHandler
+                  : reportUserHandler
               }
               onCloseModal={closeModal}
               data={modal.modalData}

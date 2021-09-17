@@ -8,6 +8,7 @@ const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const emailRef = useRef();
   const [error, setError] = useState(null);
+  const [emailSent, setEmailSent] = useState(false);
 
   const formSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +31,7 @@ const ResetPassword = () => {
         error.data = data;
         throw error;
       }
+      setEmailSent(true);
     } catch (err) {
       setError({ ...err.data });
     }
@@ -37,43 +39,50 @@ const ResetPassword = () => {
   return (
     <section className={classes.auth}>
       <h1>Reset your password</h1>
-      <form onSubmit={formSubmit}>
-        <div className={classes.control}>
-          <input
-            className={`${error ? classes.error : ""}`}
-            placeholder="Please enter your email"
-            ref={emailRef}
-            type="email"
-            id="email"
-          />
-          {error && (
-            <span className={classes.error}>This email does not exist</span>
-          )}
-        </div>
-        <div className={classes.actions}>
-          {!isLoading && <button>Reset Password</button>}
-          {isLoading && (
-            <div className={classes.loadingContainer}>
-              <button className={classes.loading}>
-                Please wait
-                <LoadingSpinner
-                  styles={{
-                    display: "inline-block",
-                    verticalAlign: "middle",
-                    position: "relative",
-                    marginLeft: "15px",
-                    width: "20px",
-                    height: "20px",
-                  }}
-                />
-              </button>
-            </div>
-          )}
-          <div className={classes.footer}>
-            <Link to="/login">Cancel</Link>
+      {!emailSent && (
+        <form onSubmit={formSubmit}>
+          <div className={classes.control}>
+            <input
+              className={`${error ? classes.error : ""}`}
+              placeholder="Please enter your email"
+              ref={emailRef}
+              type="email"
+              id="email"
+            />
+            {error && (
+              <span className={classes.error}>This email does not exist</span>
+            )}
           </div>
+          <div className={classes.actions}>
+            {!isLoading && <button>Reset Password</button>}
+            {isLoading && (
+              <div className={classes.loadingContainer}>
+                <button className={classes.loading}>
+                  Please wait
+                  <LoadingSpinner
+                    styles={{
+                      display: "inline-block",
+                      verticalAlign: "middle",
+                      position: "relative",
+                      marginLeft: "15px",
+                      width: "20px",
+                      height: "20px",
+                    }}
+                  />
+                </button>
+              </div>
+            )}
+            <div className={classes.footer}>
+              <Link to="/login">Cancel &times;</Link>
+            </div>
+          </div>
+        </form>
+      )}
+      {emailSent && (
+        <div style={{ textAlign: "center", padding: "20px" }}>
+          An email has been sent to the email provided.
         </div>
-      </form>
+      )}
     </section>
   );
 };

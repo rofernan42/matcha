@@ -101,10 +101,10 @@ table {
 }
 
 .cross.small {
-  height: 32px;
-  width: 32px;
-  font-size: 40px;
-  line-height: 15px;
+  height: 30px;
+  width: 30px;
+  font-size: 33px;
+  line-height: 5px;
   padding: 0;
 }
 
