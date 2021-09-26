@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { url } from "../../util/usersReq";
 import classes from "./Convos.module.css";
 import socket from "../../util/socket";
+import profil from "../../images/blank-profile-picture.jpg";
 
 const Convo = (props) => {
   const [data, setData] = useState(null);
@@ -37,7 +38,7 @@ const Convo = (props) => {
     <div className={classes.convo} onClick={changeRoomHandler}>
       <img
         className={classes.imgProfile}
-        src={`${url}${props.imgProfile}`}
+        src={props.imgProfile ? `${url}${props.imgProfile}` : profil}
         alt=""
       />
       <div

@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
@@ -8,31 +8,15 @@ import AuthContext from "./store/auth-context";
 import HomePage from "./pages/HomePage";
 import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
-
 import socket from "./util/socket";
-import { store } from "react-notifications-component";
 import UserProfile from "./components/Users/UserProfile/UserProfile";
 import ResetPassword from "./components/Auth/ResetPassword";
 import NewPassword from "./components/Auth/NewPassword";
+import { toast } from "react-toastify";
 
 function App() {
   const authCtx = useContext(AuthContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const history = useHistory();
-  // function success(pos) {
-  //   var crd = pos.coords;
-
-  //   console.log('Your current position is:');
-  //   console.log(`Latitude : ${crd.latitude}`);
-  //   console.log(`Longitude: ${crd.longitude}`);
-  //   console.log(`More or less ${crd.accuracy} meters.`);
-  // }
-
-  // function error(err) {
-  //   console.warn(`ERROR(${err.code}): ${err.message}`);
-  // }
-
-  // navigator.geolocation.getCurrentPosition(success, error);
 
   useEffect(() => {
     if (authCtx.userId) {
@@ -45,27 +29,13 @@ function App() {
   }, [authCtx.userId]);
   useEffect(() => {
     if (authCtx.userId) {
-      socket.off("notif").on("notif", (data) => {
+      socket.off("notifMatch").on("notifMatch", (data) => {
         if (data) {
-          store.addNotification({
-            title: data.message,
-            message: "lalala",
-            type: data.type,
-            insert: "top",
-            container: "top-center",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 5000,
-              onScreen: false,
-            },
+          toast(data.message, {
+            style: { backgroundColor: "#9f5ccc", color: "white" },
           });
         }
       });
-      // socket.off("actualise").on("actualise", () => {
-      //   console.log("actualise");
-      //   history.go(0);
-      // });
     }
   }, [authCtx.userId]);
   return (

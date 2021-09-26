@@ -1,5 +1,6 @@
 import classes from "./Chat.module.css";
 import settings from "../../images/settings.png";
+import profil from "../../images/blank-profile-picture.jpg";
 import { useState } from "react";
 import { url } from "../../util/usersReq";
 import { Link } from "react-router-dom";
@@ -10,8 +11,8 @@ const ChatHeader = (props) => {
     <>
       <div className={classes.userInfo}>
         <div className={classes.username}>
-          <img alt="" src={`${url}${props.imgProfile}`} />
-          {props.user.username}
+          <img alt="" src={props.imgProfile ? `${url}${props.imgProfile}` : profil} />
+          {" "}{props.user.username}
         </div>
         <Link className={classes.linkProfile} to={`/users/${props.user._id}`}>see profile</Link>
         <img

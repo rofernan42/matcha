@@ -2,6 +2,7 @@ import { useReducer, useRef, useState } from "react";
 import { updateUser } from "../../util/usersReq";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./SettingsForm.module.css";
+import { toast } from "react-toastify";
 
 const getData = (state, action) => {
   if (action.type === "SUCCESS") {
@@ -46,8 +47,10 @@ const SettingsForm = (props) => {
         token: props.token,
       });
       dispatch({ type: "SUCCESS", data: updatedUser });
+      toast.success("Settings edited successfully.");
     } catch (err) {
       dispatch({ type: "ERROR", message: err.data || "Something went wrong." });
+      toast.error("Something went wrong.");
     }
     setIsLoading(false);
   };

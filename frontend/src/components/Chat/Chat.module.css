@@ -142,6 +142,11 @@
   display: flex;
 }
 
+.imgContainer {
+  display: flex;
+  align-items: flex-end;
+}
+
 .imgProfile {
   width: 32px;
   height: 32px;
@@ -153,6 +158,7 @@
 .content {
   padding: 10px;
   border-radius: 20px;
+  border-bottom-left-radius: 3px;
   background-color: #38015c;
   color: white;
   max-width: 500px;
@@ -162,6 +168,7 @@
 
 .bottom {
   font-size: 10px;
+  color: #8b8b8b;
 }
 
 .message.me {
@@ -170,6 +177,8 @@
 
 .message.me .content {
   background-color: #c79ee2;
+  border-radius: 20px;
+  border-bottom-right-radius: 3px;
 }
 
 .noMessage {

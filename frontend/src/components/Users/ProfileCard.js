@@ -2,9 +2,8 @@ import classes from "./ProfileCard.module.css";
 import quotes from "../../images/left-quotes-sign.png";
 import ImageSlider from "./ImageSlider";
 import { userAction } from "../../util/usersReq";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TimeAgo from "react-timeago";
-import { store } from "react-notifications-component";
 import socket from "../../util/socket";
 import LikeButton from "./LikeButton";
 import { useHistory } from "react-router-dom";
@@ -12,6 +11,8 @@ import heart from "../../images/heart.png";
 import heartColor from "../../images/heart-color.png";
 import block from "../../images/block.png";
 import { calculateDistance } from "../../util/geolocation";
+import { toast } from "react-toastify";
+import { createNotification } from "../../util/notifsReq";
 
 const ProfileCard = (props) => {
   const [liked, setLiked] = useState(props.liked);
@@ -33,10 +34,18 @@ const ProfileCard = (props) => {
       props.onSetLikes(resData.likes);
       if (resData.match) {
         setMatch(resData.match);
+        toast(`You matched with ${props.user.username}!`, {
+          style: { backgroundColor: "#9f5ccc", color: "white" },
+        });
+        await createNotification({
+          token: props.token,
+          type: "match",
+          fromName: resData.currentUser,
+          userId: props.user._id,
+        });
         socket.emit("newMatch", {
           userId: props.user._id,
-          user1: props.user.username,
-          user2: resData.currentUser,
+          username: resData.currentUser,
         });
         setTimeout(() => {
           props.onCloseProfile();
@@ -54,25 +63,7 @@ const ProfileCard = (props) => {
     });
     history.go(0);
   };
-  useEffect(() => {
-    socket.off("matchPopup").on("matchPopup", (data) => {
-      if (data) {
-        store.addNotification({
-          title: data.message,
-          message: "lalala",
-          type: "info",
-          insert: "top",
-          container: "top-center",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 5000,
-            onScreen: false,
-          },
-        });
-      }
-    });
-  }, []);
+
   const imgs = props.user.images.filter((img) => img !== null);
   const distance = calculateDistance(
     props.currentLoc.lat,

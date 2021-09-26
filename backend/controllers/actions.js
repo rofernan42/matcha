@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const Like = require("../models/like");
+const Visit = require("../models/visit");
 const Match = require("../models/match");
 const Block = require("../models/block");
 const DOMAIN = require("../app").DOMAIN;
@@ -77,7 +78,8 @@ exports.postBlock = async (req, res, next) => {
 exports.destroyBlock = async (req, res, next) => {
   try {
     await Block.destroyByUsers(req.userId, req.params.id);
-    res.status(201).json({ message: "User unblocked" });
+    const blockedUsers = await User.fetchBlockedUsers(req.userId);
+    res.status(201).json({ users: blockedUsers });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -108,6 +110,30 @@ exports.postReport = async (req, res, next) => {
       }
     });
     res.status(200).json({ message: "Email sent" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.visitProfile = async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const towardsId = req.params.id;
+    const towardsUser = await User.findById(towardsId);
+    const existingVisit = await Visit.findByUsers(user._id, towardsId);
+    if (towardsUser && !existingVisit) {
+      const visit = new Visit({ id_from: user._id, id_towards: towardsId });
+      await visit.save();
+    }
+    res.status(201).json({ message: "You visited a profile" });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

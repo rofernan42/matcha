@@ -1,12 +1,20 @@
 import classes from "./Chat.module.css";
 import TimeAgo from "react-timeago";
+import profil from "../../images/blank-profile-picture.jpg";
+import { url } from "../../util/usersReq";
 
 const Message = (props) => {
   return (
     <div className={`${classes.message} ${classes[props.who]}`}>
       <div className={classes.top}>
         {props.who === "you" && (
-          <img className={classes.imgProfile} src={props.imgProfile} alt="" />
+          <div className={classes.imgContainer}>
+            <img
+              className={classes.imgProfile}
+              src={props.imgProfile ? `${url}${props.imgProfile}` : profil}
+              alt=""
+            />
+          </div>
         )}
         <p className={classes.content}>{props.msg.content}</p>
       </div>

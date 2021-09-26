@@ -50,13 +50,13 @@ const Convos = (props) => {
         </div>
         {matches &&
           matches.map((match) => {
-            const imgProfile = match.user.images.find((img) => img !== null);
+            // const imgProfile = match.user.images.find((img) => img !== null);
             return (
               <Convo
                 key={match.match._id}
                 match={match}
                 currentRoom={props.room && props.room.match._id}
-                imgProfile={imgProfile}
+                imgProfile={match.user.image}
                 onChangeRoom={props.onChangeRoom}
               />
             );

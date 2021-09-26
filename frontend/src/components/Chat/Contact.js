@@ -1,5 +1,6 @@
 import classes from "./Contacts.module.css";
 import { url } from "../../util/usersReq";
+import profil from "../../images/blank-profile-picture.jpg";
 
 const Contact = (props) => {
   const changeRoomHandler = () => {
@@ -9,7 +10,7 @@ const Contact = (props) => {
     <div className={classes.contact} onClick={changeRoomHandler}>
       <img
         className={classes.imgProfile}
-        src={`${url}${props.imgProfile}`}
+        src={props.imgProfile ? `${url}${props.imgProfile}` : profil}
         alt=""
       />
       <div className={classes.username}>{props.user.username}</div>

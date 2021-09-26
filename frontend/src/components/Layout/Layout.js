@@ -1,20 +1,29 @@
 import Nav from "./Nav";
-import ReactNotification from "react-notifications-component";
-import "react-notifications-component/dist/theme.css";
 import { useState } from "react";
 
 const Layout = (props) => {
   const [userOptions, setUserOptions] = useState(false);
-  const toggleOptions = () => {
+  const [notifs, setNotifs] = useState(false);
+  const userToggleOptions = () => {
     setUserOptions((prev) => !prev);
-  }
+  };
+  const notifsToggleOptions = () => {
+    setNotifs((prev) => !prev);
+  };
   return (
     <>
-      <div onClick={() => userOptions && setUserOptions(false)}>
-        <ReactNotification />
+      <div
+        onClick={() => {
+          userOptions && setUserOptions(false);
+          notifs &&
+            setNotifs(() => {
+              return false;
+            });
+        }}
+      >
         <Nav
-          currentUserOptions={userOptions}
-          onSetUserOptions={toggleOptions}
+          dropdowns={{ userOptions, notifs }}
+          onToggle={{ userToggleOptions, notifsToggleOptions }}
         />
         <main>{props.children}</main>
       </div>

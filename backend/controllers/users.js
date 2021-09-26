@@ -97,6 +97,18 @@ exports.getUsersWhoLikeMe = async (req, res, next) => {
   }
 };
 
+exports.getVisits = async (req, res, next) => {
+  const visits = await User.fetchVisits(req.userId);
+  try {
+    res.status(200).json({ users: visits });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
 exports.getFilteredUsers = async (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = NB_USERS_PER_PAGE;
@@ -127,9 +139,9 @@ exports.getFilteredUsers = async (req, res, next) => {
       filteredUsers
     );
   }
-  if (req.query.sort?.includes("age")) {
-    filteredUsers = sortByAge(req.query.sort, filteredUsers);
-  } else if (req.query.sort?.includes("score")) {
+  if (req.query.sort === "age") {
+    filteredUsers = sortByAge(req.query.order, filteredUsers);
+  } else if (req.query.sort === "score") {
     console.log("sort by score");
   } else {
     filteredUsers = sortByDistance(user, filteredUsers);
@@ -228,9 +240,9 @@ const filterByAttraction = (user, users) => {
 };
 
 const sortByAge = (order, users) => {
-  if (order === "ageIncrease") {
+  if (order === "increase") {
     return users.sort((a, b) => a.age - b.age);
-  } else if (order === "ageDecrease") {
+  } else if (order === "decrease") {
     return users.sort((a, b) => b.age - a.age);
   }
   return users;

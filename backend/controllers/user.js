@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const Image = require("../models/image");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcryptjs");
@@ -227,12 +226,6 @@ exports.postImage = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    const images = await Image.findByUser(user._id);
-    if (!images) {
-      const error = new Error("Images not found");
-      error.statusCode = 401;
-      throw error;
-    }
     const image = req.file;
     const userDir = `images/${user._id.toString()}`;
     const imageNb = +req.body.imageNb;
@@ -263,38 +256,29 @@ exports.postImage = async (req, res, next) => {
     });
     switch (imageNb) {
       case 0:
-        if (images.image0) clearImage(images.image0);
-        images.image0 = imageUrl;
+        if (user.image0) clearImage(user.image0);
+        user.image0 = imageUrl;
         break;
       case 1:
-        if (images.image1) clearImage(images.image1);
-        images.image1 = imageUrl;
+        if (user.image1) clearImage(user.image1);
+        user.image1 = imageUrl;
         break;
       case 2:
-        if (images.image2) clearImage(images.image2);
-        images.image2 = imageUrl;
+        if (user.image2) clearImage(user.image2);
+        user.image2 = imageUrl;
         break;
       case 3:
-        if (images.image3) clearImage(images.image3);
-        images.image3 = imageUrl;
+        if (user.image3) clearImage(user.image3);
+        user.image3 = imageUrl;
         break;
       case 4:
-        if (images.image4) clearImage(images.image4);
-        images.image4 = imageUrl;
+        if (user.image4) clearImage(user.image4);
+        user.image4 = imageUrl;
         break;
     }
-    const updatedImages = new Image({ ...images });
-    await updatedImages.save();
-    const extractedImages = Object.values(
-      (({ image0, image1, image2, image3, image4 }) => ({
-        image0,
-        image1,
-        image2,
-        image3,
-        image4,
-      }))(updatedImages)
-    );
-    res.status(201).json(extractedImages);
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
+    res.status(201).json([user.image0, user.image1, user.image2, user.image3, user.image4]);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -311,47 +295,32 @@ exports.deleteImage = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    const images = await Image.findByUser(user._id);
-    if (!images) {
-      const error = new Error("Images not found");
-      error.statusCode = 401;
-      throw error;
-    }
     const imageNb = +req.body.imageNb;
     switch (imageNb) {
       case 0:
-        if (images.image0) clearImage(images.image0);
-        images.image0 = null;
+        if (user.image0) clearImage(user.image0);
+        user.image0 = null;
         break;
       case 1:
-        if (images.image1) clearImage(images.image1);
-        images.image1 = null;
+        if (user.image1) clearImage(user.image1);
+        user.image1 = null;
         break;
       case 2:
-        if (images.image2) clearImage(images.image2);
-        images.image2 = null;
+        if (user.image2) clearImage(user.image2);
+        user.image2 = null;
         break;
       case 3:
-        if (images.image3) clearImage(images.image3);
-        images.image3 = null;
+        if (user.image3) clearImage(user.image3);
+        user.image3 = null;
         break;
       case 4:
-        if (images.image4) clearImage(images.image4);
-        images.image4 = null;
+        if (user.image4) clearImage(user.image4);
+        user.image4 = null;
         break;
     }
-    const updatedImages = new Image({ ...images });
-    await updatedImages.save();
-    const extractedImages = Object.values(
-      (({ image0, image1, image2, image3, image4 }) => ({
-        image0,
-        image1,
-        image2,
-        image3,
-        image4,
-      }))(updatedImages)
-    );
-    res.status(201).json(extractedImages);
+    const updatedUser = new User({ ...user });
+    await updatedUser.save();
+    res.status(201).json([user.image0, user.image1, user.image2, user.image3, user.image4]);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

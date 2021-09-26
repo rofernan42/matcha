@@ -23,12 +23,12 @@ const Contacts = (props) => {
         />
         {props.matches &&
           matches.map((match) => {
-            const imgProfile = match.user.images.find((img) => img !== null);
+            // const imgProfile = match.user.images.find((img) => img !== null);
             return (
               <Contact
                 key={match.user._id}
                 matchId={match.match._id}
-                imgProfile={imgProfile}
+                imgProfile={match.user.image}
                 user={match.user}
                 onChangeRoom={props.onChangeRoom}
                 online={props.onlineUsers.some(

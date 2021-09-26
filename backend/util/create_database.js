@@ -34,6 +34,11 @@ conn.connect((err) => {
       lastConnection BIGINT NULL,
       resetToken VARCHAR(255) NULL,
       resetTokenExpiry BIGINT NULL,
+      image0 TEXT NULL,
+      image1 TEXT NULL,
+      image2 TEXT NULL,
+      image3 TEXT NULL,
+      image4 TEXT NULL,
       PRIMARY KEY (_id),
       UNIQUE INDEX _id_UNIQUE (_id ASC) VISIBLE,
       UNIQUE INDEX username_UNIQUE (username ASC) VISIBLE,
@@ -42,25 +47,6 @@ conn.connect((err) => {
     (err, res) => {
       if (err) throw err;
       console.log("Table users created");
-    }
-  );
-  conn.query(
-    `
-    CREATE TABLE IF NOT EXISTS matcha.images (
-      _id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-      user_id INT UNSIGNED NOT NULL,
-      image0 TEXT NULL,
-      image1 TEXT NULL,
-      image2 TEXT NULL,
-      image3 TEXT NULL,
-      image4 TEXT NULL,
-      PRIMARY KEY (_id),
-      UNIQUE INDEX _id_UNIQUE (_id ASC) VISIBLE,
-      UNIQUE INDEX user_id_UNIQUE (user_id ASC) VISIBLE);
-    `,
-    (err, res) => {
-      if (err) throw err;
-      console.log("Table images created");
     }
   );
   conn.query(
@@ -127,6 +113,37 @@ conn.connect((err) => {
     (err, res) => {
       if (err) throw err;
       console.log("Table blocks created");
+    }
+  );
+  conn.query(
+    `
+    CREATE TABLE IF NOT EXISTS matcha.visits (
+      _id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+      id_from INT UNSIGNED NOT NULL,
+      id_towards INT UNSIGNED NOT NULL,
+      PRIMARY KEY (_id),
+      UNIQUE INDEX _id_UNIQUE (_id ASC) VISIBLE);
+    `,
+    (err, res) => {
+      if (err) throw err;
+      console.log("Table visits created");
+    }
+  );
+  conn.query(
+    `
+    CREATE TABLE IF NOT EXISTS matcha.notifications (
+      _id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+      user_id INT UNSIGNED NOT NULL,
+      notifType VARCHAR(255) NULL,
+      notifContent VARCHAR(255) NULL,
+      notifRead TINYINT NULL,
+      created_at BIGINT NOT NULL,
+      PRIMARY KEY (_id),
+      UNIQUE INDEX _id_UNIQUE (_id ASC) VISIBLE);
+    `,
+    (err, res) => {
+      if (err) throw err;
+      console.log("Table notifications created");
     }
   );
 });

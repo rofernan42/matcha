@@ -13,4 +13,6 @@ router.delete("/block/:id", isAuth, actionsController.destroyBlock);
 
 router.post("/report/:id", isAuth, actionsController.postReport);
 
+router.post("/visit/:id", isAuth, actionsController.visitProfile);
+
 module.exports = router;

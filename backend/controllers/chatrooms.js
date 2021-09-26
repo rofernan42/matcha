@@ -23,7 +23,7 @@ exports.getMatches = async (req, res, next) => {
       usersMatched.map(async (elem) => {
         const user = await User.findById(elem.user);
         return {
-          user: { _id: user._id, username: user.username, images: user.images },
+          user: { _id: user._id, username: user.username, image: user.images.find(img => img != null) },
           match: elem.match,
         };
       })

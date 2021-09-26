@@ -84,8 +84,10 @@
 }
 
 .status {
-  z-index: 1;
-  position: absolute;
+  /* z-index: 1; */
+  /* position: absolute; */
+  display: inline-block;
+  vertical-align: top;
   width: 9px;
   height: 9px;
   border-radius: 50%;

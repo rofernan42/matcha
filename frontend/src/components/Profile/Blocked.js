@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchUsers, url, userAction } from "../../util/usersReq";
 import classes from "./Profile.module.css";
 import profil from "../../images/blank-profile-picture.jpg";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const Blocked = (props) => {
   const [usersBlocked, setUsersBlocked] = useState(null);
@@ -21,11 +23,13 @@ const Blocked = (props) => {
   }, [props.token]);
 
   const unblockHandler = async (id) => {
-    await userAction({
+    const data = await userAction({
       path: `block/${id}`,
       method: "DELETE",
       token: props.token,
     });
+    setUsersBlocked(data.users);
+    toast.success("User unblocked!");
   };
   return (
     <div className={classes.profilePage}>

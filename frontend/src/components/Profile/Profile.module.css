@@ -5,15 +5,54 @@
   animation: profileOpening 1s linear forwards;
 }
 
+.profilePage.likes {
+  flex-direction: column;
+}
+
+.visits {
+  background: white;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  height: fit-content;
+  margin: auto;
+  margin-top: 20px;
+  padding: 10px 20px;
+}
+
+.visitsTitle {
+  font-weight: bold;
+  color: #8969a1;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.visits div {
+  display: flex;
+  overflow-x: auto;
+}
+
+.visitOption img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+  margin: 0 3px;
+  filter: grayscale(70%);
+  transition: linear 300ms;
+}
+
+.visitOption img:hover {
+  filter: grayscale(0);
+}
+
 .settingsField {
   background: white;
   width: 90%;
   height: fit-content;
   min-height: 80vh;
   text-align: center;
-  margin: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px auto;
   padding: 20px;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -28,7 +67,6 @@
 }
 
 .btn {
-  /* margin: 10px; */
   width: 75px;
   font-size: 15px;
   white-space: nowrap;
@@ -123,6 +161,8 @@
   font-weight: bold;
   color: #8969a1;
   margin-bottom: 10px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .listOption {
@@ -132,6 +172,7 @@
   padding: 5px 10px;
   display: flex;
   justify-content: space-between;
+  transition: linear 300ms;
 }
 
 .listOption:last-child {

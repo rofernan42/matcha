@@ -1,4 +1,10 @@
-import { useContext, useEffect, useReducer, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import useHttp from "../../../hooks/use-http";
 import AuthContext from "../../../store/auth-context";
@@ -18,6 +24,9 @@ import report from "../../../images/report.png";
 import Modal from "../../ui/Modal";
 import LikeButton from "../LikeButton";
 import Footer from "./Footer";
+import { toast } from "react-toastify";
+import socket from "../../../util/socket";
+import { createNotification } from "../../../util/notifsReq";
 
 const setModalActive = (state, action) => {
   if (action.type === "BLOCK") {
@@ -78,19 +87,40 @@ const UserProfile = (props) => {
     modalData: null,
   });
   const [liked, setLiked] = useState(null);
+  const [matched, setMatched] = useState(null);
   const { sendReq, status, data: user, error } = useHttp(fetchUser, true);
-  const { sendReq: sendReqCurrentUser, data: currentUser } = useHttp(
-    fetchCurrentUser,
-    true
-  );
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const visitNotification = useCallback(async () => {
+    try {
+      const userData = await fetchCurrentUser(authCtx.token);
+      await userAction({
+        path: `visit/${params.userId}`,
+        method: "POST",
+        token: authCtx.token,
+      });
+      await createNotification({
+        token: authCtx.token,
+        type: "visit",
+        fromName: userData.user.username,
+        userId: params.userId,
+      });
+      socket.emit("newVisit", {
+        userId: params.userId,
+      });
+      setCurrentUser(userData);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [authCtx.token, params.userId]);
 
   useEffect(() => {
     sendReq({
       path: `users/${params.userId}`,
       token: authCtx.token,
     });
-    sendReqCurrentUser(authCtx.token);
-  }, [authCtx.token, params.userId, sendReq, sendReqCurrentUser]);
+    visitNotification();
+  }, [authCtx.token, params.userId, sendReq, visitNotification]);
 
   const blockUserHandler = async () => {
     try {
@@ -99,6 +129,7 @@ const UserProfile = (props) => {
         method: "POST",
         token: authCtx.token,
       });
+      toast.warning(`You have blocked ${user.username}`);
       history.push("/users");
     } catch (err) {
       console.log(err);
@@ -111,7 +142,10 @@ const UserProfile = (props) => {
         method: "DELETE",
         token: authCtx.token,
       });
-      history.go(0);
+      toast.warning(`You have cancelled the match with ${user.username}.`);
+      setMatched(false);
+      setLiked(false);
+      dispatch({ type: "CLOSE" });
     } catch (err) {
       console.log(err);
     }
@@ -122,6 +156,7 @@ const UserProfile = (props) => {
       method: "POST",
       token: authCtx.token,
     });
+    toast.warning(`You have reported ${user.username}.`);
     dispatch({ type: "CLOSE" });
   };
 
@@ -137,6 +172,22 @@ const UserProfile = (props) => {
         token: authCtx.token,
       });
       setLiked(resData.likes.includes(+params.userId));
+      if (resData.match) {
+        setMatched(true);
+        toast(`You matched with ${user.username}!`, {
+          style: { backgroundColor: "#9f5ccc", color: "white" },
+        });
+        await createNotification({
+          token: authCtx.token,
+          type: "match",
+          fromName: currentUser?.username,
+          userId: params.userId,
+        });
+        socket.emit("newMatch", {
+          userId: params.userId,
+          username: resData.currentUser,
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -239,7 +290,7 @@ const UserProfile = (props) => {
                   <span className={classes.denum}>5</span>
                 </div>
               </div>
-              {!user.matchedMe && (
+              {((!user.matchedMe && matched === null) || matched === false) && (
                 <div className={classes.likeButton}>
                   <LikeButton
                     sendLikeHandler={sendLikeHandler}
@@ -251,7 +302,7 @@ const UserProfile = (props) => {
                   />
                 </div>
               )}
-              {user.matchedMe && (
+              {(matched === null ? user.matchedMe : matched) && (
                 <div className={classes.matchField}>
                   <div>
                     That's a match!{" "}

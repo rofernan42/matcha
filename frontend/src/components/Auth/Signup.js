@@ -4,6 +4,7 @@ import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
 import { url } from "../../util/usersReq";
 import { geolocUrl } from "../../util/geolocation";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -53,6 +54,7 @@ const Signup = () => {
       }
       console.log(data);
       history.replace("/login");
+      toast.success("Account created successfully.")
     } catch (err) {
       console.log({ ...err.data.message });
       setError({ ...err.data.message });

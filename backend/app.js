@@ -5,13 +5,12 @@ const path = require("path");
 // const fs = require("fs");
 // const https = require("https");
 
-// const cors = require("cors");
-
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const usersRoutes = require("./routes/users");
 const chatroomRoutes = require("./routes/chatroom");
 const actionsRoutes = require("./routes/actions");
+const notifsRoutes = require("./routes/notifications");
 
 const app = express();
 
@@ -54,19 +53,13 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-// app.use(cors({
-//   'allowedHeaders': ['Content-Type'], // headers that React is sending to the API
-//   'exposedHeaders': ['Content-Type'], // headers that you are sending back to React
-//   'origin': '*',
-//   'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//   'preflightContinue': false
-// }));
 
 app.use("/auth", authRoutes);
 app.use(userRoutes);
 app.use(usersRoutes);
 app.use("/chat", chatroomRoutes);
 app.use(actionsRoutes);
+app.use(notifsRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -94,6 +87,7 @@ io.on("connection", (socket) => {
     addUser(userId, socket.id);
     io.emit("getUsers", users);
   });
+
   socket.on("sendMessage", ({ senderId, receiverId, text, roomId }) => {
     const user = getUser(receiverId);
     if (user) {
@@ -106,30 +100,37 @@ io.on("connection", (socket) => {
         roomId,
         text,
       });
-      io.to(user.socketId).emit(`getPushNotif`);
+      io.to(user.socketId).emit(`getChatNotif`);
     }
   });
   socket.on("newMatch", (data) => {
     if (data) {
       const user = getUser(data.userId);
-      socket.emit("matchPopup", {
-        message: `You matched with ${data.user1} !`,
-      });
-      if (user)
-        io.to(user.socketId).emit("notif", {
-          message: `You matched with ${data.user2} !`,
-          type: "info",
-        });
-    }
-  });
-  socket.on("blockUser", (data) => {
-    if (data) {
-      const user = getUser(data.userId);
       if (user) {
-        io.to(user.socketId).emit("actualise");
+        io.to(user.socketId).emit("notifMatch", {
+          message: `You matched with ${data.username} !`,
+        });
+        io.to(user.socketId).emit("getPushNotif");
       }
     }
   });
+  socket.on("newLike", (data) => {
+    if (data) {
+      const user = getUser(data.userId);
+      if (user) {
+        io.to(user.socketId).emit("getPushNotif");
+      }
+    }
+  });
+  socket.on("newVisit", (data) => {
+    if (data) {
+      const user = getUser(data.userId);
+      if (user) {
+        io.to(user.socketId).emit("getPushNotif");
+      }
+    }
+  });
+
   socket.on("disconnect", () => {
     removeUser(socket.id);
     io.emit("getUsers", users);

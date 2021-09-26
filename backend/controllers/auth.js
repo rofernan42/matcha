@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const Image = require("../models/image");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authValidation = require("../middleware/auth-validation");
@@ -8,7 +7,7 @@ const DOMAIN = require("../app").DOMAIN;
 const nodemailer = require("nodemailer");
 const emailPassword = require("../../credentials").emailPassword;
 
-exports.transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   // name: "gmail.com",
   // host: "smtp.gmail.com",
   // port: 587,
@@ -19,6 +18,8 @@ exports.transporter = nodemailer.createTransport({
     pass: emailPassword,
   },
 });
+
+exports.transporter = transporter;
 
 exports.signup = async (req, res, next) => {
   const username = req.body.username.trim();
@@ -54,10 +55,6 @@ exports.signup = async (req, res, next) => {
     });
     await user.save();
     const createdUser = await User.findByEmail(user.email);
-    const userImgs = new Image({
-      user_id: createdUser._id,
-    });
-    await userImgs.save();
     console.log(user);
     res.status(201).json({ userId: createdUser._id, message: "User created" });
   } catch (err) {

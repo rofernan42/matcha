@@ -8,7 +8,7 @@ export const fetchMatches = async (data) => {
   });
   const resData = await res.json();
   if (!res.ok) {
-    throw new Error(resData.message || "Could not fetch users.");
+    throw new Error(resData.message || "Could not fetch matches.");
   }
   const matchesData = [];
   for (const elem of resData.matches) {

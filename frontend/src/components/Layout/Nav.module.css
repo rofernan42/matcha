@@ -49,11 +49,15 @@
 }
 
 .navIcon {
-  width: 20px;
-  height: 20px;
+  width: 23px;
+  height: 23px;
   object-fit: cover;
-  border-radius: 50%;
   vertical-align: middle;
+}
+
+.navIcon:hover {
+  cursor: pointer;
+  filter: grayscale(100%) brightness(100);
 }
 
 .header button {
@@ -78,6 +82,7 @@
 
 .header a.active {
   color: white;
+  filter: grayscale(100%) brightness(100);
 }
 
 .header .active button {
@@ -87,6 +92,7 @@
 
 .pushNotif {
   position: absolute;
+  margin-left: -5px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -121,14 +127,13 @@
 }
 
 .dropDownOption {
-  /* border: 1px solid #706675f3; */
-  /* border-bottom: none; */
   white-space: nowrap;
   flex: 1;
   color: #cececea9;
   padding: 5px 20px;
   font-weight: 500;
   display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -145,19 +150,50 @@
   flex: 3;
 }
 
-.dropDownOption:last-child {
-  /* border-bottom: 1px solid #706675f3; */
-}
-
 .dropDownOption:hover {
   color: white;
   cursor: pointer;
-  background-color: #d3b2e95b
+  background-color: #d3b2e95b;
 }
 
 .optionLink {
   width: 100%;
   height: 100%;
+}
+
+.notifOption {
+  white-space: nowrap;
+  flex: 1;
+  color: #cececea9;
+  padding: 5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notifOption.titleNotifs {
+  font-size: smaller;
+  border-bottom: 1px dashed #706675f3;
+}
+
+.notifOption .timeAgo {
+  font-size: 10px;
+  font-style: italic;
+  margin-right: 10px;
+}
+
+.notifOption .deleteNotif {
+  margin-left: 10px;
+}
+
+.notifOption .deleteNotif:hover {
+  cursor: pointer;
+  color: white;
+}
+
+.notifOption.noNotif {
+  padding: 10px;
 }
 
 @keyframes notifOpen {
@@ -174,12 +210,12 @@
 
 @keyframes userOptionsOpening {
   0% {
-    transform: scaleY(0)
+    transform: scaleY(0);
   }
   80% {
-    transform: scaleY(1.1)
+    transform: scaleY(1.1);
   }
   100% {
-    transform: scaleY(1)
+    transform: scaleY(1);
   }
 }

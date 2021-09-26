@@ -7,6 +7,7 @@ import socket from "../../util/socket";
 import ChatHeader from "./ChatHeader";
 import { useHistory } from "react-router-dom";
 import Modal from "../ui/Modal";
+import { toast } from "react-toastify";
 
 const setModalActive = (state, action) => {
   if (action.type === "BLOCK") {
@@ -162,16 +163,16 @@ const Chat = (props) => {
       method: "POST",
       token: authCtx.token,
     });
+    toast.warning(`You have reported ${props.room.user.username}.`);
     dispatch({ type: "CLOSE" });
   };
 
-  const imgProfile = props.room.user.images.find((img) => img !== null);
   return (
     <div className={classes.room}>
       <div className={classes.wrapper}>
         <ChatHeader
           user={props.room.user}
-          imgProfile={imgProfile}
+          imgProfile={props.room.user.image}
           onBlockModal={() => dispatch({ type: "BLOCK" })}
           onCancelModal={() => dispatch({ type: "CANCEL" })}
           onReportModal={() => dispatch({ type: "REPORT" })}
@@ -182,7 +183,7 @@ const Chat = (props) => {
               return (
                 <div key={msg._id} ref={scrollRef}>
                   <Message
-                    imgProfile={`${url}${imgProfile}`}
+                    imgProfile={props.room.user.image}
                     key={msg._id}
                     msg={msg}
                     who={msg.user_id === +authCtx.userId ? "me" : "you"}

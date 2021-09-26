@@ -13,6 +13,8 @@ router.get("/liked-users", isAuth, usersController.getLikedUsers);
 
 router.get("/users-liking", isAuth, usersController.getUsersWhoLikeMe);
 
+router.get("/visits", isAuth, usersController.getVisits);
+
 router.get("/filtered-users", isAuth, usersController.getFilteredUsers);
 
 module.exports = router;
