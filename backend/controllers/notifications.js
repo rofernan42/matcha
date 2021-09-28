@@ -10,7 +10,7 @@ exports.getNotifications = async (req, res, next) => {
       throw error;
     }
     const notifs = await Notification.fetchByUser(req.userId);
-    res.status(200).json(notifs);
+    res.status(200).json(notifs.slice(0, 5));
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -21,7 +21,6 @@ exports.getNotifications = async (req, res, next) => {
 
 exports.postNotification = async (req, res, next) => {
   const notifType = req.body.type;
-  const fromName = req.body.fromName;
   const user_id = req.body.userId;
   const user = await User.findById(req.userId);
   try {
@@ -32,12 +31,12 @@ exports.postNotification = async (req, res, next) => {
     }
     let notifContent;
     if (notifType === "visit")
-      notifContent = fromName + " visited your profile!";
-    else if (notifType === "like") notifContent = fromName + " just liked you!";
+      notifContent = user.username + " visited your profile !";
+    else if (notifType === "like") notifContent = user.username + " just liked you !";
     else if (notifType === "match")
-      notifContent = "You matched with " + fromName + "!";
+      notifContent = "You matched with " + user.username + " !";
     else if (notifType === "cancel")
-      notifContent = fromName + " cancelled the match :(";
+      notifContent = user.username + " cancelled the match :(";
     const notif = new Notification({
       user_id,
       notifType,
@@ -60,7 +59,7 @@ exports.deleteNotification = async (req, res, next) => {
     const id = req.params.id;
     await Notification.destroy(id);
     const notifs = await Notification.fetchByUser(req.userId);
-    res.status(201).json(notifs);
+    res.status(201).json(notifs.slice(0, 5));
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

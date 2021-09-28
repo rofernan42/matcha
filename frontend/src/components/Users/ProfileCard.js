@@ -40,7 +40,6 @@ const ProfileCard = (props) => {
         await createNotification({
           token: props.token,
           type: "match",
-          fromName: resData.currentUser,
           userId: props.user._id,
         });
         socket.emit("newMatch", {
@@ -50,6 +49,15 @@ const ProfileCard = (props) => {
         setTimeout(() => {
           props.onCloseProfile();
         }, 1000);
+      } else if (resData.likes.includes(props.user._id)) {
+        await createNotification({
+          token: props.token,
+          type: "like",
+          userId: props.user._id,
+        });
+        socket.emit("newLike", {
+          userId: props.user._id,
+        });
       }
     } catch (err) {
       console.log(err);

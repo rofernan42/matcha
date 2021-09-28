@@ -114,6 +114,14 @@ io.on("connection", (socket) => {
       }
     }
   });
+  socket.on("cancelMatch", (data) => {
+    if (data) {
+      const user = getUser(data.userId);
+      if (user) {
+        io.to(user.socketId).emit("getPushNotif");
+      }
+    }
+  })
   socket.on("newLike", (data) => {
     if (data) {
       const user = getUser(data.userId);

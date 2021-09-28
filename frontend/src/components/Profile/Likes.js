@@ -25,7 +25,7 @@ const Likes = (props) => {
         });
         setUsersLiked(fetchedLiked.users);
         setUsersLiking(fetchedLiking.users);
-        setVisits(fetchedVisits.users);
+        setVisits(fetchedVisits.users.reverse());
       } catch (err) {
         console.log(err);
       }

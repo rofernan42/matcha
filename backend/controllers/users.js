@@ -139,7 +139,9 @@ exports.getFilteredUsers = async (req, res, next) => {
       filteredUsers
     );
   }
-  if (req.query.sort === "age") {
+  if (req.query.sort === "interests") {
+    filteredUsers = sortByInterests(user.interests.split(";"), filteredUsers);
+  } else if (req.query.sort === "age") {
     filteredUsers = sortByAge(req.query.order, filteredUsers);
   } else if (req.query.sort === "score") {
     console.log("sort by score");
@@ -279,6 +281,18 @@ const sortByDistance = (currentUser, users) => {
       calculateDistance(currentUser.lat, a.lat, currentUser.lon, a.lon) -
       calculateDistance(currentUser.lat, b.lat, currentUser.lon, b.lon)
   );
+};
+
+const sortByInterests = (interests, users) => {
+  return users.sort((a, b) => {
+    const inta = a.interests
+      .split(";")
+      .filter((i) => interests.indexOf(i) > -1);
+    const intb = b.interests
+      .split(";")
+      .filter((i) => interests.indexOf(i) > -1);
+    return intb.length - inta.length;
+  });
 };
 
 const filterByDistance = (minDist, maxDist, currentUser, users) => {

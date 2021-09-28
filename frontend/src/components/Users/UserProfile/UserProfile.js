@@ -102,7 +102,6 @@ const UserProfile = (props) => {
       await createNotification({
         token: authCtx.token,
         type: "visit",
-        fromName: userData.user.username,
         userId: params.userId,
       });
       socket.emit("newVisit", {
@@ -146,6 +145,14 @@ const UserProfile = (props) => {
       setMatched(false);
       setLiked(false);
       dispatch({ type: "CLOSE" });
+      await createNotification({
+        token: authCtx.token,
+        type: "cancel",
+        userId: params.userId,
+      });
+      socket.emit("cancelMatch", {
+        userId: params.userId,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -180,12 +187,20 @@ const UserProfile = (props) => {
         await createNotification({
           token: authCtx.token,
           type: "match",
-          fromName: currentUser?.username,
           userId: params.userId,
         });
         socket.emit("newMatch", {
           userId: params.userId,
-          username: resData.currentUser,
+          username: currentUser?.user.username,
+        });
+      } else if (resData.likes.includes(+params.userId)) {
+        await createNotification({
+          token: authCtx.token,
+          type: "like",
+          userId: params.userId,
+        });
+        socket.emit("newLike", {
+          userId: params.userId,
         });
       }
     } catch (err) {

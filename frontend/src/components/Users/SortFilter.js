@@ -14,15 +14,22 @@ const SortFilter = () => {
     if (e.target.value === "location") {
       queryParams.delete("sort");
       queryParams.delete("order");
+      queryParams.delete("interests");
       const queries = queryParams.toString();
       history.push({
         pathname: loc.pathname,
         search: queries,
       });
     } else {
-        console.log(e.target.value)
       queryParams.set("sort", e.target.value);
-      if (order.length > 0) {
+      if (e.target.value === "interests") {
+        queryParams.delete("order");
+        const queries = queryParams.toString();
+        history.push({
+          pathname: loc.pathname,
+          search: queries,
+        });
+      } else if (order.length > 0) {
         queryParams.set("order", order);
         const queries = queryParams.toString();
         history.push({
@@ -56,12 +63,12 @@ const SortFilter = () => {
           labelId="sort-label"
           id="sort-select"
           value={value}
-          label="Age"
           onChange={handleChange}
         >
           <MenuItem value={"location"}>Location</MenuItem>
           <MenuItem value={"age"}>Age</MenuItem>
           <MenuItem value={"score"}>Score</MenuItem>
+          <MenuItem value={"interests"}>Interests</MenuItem>
         </Select>
       </FormControl>
       <FormControl

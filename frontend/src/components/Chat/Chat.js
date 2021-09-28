@@ -8,6 +8,7 @@ import ChatHeader from "./ChatHeader";
 import { useHistory } from "react-router-dom";
 import Modal from "../ui/Modal";
 import { toast } from "react-toastify";
+import { createNotification } from "../../util/notifsReq";
 
 const setModalActive = (state, action) => {
   if (action.type === "BLOCK") {
@@ -154,6 +155,14 @@ const Chat = (props) => {
       path: `cancel-match/${props.room.user._id}`,
       method: "DELETE",
       token: authCtx.token,
+    });
+    await createNotification({
+      token: authCtx.token,
+      type: "cancel",
+      userId: props.room.user._id,
+    });
+    socket.emit("cancelMatch", {
+      userId: props.room.user._id,
     });
     history.go(0);
   };

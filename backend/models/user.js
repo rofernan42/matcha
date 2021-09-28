@@ -111,7 +111,8 @@ class User {
     const res = await db.execute(queryUsers);
     const data = res[0].map((user) => {
       return {
-        ...user,
+        _id: user._id,
+        username: user.username,
         image: [
           user.image0,
           user.image1,
@@ -134,7 +135,8 @@ class User {
     const res = await db.execute(queryUsers);
     const data = res[0].map((user) => {
       return {
-        ...user,
+        _id: user._id,
+        username: user.username,
         image: [
           user.image0,
           user.image1,
@@ -157,7 +159,8 @@ class User {
     const res = await db.execute(queryUsers);
     const data = res[0].map((user) => {
       return {
-        ...user,
+        _id: user._id,
+        username: user.username,
         image: [
           user.image0,
           user.image1,
@@ -175,21 +178,13 @@ class User {
     if (visits.length === 0) {
       return [];
     }
-    const queryUsers =
-      "SELECT _id,image0,image1,image2,image3,image4 FROM users WHERE _id IN (" + visits.join() + ")";
-    const res = await db.execute(queryUsers);
-    const data = res[0].map((user) => {
+    const data = await Promise.all(visits.map(async (user) => {
+      const [img] = await db.execute("SELECT image0,image1,image2,image3,image4 FROM users WHERE _id=?", [user]);
       return {
-        ...user,
-        image: [
-          user.image0,
-          user.image1,
-          user.image2,
-          user.image3,
-          user.image4,
-        ].find((img) => img),
-      };
-    });
+        _id: user,
+        image: Object.values(img[0]).find((img) => img)
+      }
+    }));
     return data;
   }
 
