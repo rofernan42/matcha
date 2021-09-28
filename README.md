@@ -4,7 +4,7 @@ This project is about creating a dating website.
 A user can subscribe and fill his personal details and preferences, in order to match another user having a similar profile.
 Once 2 users matched, they are able to chat between each other thanks to a private messenger.
 ## Features
-# User profile
+### User profile
 A user can subscribe with a username, an email, a first name, a last name and a password. The user must be able to reset his password wether he is connected or not (with a reset email in case of forgetting). The user must be able to logout from anywhere on the website.
 
 Once connected, the user can change his age, his gender, his sexual orientation, write a short bio, create a tag list of interests, and upload up to 5 pictures.
@@ -16,7 +16,7 @@ The user must be able to see the people who liked or visited his profile.
 The user must be geolocated accurately.
 
 Each user has a popularity score based of his number of likes.
-# Matches
+### Matches
 The user has access to a list of suggestions sorted respecting some criteria:
 * the sexual orientation
 * the proximity
@@ -31,7 +31,7 @@ The user can send a like to another user. If this user sends a like back, they b
 
 The user can block or report another user, and must be able who is online or not.
 
-# Notifications
+### Notifications
 A user must receive notifications in real time when:
 * he received a like
 * he received a visit
