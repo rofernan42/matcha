@@ -42,6 +42,7 @@
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 1px 15px rgba(0, 0, 0, 0.322);
+  cursor: pointer;
 }
 
 .icons {
@@ -64,9 +65,6 @@
   color: #4a2a64;
   word-spacing: 0.4em;
   letter-spacing: 3px;
-  /* flex-grow: 1; */
-  /* overflow: hidden; */
-  /* text-overflow: ellipsis; */
 }
 
 .infoField .label {
@@ -235,6 +233,28 @@
 
 .status-label {
   margin-left: 5px;
+}
+
+.background {
+  z-index: 150;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.616);
+  animation: pageOpening 0.3s ease-in forwards;
+}
+
+.imageSlider {
+  position: fixed;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  width: 415px;
+  height: 270px;
+  z-index: 160;
+  animation: pageOpening 0.3s ease-in forwards;
 }
 
 @keyframes pageOpening {

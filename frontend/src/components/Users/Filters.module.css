@@ -1,64 +1,42 @@
-.filters {
-  border-right: 1px solid #8354a3;
-  padding: 5px;
-}
-
-.filters:last-child {
-  border: none;
-}
-
 .label {
-  text-align: center;
-  background: #ffffff;
-  width: min-content;
-  padding: 10px 15px;
-  transition: all 200ms linear;
-  white-space: nowrap;
-  border: 1px solid #d6cfdb;
-  border-radius: 5px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-}
-
-.label:hover {
-  border: 1px solid #8354a3;
-  cursor: pointer;
-}
-
-.labelTitle {
-  position: absolute;
-  margin-top: -12px;
-  margin-left: -12px;
-  font-size: 12px;
-  color: #938a99;
-}
-
-.labelRange {
-  font-size: 25px;
-  color: #8354a3;
-}
-
-.labelLocRange {
-  font-size: 20px;
-  color: #8354a3;
-}
-
-.ageRange {
-  padding: 0 20px;
-}
-
-.filterFields {
+  margin: 5px 15px;
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
 }
 
-.sortMenu {
-  /* flex: 1; */
-  /* width: 200px; */
-  /* margin: 0; */
-  height: 100%;
-  padding: 0;
+.label div {
+  white-space: nowrap;
+  font-size: 12px;
+  color: #9f5ccc;
 }
 
-.sortMenu::after {
-  transition: width 300ms ease-in;
+.label div:hover {
+  color: #754396;
+  cursor: pointer;
+}
+
+.label h1 {
+  margin: 0;
+  color: #8354a3;
+}
+
+.filters {
+  height: 100%;
+  margin-top: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.336);
+}
+
+.ageRange {
+  margin-left: 25px;
+  width: 250px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #9b9b9b;
+}
+
+.ageRange:last-child {
+  border: none;
 }

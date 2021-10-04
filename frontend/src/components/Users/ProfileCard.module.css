@@ -22,6 +22,7 @@
   box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
   background-color: #332e36;
   animation: profileOpening 0.7s ease-in-out forwards;
+  overflow-y: auto;
 }
 .card-header {
   position: relative;

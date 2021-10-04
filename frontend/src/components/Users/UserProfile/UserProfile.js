@@ -27,6 +27,7 @@ import Footer from "./Footer";
 import { toast } from "react-toastify";
 import socket from "../../../util/socket";
 import { createNotification } from "../../../util/notifsReq";
+import ImageSlider from "../ImageSlider";
 
 const setModalActive = (state, action) => {
   if (action.type === "BLOCK") {
@@ -90,6 +91,7 @@ const UserProfile = (props) => {
   const [matched, setMatched] = useState(null);
   const { sendReq, status, data: user, error } = useHttp(fetchUser, true);
   const [currentUser, setCurrentUser] = useState(null);
+  const [imgSlider, setImgSlider] = useState(false);
 
   const visitNotification = useCallback(async () => {
     try {
@@ -227,6 +229,7 @@ const UserProfile = (props) => {
                   className={classes.avatar}
                   alt=""
                   src={url + user.images[0]}
+                  onClick={() => setImgSlider(true)}
                 />
               )}
               <div>
@@ -336,6 +339,17 @@ const UserProfile = (props) => {
                 </div>
               )}
             </div>
+            {imgSlider && (
+              <div>
+                <div
+                  className={classes.background}
+                  onClick={() => setImgSlider(false)}
+                />
+                <div className={classes.imageSlider}>
+                  <ImageSlider images={user.images} />
+                </div>
+              </div>
+            )}
             <Footer
               currentUser={currentUser.user}
               user={user}

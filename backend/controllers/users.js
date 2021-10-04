@@ -3,8 +3,6 @@ const Like = require("../models/like");
 const Match = require("../models/match");
 const User = require("../models/user");
 
-const NB_USERS_PER_PAGE = 10;
-
 exports.getSingleUser = async (req, res, next) => {
   const user = await User.findById(req.params.id);
   try {
@@ -110,49 +108,51 @@ exports.getVisits = async (req, res, next) => {
 };
 
 exports.getFilteredUsers = async (req, res, next) => {
-  const currentPage = req.query.page || 1;
-  const perPage = NB_USERS_PER_PAGE;
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  const users = await User.fetchFilteredUsers(req.userId);
-  const usersNotBlocked = await filterByBlockings(user, users);
-  let filteredUsers = filterByAttraction(user, usersNotBlocked);
-  if (req.query.minAge || req.query.maxAge) {
-    filteredUsers = filterByAge(
-      req.query.minAge,
-      req.query.maxAge,
-      filteredUsers
-    );
-  }
-  if (req.query.minScore || req.query.maxScore) {
-    console.log("filter by score");
-  }
-  if (req.query.minDist || req.query.maxDist) {
-    filteredUsers = filterByDistance(
-      req.query.minDist,
-      req.query.maxDist,
-      user,
-      filteredUsers
-    );
-  }
-  if (req.query.sort === "interests") {
-    filteredUsers = sortByInterests(user.interests.split(";"), filteredUsers);
-  } else if (req.query.sort === "age") {
-    filteredUsers = sortByAge(req.query.order, filteredUsers);
-  } else if (req.query.sort === "score") {
-    console.log("sort by score");
-  } else {
-    filteredUsers = sortByDistance(user, filteredUsers);
-  }
-  const totalItems = filteredUsers.length;
-  const fetchedUsers = paginate(filteredUsers, perPage, currentPage);
   try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const users = await User.fetchFilteredUsers(req.userId);
+    const usersNotBlocked = await filterByBlockings(user, users);
+    let filteredUsers = filterByAttraction(user, usersNotBlocked);
+    if (req.query.minAge || req.query.maxAge) {
+      filteredUsers = filterByAge(
+        req.query.minAge,
+        req.query.maxAge,
+        filteredUsers
+      );
+    }
+    if (req.query.minScore || req.query.maxScore) {
+      console.log("filter by score");
+    }
+    if (req.query.minDist || req.query.maxDist) {
+      filteredUsers = filterByDistance(
+        req.query.minDist,
+        req.query.maxDist,
+        user,
+        filteredUsers
+      );
+    }
+    if (req.query.interests) {
+      filteredUsers = filterByInterests(
+        req.query.interests.split(";"),
+        filteredUsers
+      );
+    }
+    if (req.query.sort === "interests") {
+      filteredUsers = sortByInterests(user.interests.split(";"), filteredUsers);
+    } else if (req.query.sort === "age") {
+      filteredUsers = sortByAge(req.query.order, filteredUsers);
+    } else if (req.query.sort === "score") {
+      console.log("sort by score");
+    } else {
+      filteredUsers = sortByDistance(user, filteredUsers);
+    }
     res.status(200).json({
-      users: fetchedUsers.map((user) => {
+      users: filteredUsers.map((user) => {
         return {
           _id: user._id,
           username: user.username,
@@ -170,8 +170,6 @@ exports.getFilteredUsers = async (req, res, next) => {
           images: user.images,
         };
       }),
-      totalItems,
-      perPage,
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -295,6 +293,15 @@ const sortByInterests = (interests, users) => {
   });
 };
 
+const filterByInterests = (interests, users) => {
+  return users.filter((user) => {
+    const userInt = user.interests
+      .split(";")
+      .filter((i) => interests.indexOf(i) > -1);
+    return userInt > 0;
+  });
+};
+
 const filterByDistance = (minDist, maxDist, currentUser, users) => {
   let filteredUsers = users;
   if (minDist) {
@@ -312,8 +319,4 @@ const filterByDistance = (minDist, maxDist, currentUser, users) => {
     );
   }
   return filteredUsers;
-};
-
-const paginate = (array, perPage, currentPage) => {
-  return array.slice((currentPage - 1) * perPage, currentPage * perPage);
 };

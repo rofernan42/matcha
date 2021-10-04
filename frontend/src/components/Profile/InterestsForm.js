@@ -1,13 +1,16 @@
-import { useRef, useState } from "react";
+import { TextField } from "@mui/material";
+import { useState } from "react";
+import { toast } from "react-toastify";
 import { updateUser } from "../../util/usersReq";
-import classes from "./Profile.module.css";
+import classes from "./Interests.module.css";
 
 const InterestsForm = (props) => {
   const [addActive, setAddActive] = useState(false);
   const [interests, setInterests] = useState(props.interests);
-  const intRef = useRef();
-  const addBtnHandler = () => {
-    if (intRef.current.value.length > 0) {
+  const [int, setInt] = useState("");
+  const addBtnHandler = (e) => {
+    setInt(e.target.value);
+    if (e.target.value.length > 0) {
       setAddActive(true);
     } else {
       setAddActive(false);
@@ -15,15 +18,20 @@ const InterestsForm = (props) => {
   };
   const InterestsHandler = async (e) => {
     e.preventDefault();
-    if (addActive) {
-      const res = await updateUser({
-        toUpdate: intRef.current.value,
-        path: "add-interest",
-        token: props.token,
-      });
-      setInterests(res.interests.split(";"));
-      setAddActive(false);
-      intRef.current.value = "";
+    try {
+      if (addActive) {
+        const res = await updateUser({
+          toUpdate: int,
+          path: "add-interest",
+          token: props.token,
+        });
+        setInterests(res.interests.split(";"));
+        setAddActive(false);
+        setInt("");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong.");
     }
   };
   const removeIntHandler = async (int) => {
@@ -36,19 +44,22 @@ const InterestsForm = (props) => {
   };
   return (
     <>
-      <div>My interests:</div>
-      <form onSubmit={InterestsHandler}>
-        <input type="text" onChange={addBtnHandler} ref={intRef} />
+      <form className={classes.interestsForm} onSubmit={InterestsHandler}>
+        <TextField
+          fullWidth
+          id="standard-basic"
+          color={"secondary"}
+          label="My interests"
+          variant="standard"
+          onChange={addBtnHandler}
+          value={int}
+        />
         <button
           id="add"
           name="add"
-          className={`${classes.btn} ${
-            addActive
-              ? `${classes.active} ${classes.selected}`
-              : classes.inactive
-          }`}
+          className={`${classes.btnPlus} ${addActive ? classes.active : ""}`}
         >
-          Add
+          +
         </button>
       </form>
       <div className={classes.interestsList}>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchUsers, url, userAction } from "../../util/usersReq";
-import classes from "./Profile.module.css";
+import containers from "./Profile.module.css";
+import classes from "./Likes.module.css";
 import profil from "../../images/blank-profile-picture.jpg";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
@@ -32,10 +33,10 @@ const Blocked = (props) => {
     toast.success("User unblocked!");
   };
   return (
-    <div className={classes.profilePage}>
-      <div className={classes.settingsField}>
+    <div className={containers.profilePage}>
+      <div className={containers.settingsField}>
         {(!usersBlocked || usersBlocked.length === 0) && (
-          <div className={classes.noUser}>You haven't blocked any user.</div>
+          <div className={classes.noBlock}>You haven't blocked any user.</div>
         )}
         {usersBlocked && usersBlocked.length > 0 && (
           <div className={classes.listField}>

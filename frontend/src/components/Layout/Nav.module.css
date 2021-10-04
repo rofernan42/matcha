@@ -48,6 +48,24 @@
   font-weight: bold;
 }
 
+.header a:hover {
+  filter: grayscale(100%) brightness(100);
+}
+
+.appName {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.logoIcon {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  margin-right: 5px;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+
 .navIcon {
   width: 23px;
   height: 23px;

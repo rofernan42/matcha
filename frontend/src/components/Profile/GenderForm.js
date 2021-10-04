@@ -1,5 +1,5 @@
 import { useState } from "react";
-import classes from "./Profile.module.css";
+import classes from "./GenderAttr.module.css";
 
 const GenderForm = (props) => {
   const [checkedGender, setChecked] = useState(props.gender);
@@ -9,8 +9,8 @@ const GenderForm = (props) => {
     props.onChangeGender({ toUpdate: genderData, path: "change-gender" });
   };
   return (
-    <>
-      <div>I am a:</div>
+    <div className={classes.genderForm}>
+      <div className={classes.label}>I am a:</div>
       <div>
         <button
           value="male"
@@ -46,7 +46,7 @@ const GenderForm = (props) => {
           Other
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

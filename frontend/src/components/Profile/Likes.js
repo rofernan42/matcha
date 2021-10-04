@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchUsers, url } from "../../util/usersReq";
-import classes from "./Profile.module.css";
+import containers from "./Profile.module.css";
+import classes from "./Likes.module.css";
 import profil from "../../images/blank-profile-picture.jpg";
 
 const Likes = (props) => {
@@ -33,10 +34,15 @@ const Likes = (props) => {
     fetchAll();
   }, [props.token]);
   return (
-    <div className={`${classes.profilePage} ${classes.likes}`}>
+    <div className={`${containers.profilePage} ${containers.likes}`}>
       <div className={classes.visits}>
         <div className={classes.visitsTitle}>They visited your profile...</div>
         <div>
+          {(!visits || visits.length === 0) && (
+            <div className={classes.noVisit}>
+              No one has visited your profile for now.
+            </div>
+          )}
           {visits &&
             visits.map((visit) => {
               return (
@@ -52,9 +58,12 @@ const Likes = (props) => {
             })}
         </div>
       </div>
-      <div className={classes.settingsField}>
+      <div className={containers.settingsField}>
         <div className={classes.listField}>
           <div className={classes.listTitle}>Profiles you liked</div>
+          {(!usersLiked || usersLiked.length === 0) && (
+            <div className={classes.noLike}>You haven't sent any like yet.</div>
+          )}
           {usersLiked &&
             usersLiked.map((user) => {
               return (
@@ -72,6 +81,11 @@ const Likes = (props) => {
         </div>
         <div className={classes.listField}>
           <div className={classes.listTitle}>They liked you</div>
+          {(!usersLiking || usersLiking.length === 0) && (
+            <div className={classes.noLike}>
+              You haven't received any like yet.
+            </div>
+          )}
           {usersLiking &&
             usersLiking.map((user) => {
               return (

@@ -1,0 +1,35 @@
+.genderForm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.label {
+    padding: 10px;
+}
+
+.btn {
+  width: 75px;
+  font-size: 15px;
+  white-space: nowrap;
+  padding: 5px;
+  cursor: default;
+  color: white;
+  border: none;
+  background: linear-gradient(127deg, #cec9d1, #c0aecc);
+  transition: all 50ms linear;
+}
+
+.btn.active:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.btn.selected {
+  color: white;
+  background: linear-gradient(127deg, #38015c, #a852e2);
+}
+
+.btn.inactive:hover {
+  cursor: default;
+}

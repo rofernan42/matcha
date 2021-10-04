@@ -1,13 +1,28 @@
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router";
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import {
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@mui/material";
+import classes from "./Filters.module.css";
 
-const SortFilter = () => {
+const SortFilter = (props) => {
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
   const [value, setValue] = useState(queryParams.get("sort") || "location");
   const [order, setOrder] = useState(queryParams.get("order") || "");
   const history = useHistory();
+
+  const setQueries = () => {
+    const queries = queryParams.toString();
+    props.onChangeFilter("?" + queries);
+    history.push({
+      pathname: loc.pathname,
+      search: queries,
+    });
+  };
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -15,84 +30,81 @@ const SortFilter = () => {
       queryParams.delete("sort");
       queryParams.delete("order");
       queryParams.delete("interests");
-      const queries = queryParams.toString();
-      history.push({
-        pathname: loc.pathname,
-        search: queries,
-      });
     } else {
       queryParams.set("sort", e.target.value);
       if (e.target.value === "interests") {
         queryParams.delete("order");
-        const queries = queryParams.toString();
-        history.push({
-          pathname: loc.pathname,
-          search: queries,
-        });
-      } else if (order.length > 0) {
-        queryParams.set("order", order);
-        const queries = queryParams.toString();
-        history.push({
-          pathname: loc.pathname,
-          search: queries,
-        });
+      } else if (e.target.value === "age" || e.target.value === "score") {
+        if (order.length === 0) queryParams.set("order", "increase");
+        else if (order.length > 0) queryParams.set("order", order);
       }
     }
+    setQueries();
   };
   const handleOrderChange = (e) => {
     setOrder(e.target.value);
     queryParams.set("sort", value);
     queryParams.set("order", e.target.value);
-    const queries = queryParams.toString();
-    history.push({
-      pathname: loc.pathname,
-      search: queries,
-    });
+    setQueries();
   };
-
   return (
-    <>
-      <FormControl sx={{ width: "120px", marginRight: "10px" }} fullWidth>
-        <InputLabel id="sort-label">Sort by</InputLabel>
-        <Select
-          sx={{
-            bgcolor: "white",
-            height: "58px",
-            boxShadow: "0 1px 4px rgba(0, 0, 0, 0.2)",
-          }}
-          labelId="sort-label"
-          id="sort-select"
-          value={value}
-          onChange={handleChange}
-        >
-          <MenuItem value={"location"}>Location</MenuItem>
-          <MenuItem value={"age"}>Age</MenuItem>
-          <MenuItem value={"score"}>Score</MenuItem>
-          <MenuItem value={"interests"}>Interests</MenuItem>
-        </Select>
+    <div className={classes.ageRange}>
+      <FormControl color={"secondary"}>
+        Sort By
+        <RadioGroup row onChange={handleChange}>
+          <FormControlLabel
+            value="location"
+            control={
+              <Radio color={"secondary"} checked={value === "location"} />
+            }
+            label="Location"
+          />
+          <FormControlLabel
+            value="interests"
+            control={
+              <Radio color={"secondary"} checked={value === "interests"} />
+            }
+            label="Interests"
+          />
+          <FormControlLabel
+            value="age"
+            control={<Radio color={"secondary"} checked={value === "age"} />}
+            label="Age"
+          />
+          <FormControlLabel
+            value="score"
+            control={<Radio color={"secondary"} checked={value === "score"} />}
+            label="Score"
+          />
+        </RadioGroup>
+        <RadioGroup row onChange={handleOrderChange}>
+          <FormControlLabel
+            value="increase"
+            control={
+              <Radio
+                size={"small"}
+                color={"secondary"}
+                disabled={value !== "age" && value !== "score"}
+                checked={order === "increase" || order === ""}
+              />
+            }
+            label="Increase"
+          />
+          <FormControlLabel
+            value="decrease"
+            control={
+              <Radio
+                size={"small"}
+                color={"secondary"}
+                disabled={value !== "age" && value !== "score"}
+                checked={order === "decrease"}
+              />
+            }
+            label="Decrease"
+          />
+        </RadioGroup>
       </FormControl>
-      <FormControl
-        sx={{ width: "120px" }}
-        disabled={!(value === "age" || value === "score")}
-      >
-        <InputLabel id="order-label">Order</InputLabel>
-        <Select
-          sx={{
-            bgcolor: "white",
-            height: "58px",
-            boxShadow: "0 1px 4px rgba(0, 0, 0, 0.2)",
-          }}
-          labelId="order-label"
-          id="order-select"
-          value={order}
-          label="Age"
-          onChange={handleOrderChange}
-        >
-          <MenuItem value={"increase"}>Increase</MenuItem>
-          <MenuItem value={"decrease"}>Decrease</MenuItem>
-        </Select>
-      </FormControl>
-    </>
+    </div>
   );
 };
 

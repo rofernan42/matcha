@@ -23,7 +23,6 @@ const Contacts = (props) => {
         />
         {props.matches &&
           matches.map((match) => {
-            // const imgProfile = match.user.images.find((img) => img !== null);
             return (
               <Contact
                 key={match.user._id}

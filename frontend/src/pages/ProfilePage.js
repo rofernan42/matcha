@@ -33,50 +33,33 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className={classes.profilePage}>
-        {user && (
-          <>
-            <Sidenav />
-            {loc.hash === "" && (
-              <Settings
-                user={updatedUser ? updatedUser : user.user}
-                images={user.user.images}
-                status={status}
-                onChangeUser={updateUserHandler}
-                token={authCtx.token}
-                error={errorUpdate ? errorUpdate : {}}
-              />
-            )}
-            {loc.hash === "#options" && (
-              <Options
-                user={updatedUser ? updatedUser : user.user}
-                status={status}
-                onChangeUser={updateUserHandler}
-                token={authCtx.token}
-                error={errorUpdate ? errorUpdate : {}}
-              />
-            )}
-            {loc.hash === "#likes" && (
-              <Likes
-                // user={updatedUser ? updatedUser : user.user}
-                // status={status}
-                // onChangeUser={updateUserHandler}
-                token={authCtx.token}
-                // error={errorUpdate ? errorUpdate : {}}
-              />
-            )}
-            {loc.hash === "#blocks" && (
-              <Blocked
-                // user={updatedUser ? updatedUser : user.user}
-                // status={status}
-                // onChangeUser={updateUserHandler}
-                token={authCtx.token}
-                // error={errorUpdate ? errorUpdate : {}}
-              />
-            )}
-          </>
-        )}
-      </div>
+      <div className={classes.profilePage}></div>
+      {user && (
+        <>
+          <Sidenav />
+          {loc.hash === "" && (
+            <Settings
+              user={updatedUser ? updatedUser : user.user}
+              images={user.user.images}
+              status={status}
+              onChangeUser={updateUserHandler}
+              token={authCtx.token}
+              error={errorUpdate ? errorUpdate : {}}
+            />
+          )}
+          {loc.hash === "#options" && (
+            <Options
+              user={updatedUser ? updatedUser : user.user}
+              status={status}
+              onChangeUser={updateUserHandler}
+              token={authCtx.token}
+              error={errorUpdate ? errorUpdate : {}}
+            />
+          )}
+          {loc.hash === "#likes" && <Likes token={authCtx.token} />}
+          {loc.hash === "#blocks" && <Blocked token={authCtx.token} />}
+        </>
+      )}
     </>
   );
 };

@@ -1,5 +1,5 @@
 const mysql = require("mysql2");
-const connect = require("./create_database");
+require("./create_database");
 
 const pool = mysql.createPool({
   host: "localhost",

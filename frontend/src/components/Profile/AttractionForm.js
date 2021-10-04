@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
-import classes from "./Profile.module.css";
+import classes from "./GenderAttr.module.css";
 
 const checkedReducer = (state, action) => {
   if (action.type === "men") {
@@ -29,8 +29,8 @@ const AttractionForm = (props) => {
     }
   }, [props, isSending, checkedAttr]);
   return (
-    <>
-      <div>I am attracted to:</div>
+    <div className={classes.genderForm}>
+      <div className={classes.label}>I am attracted to:</div>
       <div>
         <button
           value="men"
@@ -59,7 +59,7 @@ const AttractionForm = (props) => {
           Women
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

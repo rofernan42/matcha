@@ -4,8 +4,10 @@ import AuthContext from "../../store/auth-context";
 import classes from "./Nav.module.css";
 import socket from "../../util/socket";
 import { fetchMatches } from "../../util/chatsReq";
+import logo from "../../images/logo.png";
 import notifsIcon from "../../images/notification.png";
 import chat from "../../images/bubble.png";
+import search from "../../images/search.png";
 import { fetchCurrentUser, url } from "../../util/usersReq";
 import UserOptions from "./UserOptions";
 import blankPicture from "../../images/blank-profile-picture.jpg";
@@ -67,7 +69,6 @@ const Nav = (props) => {
         else setChatNotif("");
       } catch (err) {
         console.log(err);
-        // authCtx.logout();
       }
     };
     if (isAuth) getMatchesNotifs();
@@ -107,7 +108,8 @@ const Nav = (props) => {
       <header className={classes.header}>
         <div className={classes.logo}>
           <NavLink activeClassName={classes.active} to="/" exact>
-            Matcha
+            <img className={classes.logoIcon} alt="" src={logo} />
+            <div className={classes.appName}>Matcha</div>
           </NavLink>
         </div>
         <nav>
@@ -123,6 +125,13 @@ const Nav = (props) => {
               <li>
                 <NavLink activeClassName={classes.active} to="/signup">
                   <button>Sign up</button>
+                </NavLink>
+              </li>
+            )}
+            {isAuth && (
+              <li>
+                <NavLink activeClassName={classes.active} to="/users">
+                  <img className={classes.navIcon} alt="" src={search} />
                 </NavLink>
               </li>
             )}

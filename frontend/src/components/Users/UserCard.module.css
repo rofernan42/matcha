@@ -1,8 +1,10 @@
 .container {
-  max-width: 1200px;
+  /* max-width: 1200px; */
   display: inline-block;
+  vertical-align: bottom;
   text-align: left;
   line-height: 1;
+  margin: 5px;
 }
 
 .profile-card-2 {
@@ -84,8 +86,6 @@
 }
 
 .status {
-  /* z-index: 1; */
-  /* position: absolute; */
   display: inline-block;
   vertical-align: top;
   width: 9px;

@@ -1,5 +1,4 @@
 import classes from "./Nav.module.css";
-import profil from "../../images/profil.png";
 import Timeago from "react-timeago";
 import { useEffect, useState } from "react";
 
