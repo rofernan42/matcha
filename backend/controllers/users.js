@@ -167,7 +167,7 @@ exports.getFilteredUsers = async (req, res, next) => {
           lon: user.lon,
           lastConnection: user.lastConnection,
           likesMe: user.likesMe,
-          images: user.images,
+          images: user.images.filter((img) => img),
         };
       }),
     });

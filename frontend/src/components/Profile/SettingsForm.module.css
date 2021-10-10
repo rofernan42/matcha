@@ -1,10 +1,48 @@
 .edit-settings {
-  height: auto;
-  padding: 10px;
+  flex: 1;
+  margin: 20px;
+  background-color: white;
+  border: 1px solid rgb(219, 219, 219);
 }
 
-.edit-settings h1 {
-  color: #8969a1;
+.edit-settings .header {
+  font-weight: normal;
+  color: #949494;
+  text-align: left;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 15px 25px;
+  font-size: 30px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  height: fit-content;
+  white-space: nowrap;
+}
+
+.edit-settings .header .headerLabel {
+  margin-right: 10px;
+}
+
+.edit-settings .header .save {
+  font-size: 17px;
+  color: #b571e2;
+}
+
+.edit-settings .header .loading,
+.edit-settings .header .loading {
+  color: #dcc5ec;
+  font-size: 17px;
+  cursor: default;
+}
+
+.edit-settings .header .save:hover {
+  color: #38015c;
+  cursor: pointer;
+}
+
+.edit-settings .formSettings {
+  padding: 20px;
+  height: 80%;
 }
 
 .settings {
@@ -20,7 +58,7 @@
   font: inherit;
   border: none;
   width: 100%;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #b9b9b9;
   padding: 0px;
   height: 2rem;
   background-color: transparent;
@@ -57,35 +95,135 @@ input.error::placeholder {
   font-weight: bold;
   color: #8969a1;
   margin-right: 10px;
+  text-align: left;
 }
 
 .passInfo {
   font-size: 10px;
 }
 
-.actions {
-  text-align: right;
+/*** BioForm ***/
+.bioField {
+  width: 100%;
+  position: relative;
 }
 
-.actions button {
-  width: 80px;
-  height: 40px;
-  white-space: nowrap;
-  cursor: pointer;
-  font: inherit;
-  color: white;
-  background-color: #a770cc;
+.bioField textarea {
+  padding: 10px;
+  width: 100%;
+  height: 150px;
+  resize: none;
   border: none;
-  border-radius: 4px;
-  margin-top: 0.8rem;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 18px;
+  font-size: 17px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5em;
 }
 
-.actions button:hover {
-  background-color: #873abb;
-  border-color: #873abb;
+.bioField .counter {
+  position: absolute;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.418);
+  bottom: 0;
+  right: 0;
+  margin: 5px 10px;
 }
 
-.actions button.loading {
+/*** InterestsForm ***/
+.header input[type="text"] {
+  width: 100%;
+  flex: 1;
+  margin-right: 10px;
+  border: none;
+  outline: none;
+  font-size: 30px;
+  box-sizing: border-box;
+}
+
+.header input[type="text"]::placeholder {
+  color: #949494;
+}
+
+.btnPlus {
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  line-height: 0;
+  color: white;
+  background-color: #d0c8d6;
+  transition: all linear 300ms;
+}
+
+.btnPlus.active {
+  background-color: indigo;
+  cursor: pointer;
+}
+
+.interestsList {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px;
+}
+
+.interestOption {
+  margin: 0.5em 1em;
+  border-radius: 2px;
+  font-size: 15px;
+  width: min-content;
+  display: flex;
+  background-color: #e4e4e4;
+  color: #6b6b6b;
+  line-height: 1rem;
+}
+
+.interestOption div {
+  padding: 5px;
   cursor: default;
-  background-color: #ceade4;
+}
+
+.interestOption .intButton {
+  border-radius: 2px;
+  border: none;
+  font-size: 15px;
+  color: #6b6b6b;
+  background-color: transparent;
+}
+
+.interestOption .intButton:hover {
+  color: white;
+  cursor: pointer;
+  background-color: rgba(255, 0, 0, 0.514);
+}
+
+.noInterest {
+  font-size: 18px;
+  color: #929292;
+  padding: 10px;
+}
+
+/*** AgeForm ***/
+.ageForm {
+  padding: 20px;
+}
+
+.ageForm .ageHeader {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ageForm .ageHeader div {
+  font-size: 20px;
+}
+
+.ageForm .ageSlider {
+  width: 90%;
+  margin: auto;
 }

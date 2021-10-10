@@ -5,7 +5,7 @@ import heart from "../../images/heart.png";
 import block from "../../images/block.png";
 import { Link, useLocation } from "react-router-dom";
 
-const Sidenav = () => {
+const Sidenav = (props) => {
   const loc = useLocation();
   return (
     <>
@@ -24,7 +24,7 @@ const Sidenav = () => {
               }`}
             >
               <img alt="" src={profil} />
-              <Link to="#options">Options</Link>
+              <Link to={`/users/${props.userId}`}>See profile</Link>
             </div>
           </div>
           <div className="nav">

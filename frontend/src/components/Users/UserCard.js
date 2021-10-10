@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import { calculateDistance } from "../../util/geolocation";
-import { url } from "../../util/usersReq";
+import { calculateDistance, url } from "../../util/utils";
 import classes from "./UserCard.module.css";
 
 const UserCard = (props) => {

@@ -1,17 +1,18 @@
 import { useRef, useState } from "react";
-import classes from "./Profile.module.css";
+import classes from "./SettingsForm.module.css";
 
 const BioForm = (props) => {
+  const NB_CHAR = 300;
   const [saveActive, setSaveActive] = useState(false);
   const bioRef = useRef();
-  const [counter, setCounter] = useState(200 - props.bio.length);
+  const [counter, setCounter] = useState(NB_CHAR - props.bio.length);
   const saveBtnHandler = () => {
     if (bioRef.current.value !== props.bio) {
       setSaveActive(true);
     } else {
       setSaveActive(false);
     }
-    setCounter(200 - bioRef.current.value.length);
+    setCounter(NB_CHAR - bioRef.current.value.length);
   };
   const bioHandler = (e) => {
     e.preventDefault();
@@ -20,39 +21,31 @@ const BioForm = (props) => {
       setSaveActive(false);
     }
   };
-  // const handleKeyPress = (e) => {
-  //   if (e.target.value.length >= 200) {
-  //     e.preventDefault();
-  //     e.stopPropagation();
-  //   }
-  // };
   return (
-    <div className={classes.bioField}>
-      <div>About myself</div>
-      <form onSubmit={bioHandler}>
+    <div
+      className={classes["edit-settings"]}
+      style={{ minWidth: "fit-content" }}
+    >
+      <div className={classes.header}>
+        <div className={classes.headerLabel}>About myself</div>
+        <div
+          className={saveActive ? classes.save : classes.loading}
+          onClick={bioHandler}
+        >
+          Save changes
+        </div>
+      </div>
+      <div className={classes.bioField}>
         <textarea
           type="textarea"
-          rows="7"
-          cols="35"
-          maxLength={200}
+          maxLength={NB_CHAR}
           defaultValue={props.bio}
           onChange={saveBtnHandler}
           ref={bioRef}
-          // onKeyPress={handleKeyPress}
+          placeholder="Type something..."
         />
         <div className={classes.counter}>{counter} characters left</div>
-        <button
-          id="save"
-          name="save"
-          className={`${classes.btn} ${
-            saveActive
-              ? `${classes.active} ${classes.selected}`
-              : classes.inactive
-          }`}
-        >
-          Save
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

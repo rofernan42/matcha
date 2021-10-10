@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
 import Image from "./Image";
 import classes from "./Images.module.css";
+import { useSelector } from "react-redux";
 
 const ImagesForm = (props) => {
-  const [image, setImages] = useState([]);
-  useEffect(() => {
-    setImages(props.image);
-  }, [props.image]);
+  const image = useSelector((state) => state.currentUser.data.images);
+
   return (
     <div className={classes["images-field"]}>
       <table>
@@ -18,7 +16,6 @@ const ImagesForm = (props) => {
                 img={image[0]}
                 typeField="main"
                 imageNb={0}
-                onChangeImg={props.onChangeImg}
                 token={props.token}
               />
             </td>
@@ -28,7 +25,6 @@ const ImagesForm = (props) => {
                 img={image[1]}
                 typeField="small"
                 imageNb={1}
-                onChangeImg={props.onChangeImg}
                 token={props.token}
               />
             </td>
@@ -38,7 +34,6 @@ const ImagesForm = (props) => {
                 img={image[2]}
                 typeField="small"
                 imageNb={2}
-                onChangeImg={props.onChangeImg}
                 token={props.token}
               />
             </td>
@@ -50,7 +45,6 @@ const ImagesForm = (props) => {
                 img={image[3]}
                 typeField="small"
                 imageNb={3}
-                onChangeImg={props.onChangeImg}
                 token={props.token}
               />
             </td>
@@ -60,7 +54,6 @@ const ImagesForm = (props) => {
                 img={image[4]}
                 typeField="small"
                 imageNb={4}
-                onChangeImg={props.onChangeImg}
                 token={props.token}
               />
             </td>

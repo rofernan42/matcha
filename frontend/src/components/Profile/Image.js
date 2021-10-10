@@ -1,45 +1,38 @@
 import { useEffect, useState } from "react";
-import { updateImage, url } from "../../util/usersReq";
 import classes from "./Images.module.css";
+import { useDispatch } from "react-redux";
+import { updateImage } from "../../store/currentUser-actions";
+import { url } from "../../util/utils";
 
 const Image = (props) => {
   const [file, setFile] = useState(null);
-  const [img, setImg] = useState(props.img);
+  const dispatch = useDispatch();
   const fileChange = (e) => {
     setFile(e.target.files[0]);
   };
   useEffect(() => {
     if (file) {
-      const updateImg = async () => {
-        const newImgs = await updateImage({
+      dispatch(
+        updateImage({
           token: props.token,
           req: "POST",
           files: file,
           imageNb: props.imageNb,
           path: "post-image",
-        });
-        setImg(newImgs[props.imageNb]);
-        setFile(null);
-      };
-      try {
-        updateImg();
-      } catch (err) {
-        console.log(err.data || "Something went wrong.");
-      }
+        })
+      );
+      setFile(null);
     }
-  }, [file, props]);
+  }, [file, props, dispatch]);
   const deleteImageHandler = async () => {
-    try {
-      await updateImage({
+    dispatch(
+      updateImage({
         token: props.token,
         req: "DELETE",
         imageNb: props.imageNb,
         path: "delete-image",
-      });
-      setImg(null);
-    } catch (err) {
-      console.log(err.data || "Something went wrong.");
-    }
+      })
+    );
   };
   const inputName = "image" + props.imageNb;
   return (
@@ -47,14 +40,14 @@ const Image = (props) => {
       <div
         className={classes[`img-field-${props.typeField}`]}
         style={
-          img
+          props.img
             ? {
-                backgroundImage: `url(${url + img})`,
+                backgroundImage: `url(${url + props.img})`,
               }
             : {}
         }
       >
-        {!img && (
+        {!props.img && (
           <label htmlFor={inputName}>
             <div className={classes["label-img"]}>
               <div
@@ -63,7 +56,7 @@ const Image = (props) => {
             </div>
           </label>
         )}
-        {!img && (
+        {!props.img && (
           <input
             type="file"
             id={inputName}
@@ -73,7 +66,7 @@ const Image = (props) => {
           />
         )}
       </div>
-      {img && (
+      {props.img && (
         <button
           onClick={deleteImageHandler}
           className={`${classes.cross} ${classes[props.typeField]}`}

@@ -6,19 +6,8 @@ const Settings = (props) => {
   return (
     <div className={classes.profilePage}>
       <div className={classes.settingsField}>
-        <ImagesForm
-          image={props.images}
-          onChangeImg={props.onChangeImg}
-          status={props.status}
-          statusImg={props.statusImg}
-          token={props.token}
-        />
-        <SettingsForm
-          user={props.user}
-          onChangeSettings={props.onChangeUser}
-          error={props.error}
-          token={props.token}
-        />
+        <ImagesForm token={props.token} />
+        <SettingsForm token={props.token} />
       </div>
     </div>
   );

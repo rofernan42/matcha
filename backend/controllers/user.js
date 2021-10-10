@@ -17,7 +17,28 @@ exports.getProfile = async (req, res, next) => {
     const updatedUser = new User({ ...user });
     await updatedUser.save();
     const likes = await Like.fetchLikes(user._id);
-    res.status(200).json({ user, likes });
+    res.status(200).json({
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      name: updatedUser.name,
+      lastname: updatedUser.lastname,
+      age: updatedUser.age,
+      bio: updatedUser.bio,
+      gender: updatedUser.gender,
+      attrMen: updatedUser.attrMen,
+      attrWomen: updatedUser.attrWomen,
+      interests:
+        updatedUser.interests.length > 0
+          ? updatedUser.interests.split(";")
+          : [],
+      score: updatedUser.score,
+      lat: updatedUser.lat,
+      lon: updatedUser.lon,
+      lastConnection: updatedUser.lastConnection,
+      images: user.images,
+      likes,
+    });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -64,7 +85,7 @@ exports.editSettings = async (req, res, next) => {
     }
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-    res.status(201).json(updatedUser);
+    res.status(201).json({ username, name, lastname, email });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -88,7 +109,7 @@ exports.postAge = async (req, res, next) => {
     user.age = age;
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-    res.status(201).json(updatedUser);
+    res.status(201).json({ age });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -108,7 +129,7 @@ exports.postGender = async (req, res, next) => {
     user.gender = req.body.data;
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-    res.status(201).json(updatedUser);
+    res.status(201).json({ gender: req.body.data });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -130,7 +151,7 @@ exports.postAttraction = async (req, res, next) => {
     user.attrWomen = attr.women;
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-    res.status(201).json(updatedUser);
+    res.status(201).json({ attrMen: attr.men, attrWomen: attr.women });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -150,7 +171,7 @@ exports.postBio = async (req, res, next) => {
     user.bio = req.body.data;
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-    res.status(201).json(updatedUser);
+    res.status(201).json({ bio: req.body.data });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -183,7 +204,7 @@ exports.postInterest = async (req, res, next) => {
       interests: removeDuplicates.join(";"),
     });
     await updatedUser.save();
-    res.status(201).json(updatedUser);
+    res.status(201).json({ interests: removeDuplicates });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -208,8 +229,7 @@ exports.removeInterest = async (req, res, next) => {
     }
     const updatedUser = new User({ ...user, interests: temp.join(";") });
     await updatedUser.save();
-
-    res.status(201).json(updatedUser);
+    res.status(201).json({ interests: temp });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -278,7 +298,17 @@ exports.postImage = async (req, res, next) => {
     }
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-    res.status(201).json([user.image0, user.image1, user.image2, user.image3, user.image4]);
+    res
+      .status(201)
+      .json({
+        images: [
+          user.image0,
+          user.image1,
+          user.image2,
+          user.image3,
+          user.image4,
+        ],
+      });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -320,7 +350,17 @@ exports.deleteImage = async (req, res, next) => {
     }
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-    res.status(201).json([user.image0, user.image1, user.image2, user.image3, user.image4]);
+    res
+      .status(201)
+      .json({
+        images: [
+          user.image0,
+          user.image1,
+          user.image2,
+          user.image3,
+          user.image4,
+        ],
+      });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

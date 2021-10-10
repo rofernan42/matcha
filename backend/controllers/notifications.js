@@ -29,20 +29,23 @@ exports.postNotification = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    let notifContent;
-    if (notifType === "visit")
-      notifContent = user.username + " visited your profile !";
-    else if (notifType === "like") notifContent = user.username + " just liked you !";
-    else if (notifType === "match")
-      notifContent = "You matched with " + user.username + " !";
-    else if (notifType === "cancel")
-      notifContent = user.username + " cancelled the match :(";
-    const notif = new Notification({
-      user_id,
-      notifType,
-      notifContent,
-    });
-    await notif.save();
+    if (+user_id !== user._id) {
+      let notifContent;
+      if (notifType === "visit")
+        notifContent = user.username + " visited your profile !";
+      else if (notifType === "like")
+        notifContent = user.username + " just liked you !";
+      else if (notifType === "match")
+        notifContent = "You matched with " + user.username + " !";
+      else if (notifType === "cancel")
+        notifContent = user.username + " cancelled the match :(";
+      const notif = new Notification({
+        user_id,
+        notifType,
+        notifContent,
+      });
+      await notif.save();
+    }
     res.status(201).json({ message: "Notification created" });
   } catch (err) {
     if (!err.statusCode) {

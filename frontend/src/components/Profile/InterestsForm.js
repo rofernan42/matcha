@@ -1,13 +1,10 @@
-import { TextField } from "@mui/material";
 import { useState } from "react";
-import { toast } from "react-toastify";
-import { updateUser } from "../../util/usersReq";
-import classes from "./Interests.module.css";
+import classes from "./SettingsForm.module.css";
 
 const InterestsForm = (props) => {
   const [addActive, setAddActive] = useState(false);
-  const [interests, setInterests] = useState(props.interests);
   const [int, setInt] = useState("");
+
   const addBtnHandler = (e) => {
     setInt(e.target.value);
     if (e.target.value.length > 0) {
@@ -18,62 +15,70 @@ const InterestsForm = (props) => {
   };
   const InterestsHandler = async (e) => {
     e.preventDefault();
-    try {
-      if (addActive) {
-        const res = await updateUser({
-          toUpdate: int,
-          path: "add-interest",
-          token: props.token,
-        });
-        setInterests(res.interests.split(";"));
-        setAddActive(false);
-        setInt("");
-      }
-    } catch (err) {
-      console.log(err);
-      toast.error("Something went wrong.");
+    if (addActive) {
+      props.onChangeInt({
+        toUpdate: int,
+        path: "add-interest",
+        token: props.token,
+      });
+      setAddActive(false);
+      setInt("");
     }
   };
   const removeIntHandler = async (int) => {
-    const res = await updateUser({
+    props.onChangeInt({
       toUpdate: int,
       path: "remove-interest",
       token: props.token,
     });
-    setInterests(res.interests.split(";"));
   };
   return (
-    <>
-      <form className={classes.interestsForm} onSubmit={InterestsHandler}>
-        <TextField
-          fullWidth
-          id="standard-basic"
-          color={"secondary"}
-          label="My interests"
-          variant="standard"
+    <div
+      className={classes["edit-settings"]}
+      style={{ minWidth: "fit-content" }}
+    >
+      <form className={classes.header} onSubmit={InterestsHandler}>
+        <input
+          type="text"
+          placeholder="My interests..."
           onChange={addBtnHandler}
           value={int}
         />
-        <button
-          id="add"
-          name="add"
-          className={`${classes.btnPlus} ${addActive ? classes.active : ""}`}
-        >
-          +
-        </button>
+        <div className={addActive ? classes.save : classes.loading}>
+          <button
+            id="add"
+            name="add"
+            className={`${classes.btnPlus} ${addActive ? classes.active : ""}`}
+          >
+            +
+          </button>
+        </div>
       </form>
       <div className={classes.interestsList}>
-        {interests.map(
-          (int) =>
-            int.length > 0 && (
-              <div className={classes.interestOption} key={int}>
-                <span>#{int}</span>
-                <button onClick={() => removeIntHandler(int)}>&times;</button>
-              </div>
-            )
+        {(!props.interests || props.interests.length === 0) && (
+          <div className={classes.noInterest}>
+            Add some of your interests or hobbies to find your perfect match !
+            (Examples: cooking, travelling, JavaScript, piano...)
+          </div>
         )}
+        {props.interests &&
+          props.interests.length > 0 &&
+          props.interests.map(
+            (int) =>
+              int.length > 0 && (
+                <div className={classes.interestOption} key={int}>
+                  <div>#{int}</div>
+                  <div
+                    className={classes.intButton}
+                    onClick={() => removeIntHandler(int)}
+                  >
+                    &times;
+                  </div>
+                </div>
+              )
+          )}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -15,6 +15,11 @@ exports.postLike = async (req, res, next) => {
       throw error;
     }
     const towardsId = req.params.id;
+    if (towardsId == user._id) {
+      const error = new Error("Invalid user");
+      error.statusCode = 401;
+      throw error;
+    }
     const match = await createMatch(user._id, towardsId);
     const existingLike = await Like.findByUsers(user._id, towardsId);
     if (!existingLike) {
@@ -23,8 +28,7 @@ exports.postLike = async (req, res, next) => {
     } else {
       await Like.destroy(existingLike._id);
     }
-    const likes = await Like.fetchLikes(user._id);
-    res.status(201).json({ likes, match, currentUser: user.username });
+    res.status(201).json({ match });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -62,6 +66,11 @@ exports.postBlock = async (req, res, next) => {
       throw error;
     }
     const towardsId = req.params.id;
+    if (towardsId == user._id) {
+      const error = new Error("Invalid user");
+      error.statusCode = 401;
+      throw error;
+    }
     await Like.destroyByUsers(user._id, towardsId);
     await Match.destroy(user._id, towardsId);
     const newBlock = new Block({ id_from: user._id, id_towards: towardsId });
@@ -92,6 +101,11 @@ exports.postReport = async (req, res, next) => {
   const userId = req.params.id;
   const user = await User.findById(userId);
   try {
+    if (userId == req.userId) {
+      const error = new Error("Invalid user");
+      error.statusCode = 401;
+      throw error;
+    }
     const mailOptions = {
       from: "matcha.rofernan@gmail.com",
       to: "matcha.rofernan@gmail.com",
@@ -127,11 +141,13 @@ exports.visitProfile = async (req, res, next) => {
       throw error;
     }
     const towardsId = req.params.id;
-    const towardsUser = await User.findById(towardsId);
-    const existingVisit = await Visit.findByUsers(user._id, towardsId);
-    if (towardsUser && !existingVisit) {
-      const visit = new Visit({ id_from: user._id, id_towards: towardsId });
-      await visit.save();
+    if (+towardsId !== user._id) {
+      const towardsUser = await User.findById(towardsId);
+      const existingVisit = await Visit.findByUsers(user._id, towardsId);
+      if (towardsUser && !existingVisit) {
+        const visit = new Visit({ id_from: user._id, id_towards: towardsId });
+        await visit.save();
+      }
     }
     res.status(201).json({ message: "You visited a profile" });
   } catch (err) {

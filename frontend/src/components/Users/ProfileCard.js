@@ -1,66 +1,64 @@
 import classes from "./ProfileCard.module.css";
 import quotes from "../../images/left-quotes-sign.png";
 import ImageSlider from "./ImageSlider";
-import { userAction } from "../../util/usersReq";
 import { useState } from "react";
 import TimeAgo from "react-timeago";
-import socket from "../../util/socket";
+import { calculateDistance, socket } from "../../util/utils";
 import LikeButton from "./LikeButton";
 import { useHistory } from "react-router-dom";
 import heart from "../../images/heart.png";
 import heartColor from "../../images/heart-color.png";
 import block from "../../images/block.png";
-import { calculateDistance } from "../../util/geolocation";
 import { toast } from "react-toastify";
 import { createNotification } from "../../util/notifsReq";
+import { useDispatch } from "react-redux";
+import { userAction } from "../../store/currentUser-actions";
+import { currentUserActions } from "../../store/currentUser-slice";
 
 const ProfileCard = (props) => {
-  const [liked, setLiked] = useState(props.liked);
   const [match, setMatch] = useState(false);
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const closeProfile = () => {
     props.onCloseProfile();
   };
+
   const sendLikeHandler = async () => {
-    try {
-      const resData = await userAction({
+    const data = await dispatch(
+      userAction({
         path: `send-like/${props.user._id}`,
         method: "POST",
         token: props.token,
+      })
+    );
+    dispatch(currentUserActions.setLike(props.user._id));
+    if (data && data.match) {
+      setMatch(true);
+      toast(`You matched with ${props.user.username}!`, {
+        style: { backgroundColor: "#9f5ccc", color: "white" },
       });
-      setLiked(() => {
-        return !liked;
+      await createNotification({
+        token: props.token,
+        type: "match",
+        userId: props.user._id,
       });
-      props.onSetLikes(resData.likes);
-      if (resData.match) {
-        setMatch(resData.match);
-        toast(`You matched with ${props.user.username}!`, {
-          style: { backgroundColor: "#9f5ccc", color: "white" },
-        });
-        await createNotification({
-          token: props.token,
-          type: "match",
-          userId: props.user._id,
-        });
-        socket.emit("newMatch", {
-          userId: props.user._id,
-          username: resData.currentUser,
-        });
-        setTimeout(() => {
-          props.onCloseProfile();
-        }, 1000);
-      } else if (resData.likes.includes(props.user._id)) {
-        await createNotification({
-          token: props.token,
-          type: "like",
-          userId: props.user._id,
-        });
-        socket.emit("newLike", {
-          userId: props.user._id,
-        });
-      }
-    } catch (err) {
-      console.log(err);
+      socket.emit("newMatch", {
+        userId: props.user._id,
+        username: props.currentUser.username,
+      });
+      setTimeout(() => {
+        props.onCloseProfile();
+      }, 1000);
+    } else if (!props.liked) {
+      await createNotification({
+        token: props.token,
+        type: "like",
+        userId: props.user._id,
+      });
+      socket.emit("newLike", {
+        userId: props.user._id,
+      });
     }
   };
   const blockUserHandler = async () => {
@@ -72,7 +70,6 @@ const ProfileCard = (props) => {
     history.go(0);
   };
 
-  const imgs = props.user.images.filter((img) => img !== null);
   const distance = calculateDistance(
     props.currentLoc.lat,
     props.user.lat,
@@ -87,7 +84,7 @@ const ProfileCard = (props) => {
       />
       <div className={`${classes.card} ${match ? classes.match : ""}`}>
         <div className={classes["card-header"]}>
-          <ImageSlider images={imgs} />
+          <ImageSlider images={props.user.images} />
           <div className={classes["card-header-bar"]}>
             <div className={classes["user-status"]}>
               <span
@@ -131,7 +128,7 @@ const ProfileCard = (props) => {
           </div>
         </div>
         <div style={{ position: "absolute", top: "240px", right: "25px" }}>
-          <LikeButton sendLikeHandler={sendLikeHandler} liked={liked} />
+          <LikeButton sendLikeHandler={sendLikeHandler} liked={props.liked} />
         </div>
         <div className={classes["card-footer"]}>
           <div className={classes["stats"]}>

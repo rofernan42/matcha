@@ -1,5 +1,6 @@
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { useEffect, useReducer, useState } from "react";
-import classes from "./GenderAttr.module.css";
+import classes from "./SettingsForm.module.css";
 
 const checkedReducer = (state, action) => {
   if (action.type === "men") {
@@ -14,9 +15,10 @@ const checkedReducer = (state, action) => {
 const AttractionForm = (props) => {
   const [isSending, setIsSending] = useState(false);
   const [checkedAttr, dispatch] = useReducer(checkedReducer, {
-    men: props.user.attrMen,
-    women: props.user.attrWomen,
+    men: !!props.user.attrMen,
+    women: !!props.user.attrWomen,
   });
+
   const attrHandler = (e) => {
     const attrData = e.target.value;
     dispatch({ type: attrData });
@@ -28,36 +30,25 @@ const AttractionForm = (props) => {
       setIsSending(false);
     }
   }, [props, isSending, checkedAttr]);
+
   return (
-    <div className={classes.genderForm}>
-      <div className={classes.label}>I am attracted to:</div>
-      <div>
-        <button
-          value="men"
-          id="men"
-          name="attraction"
-          className={`${classes.btn} ${
-            checkedAttr.men
-              ? `${classes.active} ${classes.selected}`
-              : classes.active
-          }`}
-          onClick={attrHandler}
-        >
-          Men
-        </button>
-        <button
-          value="women"
-          id="women"
-          name="attraction"
-          className={`${classes.btn} ${
-            checkedAttr.women
-              ? `${classes.active} ${classes.selected}`
-              : classes.active
-          }`}
-          onClick={attrHandler}
-        >
-          Women
-        </button>
+    <div className={classes.ageForm} style={{flex: 1}}>
+      <div className={classes.ageHeader}>
+        <div className={classes.label}>I am attracted to</div>
+      </div>
+      <div style={{ width: "fit-content", margin: "auto" }}>
+        <FormGroup row onChange={attrHandler}>
+          <FormControlLabel
+            control={<Checkbox color="secondary" checked={checkedAttr.men} />}
+            value="men"
+            label="Men"
+          />
+          <FormControlLabel
+            control={<Checkbox color="secondary" checked={checkedAttr.women} />}
+            value="women"
+            label="Women"
+          />
+        </FormGroup>
       </div>
     </div>
   );

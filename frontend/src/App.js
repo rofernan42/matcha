@@ -8,15 +8,24 @@ import AuthContext from "./store/auth-context";
 import HomePage from "./pages/HomePage";
 import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
-import socket from "./util/socket";
-import UserProfile from "./components/Users/UserProfile/UserProfile";
+import { socket } from "./util/utils";
+import UserProfilePage from "./pages/UserProfilePage";
 import ResetPassword from "./components/Auth/ResetPassword";
 import NewPassword from "./components/Auth/NewPassword";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { fetchCurrentUser } from "./store/currentUser-actions";
 
 function App() {
   const authCtx = useContext(AuthContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (authCtx.isAuth) {
+      dispatch(fetchCurrentUser(authCtx.token));
+    }
+  }, [dispatch, authCtx]);
 
   useEffect(() => {
     if (authCtx.userId) {
@@ -28,7 +37,7 @@ function App() {
     }
   }, [authCtx.userId]);
   useEffect(() => {
-    if (authCtx.userId) {
+    if (authCtx.isAuth) {
       socket.off("notifMatch").on("notifMatch", (data) => {
         if (data) {
           toast(data.message, {
@@ -37,7 +46,7 @@ function App() {
         }
       });
     }
-  }, [authCtx.userId]);
+  }, [authCtx.isAuth]);
   return (
     <Layout>
       <Switch>
@@ -80,7 +89,7 @@ function App() {
               <UsersPage onlineUsers={onlineUsers} />
             </Route>
             <Route path="/users/:userId">
-              <UserProfile onlineUsers={onlineUsers} />
+              <UserProfilePage onlineUsers={onlineUsers} />
             </Route>
           </Switch>
         )}

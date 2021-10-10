@@ -22,77 +22,109 @@
 }
 
 .userInfo {
-  background: linear-gradient(to bottom, #543b68, #d4acee);
+  /* background: linear-gradient(to bottom, #543b68, #d4acee); */
+  /* background-color: #9364af; */
+  background-color: rgb(245, 245, 245);
   flex: 1;
   height: 100%;
-  overflow: hidden;
+  padding: 0 10px;
 }
 
 .infoField {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
 }
 
 .infoField .avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.322);
+  width: 300px;
+  height: 300px;
+  border-radius: 3px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.322);
   cursor: pointer;
+  margin-top: 20px;
+  position: relative;
+}
+
+.infoField .avatar div {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 5px;
+  margin-left: 10px;
 }
 
 .icons {
-  margin-top: 20px;
-  width: 70%;
+  margin-bottom: 20px;
+  width: 80%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .infoField .icon {
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   object-fit: cover;
-  filter: invert(100%);
+  filter: invert(50%);
 }
 
-.infoField div {
-  text-align: center;
-  font-size: 30px;
+.infoField .icon:hover {
+  filter: none;
+}
+
+.infoField .nameField {
+  font-size: 25px;
   color: #4a2a64;
-  word-spacing: 0.4em;
-  letter-spacing: 3px;
+  word-spacing: 0.3em;
+  letter-spacing: 2px;
+  margin-top: 5px;
 }
 
 .infoField .label {
   font-size: 15px;
-  color: #cfbfdb;
+  color: #9b8fa5;
 }
 
 .userDetails {
   flex: 3;
-  margin-bottom: 25px;
   overflow-y: scroll;
+  background-color: rgb(245, 245, 245);
+  /* box-shadow: inset 4px 7px 10px rgba(0, 0, 0, 0.226); */
 }
 
-.userDetails .label {
+/* .userDetails .label {
   width: 95%;
   margin: auto;
   border-bottom: 3px solid #543b68;
   font-size: 30px;
   font-weight: bold;
   color: #543b68;
+} */
+
+.userDetails .descriptionField {
+  background-color: white;
+  border: 1px solid rgb(219, 219, 219);
+  width: 90%;
+  max-width: 800px;
+  min-height: 200px;
+  /* margin: auto; */
+  margin-top: 20px;
+  padding: 15px;
 }
 
-.userDetails .bioField {
-  width: 90%;
-  margin: auto;
-  margin-top: 20px;
-  margin-bottom: 30px;
+.userDetails .usernameField {
+  font-weight: bold;
   font-size: 25px;
+}
+
+.userDetails .distanceField {
+  font-weight: bold;
+  color: #979797;
+  font-size: 15px;
+  margin-bottom: 20px;
 }
 
 .userDetails .intField {
@@ -117,18 +149,18 @@
 }
 
 .additional {
-  margin-top: 50px;
-  display: flex;
+  margin-top: 20px;
+  /* display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-around; */
 }
 
-.additional div {
+/* .additional div {
   margin: 0 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
+} */
 
 .additional .label {
   width: 100%;
@@ -141,28 +173,38 @@
 }
 
 .matchField {
+  margin: auto;
   background: #ffffff;
-  box-shadow: 1px 1px 10px #00000062;
-  border-radius: 10px;
-  padding: 10px;
+  /* box-shadow: 1px 1px 10px #00000062; */
+  /* border-radius: 10px; */
+  border: 1px solid rgb(219, 219, 219);
+  width: fit-content;
+  padding: 15px;
+  margin-bottom: 20px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .matchField div {
   text-align: center;
-  font-size: 30px;
-  color: #646168;
+  /* font-size: 20px; */
+  /* color: #646168; */
   font-weight: bold;
-  display: inline;
+  font-size: 25px;
 }
 
-.matchField .matchHeart {
+/* .matchField .matchHeart {
   width: 20px;
   height: 20px;
   filter: hue-rotate(280deg);
-}
+} */
 
 .matchField .cancelMatch {
-  font-size: 20px;
+  padding: 0 10px;
+  font-size: 15px;
   font-weight: unset;
   color: #9f5ccc;
 }
@@ -198,31 +240,12 @@
   transform: rotate(45deg);
 }
 
-.userDetails .footer {
-  position: fixed;
-  bottom: 0;
-  background-color: #cecad1;
-  color: #543b68;
-  letter-spacing: 2px;
-  width: 75%;
-  min-width: fit-content;
-  height: 25px;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.userDetails .footer div {
-  padding: 0 10px;
-}
-
 .status {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   display: inline-block;
+  vertical-align: middle;
 }
 .green {
   background-color: #58b666;
@@ -232,7 +255,9 @@
 }
 
 .status-label {
-  margin-left: 5px;
+  margin-left: 7px;
+  color: white;
+  vertical-align: middle;
 }
 
 .background {

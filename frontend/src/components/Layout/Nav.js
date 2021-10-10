@@ -2,27 +2,28 @@ import { useContext, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import classes from "./Nav.module.css";
-import socket from "../../util/socket";
+import { socket } from "../../util/utils";
 import { fetchMatches } from "../../util/chatsReq";
 import logo from "../../images/logo.png";
 import notifsIcon from "../../images/notification.png";
 import chat from "../../images/bubble.png";
 import search from "../../images/search.png";
-import { fetchCurrentUser, url } from "../../util/usersReq";
+import { url } from "../../util/utils";
 import UserOptions from "./UserOptions";
 import blankPicture from "../../images/blank-profile-picture.jpg";
 import { ToastContainer } from "react-toastify";
 import Notifs from "./Notifs";
 import { deleteNotifications, fetchNotifs } from "../../util/notifsReq";
+import { useSelector } from "react-redux";
 
 const Nav = (props) => {
   const authCtx = useContext(AuthContext);
   const [chatNotif, setChatNotif] = useState("");
   const [pushNotif, setPushNotif] = useState("");
-  const [currentUser, setCurrentUser] = useState(null);
   const [notifs, setNotifs] = useState(null);
   const loc = useLocation();
   const isAuth = authCtx.isAuth;
+  const currentUser = useSelector((state) => state.currentUser.data);
 
   const logoutHandler = () => {
     authCtx.logout();
@@ -73,14 +74,6 @@ const Nav = (props) => {
     };
     if (isAuth) getMatchesNotifs();
   }, [authCtx, isAuth, loc.pathname]);
-
-  useEffect(() => {
-    const getCurrentUser = async () => {
-      const data = await fetchCurrentUser(authCtx.token);
-      setCurrentUser(data.user);
-    };
-    if (isAuth) getCurrentUser();
-  }, [isAuth, authCtx.token]);
 
   const deleteNotif = async (data) => {
     try {

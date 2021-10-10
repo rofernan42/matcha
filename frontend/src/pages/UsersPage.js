@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import UserCard from "../components/Users/UserCard";
-import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
-import { fetchCurrentUser, fetchUsers } from "../util/usersReq";
+import { fetchUsers } from "../util/usersReq";
 import classes from "./Pages.module.css";
 import ProfileCard from "../components/Users/ProfileCard";
 import { useLocation } from "react-router-dom";
@@ -11,6 +10,7 @@ import Pagination from "../components/ui/Pagination";
 import Filters from "../components/Users/Filters";
 import searchIcon from "../images/search.png";
 import filter from "../images/filter.png";
+import { useSelector } from "react-redux";
 
 const UsersPage = (props) => {
   const perPage = 5;
@@ -25,17 +25,14 @@ const UsersPage = (props) => {
   const [usersData, setUsersData] = useState(null);
   const [usernameFilter, setUsernameFilter] = useState([]);
   const [filtersMenu, setFiltersMenu] = useState(false);
-  const { sendReq: sendReqCurrentUser, data: currentUser } = useHttp(
-    fetchCurrentUser,
-    true
-  );
+  const currentUser = useSelector((state) => state.currentUser.data);
+
   useEffect(() => {
     const getUsers = async () => {
       const users = await fetchUsers({
         token: authCtx.token,
         path: "filtered-users" + loc.search,
       });
-      await sendReqCurrentUser(authCtx.token);
       setUsersData(users.users);
       setUsernameFilter(users.users);
     };
@@ -50,9 +47,6 @@ const UsersPage = (props) => {
     setUsersData(users.users);
   };
 
-  const setLikes = (likes) => {
-    currentUser.likes = likes;
-  };
   const profileCardHandler = (user) => {
     setUserProfile({ display: true, profile: user });
   };
@@ -120,8 +114,8 @@ const UsersPage = (props) => {
                   key={user._id}
                   user={user}
                   currentLoc={{
-                    lat: currentUser.user.lat,
-                    lon: currentUser.user.lon,
+                    lat: currentUser.lat,
+                    lon: currentUser.lon,
                   }}
                   onProfileCard={profileCardHandler}
                   online={props.onlineUsers.some(
@@ -131,12 +125,14 @@ const UsersPage = (props) => {
               ))}
         </div>
       </div>
-      {filtersMenu && (
-        <div
-          className={classes.filtersBg}
-          onClick={() => setFiltersMenu(false)}
-        />
-      )}
+      <div
+        className={classes.filtersBg}
+        onClick={() => setFiltersMenu(false)}
+        style={{
+          opacity: filtersMenu ? 1 : 0,
+          visibility: filtersMenu ? "visible" : "hidden",
+        }}
+      />
       <div
         className={classes.filtersMenu}
         style={{ width: filtersMenu ? "320px" : 0 }}
@@ -149,11 +145,11 @@ const UsersPage = (props) => {
           onCloseProfile={closeProfileHandler}
           user={userProfile.profile}
           token={authCtx.token}
+          currentUser={currentUser}
           liked={currentUser.likes.includes(userProfile.profile._id)}
-          onSetLikes={setLikes}
           currentLoc={{
-            lat: currentUser.user.lat,
-            lon: currentUser.user.lon,
+            lat: currentUser.lat,
+            lon: currentUser.lon,
           }}
           online={props.onlineUsers.some(
             (e) => e.userId === userProfile.profile._id.toString()
