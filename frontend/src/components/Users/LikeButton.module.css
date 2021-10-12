@@ -1,15 +1,18 @@
 .btn-follow {
   width: 45px;
   height: 45px;
-  background: linear-gradient(to left, #786186, #d2b4e6);
   border-radius: 50%;
   transition: 200ms linear;
   cursor: pointer;
 }
 
+.btn-follow.inactive {
+  background-color: #9884a5;
+}
+
 .btn-follow.active {
   box-shadow: 0 10px 15px #c79ee285;
-  background: linear-gradient(to left, #630c9c, #bc76eb);
+  background-color: #630c9c;
 }
 
 .btn-follow.inactive:hover {

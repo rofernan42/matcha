@@ -110,7 +110,6 @@
   width: 90%;
   max-width: 800px;
   min-height: 200px;
-  /* margin: auto; */
   margin-top: 20px;
   padding: 15px;
 }
@@ -118,6 +117,9 @@
 .userDetails .usernameField {
   font-weight: bold;
   font-size: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .userDetails .distanceField {
@@ -150,17 +152,7 @@
 
 .additional {
   margin-top: 20px;
-  /* display: flex;
-  align-items: center;
-  justify-content: space-around; */
 }
-
-/* .additional div {
-  margin: 0 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-} */
 
 .additional .label {
   width: 100%;
@@ -272,12 +264,14 @@
 }
 
 .imageSlider {
+  background-color: rgba(0, 0, 0, 0.212);
+  padding: 20px 0;
   position: fixed;
   left: 50%;
-  top: 45%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  width: 415px;
-  height: 270px;
+  width: 100%;
+  height: auto;
   z-index: 160;
   animation: pageOpening 0.3s ease-in forwards;
 }

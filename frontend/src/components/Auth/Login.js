@@ -1,8 +1,7 @@
 import { useContext, useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
-import { geolocUrl } from "../../util/geolocation";
-import { url } from "../../util/usersReq";
+import { geolocUrl, url } from "../../util/utils";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
 

@@ -24,12 +24,12 @@ const UserCard = (props) => {
           />
         )}
         <div className={classes["profile-username"]}>
-          {props.user.username}
           <div
             className={`${classes.status} ${
               props.online ? classes.green : classes.orange
             }`}
           ></div>
+          {props.user.username}
         </div>
         <div className={classes["profile-location"]}>
           {props.user.age && <>{props.user.age} yo - </>}

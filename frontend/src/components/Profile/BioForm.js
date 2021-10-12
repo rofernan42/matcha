@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 import classes from "./SettingsForm.module.css";
 
 const BioForm = (props) => {
@@ -18,6 +19,7 @@ const BioForm = (props) => {
     e.preventDefault();
     if (saveActive) {
       props.onChangeBio({ toUpdate: bioRef.current.value, path: "change-bio" });
+      toast.success("Bio updated successfully")
       setSaveActive(false);
     }
   };

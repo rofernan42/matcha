@@ -1,0 +1,146 @@
+/*** Visits ***/
+.visits {
+  flex: 1;
+  margin: 20px;
+  background-color: white;
+  border: 1px solid rgb(219, 219, 219);
+  height: fit-content;
+  padding: 10px 20px;
+}
+
+.visitsTitle {
+  font-weight: bold;
+  color: #8969a1;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.visits div {
+  display: flex;
+  overflow-x: auto;
+}
+
+.visitOption img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+  margin: 0 3px;
+  filter: grayscale(70%);
+  transition: linear 300ms;
+}
+
+.visitOption img:hover {
+  filter: grayscale(0);
+}
+
+.noVisit {
+  height: 40px;
+  color: rgba(0, 0, 0, 0.377);
+  font-weight: bold;
+  cursor: default;
+}
+
+.noBlock {
+  font-size: 40px;
+  color: rgba(0, 0, 0, 0.295);
+  font-weight: bold;
+}
+
+/*** Likes & Blocks ***/
+.likesContainer {
+  flex: 1;
+  margin: 0 20px;
+}
+
+.likesField {
+  background-color: white;
+  border: 1px solid rgb(219, 219, 219);
+  margin-bottom: 20px;
+}
+
+.listField {
+  flex: 1;
+}
+
+.listTitle {
+  border-bottom: 1px solid #dbdbdb;
+  font-weight: normal;
+  color: #949494;
+  text-align: left;
+  padding: 15px 25px;
+  font-size: 30px;
+  white-space: nowrap;
+}
+
+.listOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.noLike {
+  color: rgba(0, 0, 0, 0.295);
+  cursor: default;
+  font-size: 30px;
+}
+
+.userCard {
+  width: 100px;
+  height: 100px;
+  border-radius: 3px;
+  position: relative;
+  color: white;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.userCard img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  filter: brightness(60%);
+  transition: all 200ms linear;
+}
+
+.userCard:hover img {
+  filter: none;
+}
+
+.userCard div {
+  text-align: left;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 0 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.unblockField {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 18px;
+  letter-spacing: 3px;
+  width: 100%;
+  opacity: 0.3;
+  transition: all 200ms linear;
+  background-color: #8969a185;
+  padding: 5px 0;
+}
+
+.userCard:hover .unblockField {
+  opacity: 1;
+  cursor: pointer;
+}

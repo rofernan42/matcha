@@ -1,17 +1,43 @@
 import classes from "./UserProfile.module.css";
 import { useDispatch } from "react-redux";
-import heartColor from "../../images/heart-color.png";
 import LikeButton from "../Users/LikeButton";
 import { userAction } from "../../store/currentUser-actions";
 import { currentUserActions } from "../../store/currentUser-slice";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { calculateDistance } from "../../util/utils";
+import { calculateDistance, socket } from "../../util/utils";
+import { useEffect } from "react";
+import { createNotification } from "../../util/notifsReq";
 
 const MainInfo = (props) => {
   const [match, setMatch] = useState(props.user.matchedMe);
   const dispatch = useDispatch();
   const currentUser = props.currentUser;
+
+  useEffect(() => {
+    const visitNotification = async () => {
+      try {
+        await dispatch(
+          userAction({
+            path: `visit/${props.params.userId}`,
+            method: "POST",
+            token: props.token,
+          })
+        );
+        await createNotification({
+          token: props.token,
+          type: "visit",
+          userId: props.params.userId,
+        });
+        socket.emit("newVisit", {
+          userId: props.params.userId,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    visitNotification();
+  }, [props.token, props.params.userId, dispatch]);
 
   const sendLikeHandler = async () => {
     const data = await dispatch(
@@ -107,12 +133,6 @@ const MainInfo = (props) => {
           </div>
         )}
       </div>
-      {/* <Footer
-        currentUser={currentUser}
-        user={props.user}
-        params={props.params}
-        onlineUsers={props.onlineUsers}
-      /> */}
     </div>
   );
 };

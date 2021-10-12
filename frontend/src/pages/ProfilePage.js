@@ -2,13 +2,11 @@ import { useContext } from "react";
 import Settings from "../components/Profile/Settings";
 import Sidenav from "../components/Profile/Sidenav";
 import AuthContext from "../store/auth-context";
-import classes from "./Pages.module.css";
-import Options from "../components/Profile/Options";
-import Likes from "../components/Profile/Likes";
 import Blocked from "../components/Profile/Blocked";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../store/currentUser-actions";
+import Interactions from "../components/Profile/Interactions";
 
 const ProfilePage = () => {
   const authCtx = useContext(AuthContext);
@@ -26,24 +24,19 @@ const ProfilePage = () => {
   };
   return (
     <>
-      <div className={classes.profilePage}></div>
       {currentUser && (
         <>
           <Sidenav userId={currentUser._id} />
           {loc.hash === "" && (
-            <>
-              <Settings
-                onChangeUser={updateUserHandler}
-                token={authCtx.token}
-              />
-              <Options
-                user={currentUser}
-                onChangeUser={updateUserHandler}
-                token={authCtx.token}
-              />
-            </>
+            <Settings
+              onChangeUser={updateUserHandler}
+              token={authCtx.token}
+              user={currentUser}
+            />
           )}
-          {loc.hash === "#likes" && <Likes token={authCtx.token} />}
+          {loc.hash === "#interactions" && (
+            <Interactions token={authCtx.token} />
+          )}
           {loc.hash === "#blocks" && <Blocked token={authCtx.token} />}
         </>
       )}

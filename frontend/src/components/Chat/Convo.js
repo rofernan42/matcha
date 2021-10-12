@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { url } from "../../util/usersReq";
 import classes from "./Convos.module.css";
-import socket from "../../util/socket";
+import { url, socket } from "../../util/utils";
 import profil from "../../images/blank-profile-picture.jpg";
 
 const Convo = (props) => {

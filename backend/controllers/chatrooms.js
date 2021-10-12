@@ -11,7 +11,7 @@ exports.getMatches = async (req, res, next) => {
       throw error;
     }
     const usersMatched = matches.map((match) => {
-      if (match.user1.toString() === req.userId) {
+      if (match.user1 === req.userId) {
         return {
           user: match.user2,
           match,

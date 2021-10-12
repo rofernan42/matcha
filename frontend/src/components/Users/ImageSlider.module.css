@@ -1,3 +1,9 @@
+.images-slider {
+  position: relative;
+  margin: auto;
+  padding: 0;
+}
+
 .images-slider-wrapper {
   display: flex;
   position: absolute;
@@ -7,16 +13,7 @@
   transition: transform 300ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
-.images-slider {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  overflow-x: hidden;
-}
-
 .card-content {
-  width: 415px;
   height: 100%;
   flex: 1;
 }
@@ -28,32 +25,51 @@
   height: 100%;
   transition: opacity 200ms linear;
   cursor: pointer;
+  border-radius: 5px;
 }
 
-.btn-slider {
-  background-color: rgba(0, 0, 0, 0.5);
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  position: absolute;
+.arrow {
   z-index: 10;
-  margin-top: 110px;
-  color: white;
-  font-size: 20px;
-  font-family: "Courier New", Courier, monospace;
-}
-
-.btn-slider.prev {
-  margin-left: 5px;
-}
-
-.btn-slider.next {
-  right: 0;
-  margin-right: 5px;
-}
-
-.btn-slider:hover {
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  outline: 0;
   cursor: pointer;
-  background-color: rgba(22, 22, 22, 0.5);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  height: auto;
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  right: 0;
+}
+
+.left:hover polyline,
+.left:focus polyline {
+  stroke-width: 4;
+}
+
+.left:active polyline {
+  stroke-width: 6;
+  transition: all 100ms ease-in-out;
+}
+
+.right:hover polyline,
+.right:focus polyline {
+  stroke-width: 4;
+}
+
+.right:active polyline {
+  stroke-width: 6;
+  transition: all 100ms ease-in-out;
+}
+
+polyline {
+  transition: all 250ms ease-in-out;
 }

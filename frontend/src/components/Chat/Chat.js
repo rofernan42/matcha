@@ -2,13 +2,14 @@ import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import AuthContext from "../../store/auth-context";
 import Message from "./Message";
 import classes from "./Chat.module.css";
-import { url, userAction } from "../../util/usersReq";
-import socket from "../../util/socket";
+import { url, socket } from "../../util/utils";
+import { userAction } from "../../store/currentUser-actions";
 import ChatHeader from "./ChatHeader";
 import { useHistory } from "react-router-dom";
 import Modal from "../ui/Modal";
 import { toast } from "react-toastify";
 import { createNotification } from "../../util/notifsReq";
+import { useDispatch } from "react-redux";
 
 const setModalActive = (state, action) => {
   if (action.type === "BLOCK") {
@@ -59,12 +60,13 @@ const setModalActive = (state, action) => {
 };
 
 const Chat = (props) => {
+  const dispatch = useDispatch();
   const authCtx = useContext(AuthContext);
   const [messages, setMessages] = useState(props.room.roomData.messages);
   const scrollRef = useRef();
   const [newMsg, setNewMsg] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const [modal, dispatch] = useReducer(setModalActive, {
+  const [modal, dispatchModal] = useReducer(setModalActive, {
     blockModal: false,
     cancelModal: false,
     reportModal: false,
@@ -143,19 +145,23 @@ const Chat = (props) => {
   };
 
   const blockUserHandler = async () => {
-    await userAction({
-      path: `block/${props.room.user._id}`,
-      method: "POST",
-      token: authCtx.token,
-    });
+    await dispatch(
+      userAction({
+        path: `block/${props.room.user._id}`,
+        method: "POST",
+        token: authCtx.token,
+      })
+    );
     history.go(0);
   };
   const cancelMatchHandler = async () => {
-    await userAction({
-      path: `cancel-match/${props.room.user._id}`,
-      method: "DELETE",
-      token: authCtx.token,
-    });
+    await dispatch(
+      userAction({
+        path: `cancel-match/${props.room.user._id}`,
+        method: "DELETE",
+        token: authCtx.token,
+      })
+    );
     await createNotification({
       token: authCtx.token,
       type: "cancel",
@@ -167,13 +173,15 @@ const Chat = (props) => {
     history.go(0);
   };
   const reportUserHandler = async () => {
-    await userAction({
-      path: `report/${props.room.user._id}`,
-      method: "POST",
-      token: authCtx.token,
-    });
+    await dispatch(
+      userAction({
+        path: `report/${props.room.user._id}`,
+        method: "POST",
+        token: authCtx.token,
+      })
+    );
     toast.warning(`You have reported ${props.room.user.username}.`);
-    dispatch({ type: "CLOSE" });
+    dispatchModal({ type: "CLOSE" });
   };
 
   return (
@@ -182,9 +190,9 @@ const Chat = (props) => {
         <ChatHeader
           user={props.room.user}
           imgProfile={props.room.user.image}
-          onBlockModal={() => dispatch({ type: "BLOCK" })}
-          onCancelModal={() => dispatch({ type: "CANCEL" })}
-          onReportModal={() => dispatch({ type: "REPORT" })}
+          onBlockModal={() => dispatchModal({ type: "BLOCK" })}
+          onCancelModal={() => dispatchModal({ type: "CANCEL" })}
+          onReportModal={() => dispatchModal({ type: "REPORT" })}
         />
         <div className={classes.roomHeader}>
           {messages &&
@@ -218,9 +226,9 @@ const Chat = (props) => {
           onConfirm={
             modal.blockModal
               ? blockUserHandler
-              : (modal.cancelModal
+              : modal.cancelModal
               ? cancelMatchHandler
-              : reportUserHandler)
+              : reportUserHandler
           }
           onCloseModal={closeModal}
           data={modal.modalData}

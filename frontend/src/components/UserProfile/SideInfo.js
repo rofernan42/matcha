@@ -5,8 +5,7 @@ import heartFull from "../../images/heart-full.png";
 import block from "../../images/block.png";
 import report from "../../images/report.png";
 import { url } from "../../util/utils";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactTimeago from "react-timeago";
 
 const SideInfo = (props) => {

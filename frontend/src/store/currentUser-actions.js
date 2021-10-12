@@ -82,19 +82,6 @@ export const updateUser = (data) => {
   };
 };
 
-// export const fetchUser = async (data) => {
-//   const res = await fetch(url + data.path, {
-//     headers: {
-//       Authorization: "Bearer " + data.token,
-//     },
-//   });
-//   const resData = await res.json();
-//   if (!res.ok) {
-//     throw new Error(data.message || "Failed to fetch user data.");
-//   }
-//   return resData;
-// };
-
 export const updateImage = (data) => {
   return async (dispatch) => {
     const sendData = async () => {

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
-import socket from "../util/socket";
+import { socket } from "../util/utils";
 
 let logoutTimer;
 

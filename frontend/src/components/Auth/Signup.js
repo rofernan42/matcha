@@ -2,9 +2,8 @@ import { useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
-import { url } from "../../util/usersReq";
-import { geolocUrl } from "../../util/geolocation";
 import { toast } from "react-toastify";
+import { geolocUrl, url } from "../../util/utils";
 
 const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);

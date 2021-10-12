@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import { fetchUsers, url, userAction } from "../../util/usersReq";
-import containers from "./Profile.module.css";
-import classes from "./Likes.module.css";
+import { fetchUsers } from "../../util/usersReq";
+import { userAction } from "../../store/currentUser-actions";
+import classes from "./Interactions.module.css";
 import profil from "../../images/blank-profile-picture.jpg";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { url } from "../../util/utils";
+import { useDispatch } from "react-redux";
 
 const Blocked = (props) => {
+  const dispatch = useDispatch();
   const [usersBlocked, setUsersBlocked] = useState(null);
   useEffect(() => {
     const fetchAll = async () => {
@@ -24,37 +27,45 @@ const Blocked = (props) => {
   }, [props.token]);
 
   const unblockHandler = async (id) => {
-    const data = await userAction({
-      path: `block/${id}`,
-      method: "DELETE",
-      token: props.token,
-    });
+    const data = await dispatch(
+      userAction({
+        path: `block/${id}`,
+        method: "DELETE",
+        token: props.token,
+      })
+    );
     setUsersBlocked(data.users);
     toast.success("User unblocked!");
   };
   return (
-    <div className={containers.profilePage}>
-      <div className={containers.settingsField}>
-        {(!usersBlocked || usersBlocked.length === 0) && (
-          <div className={classes.noBlock}>You haven't blocked any user.</div>
-        )}
-        {usersBlocked && usersBlocked.length > 0 && (
-          <div className={classes.listField}>
-            <div className={classes.listTitle}>Users blocked</div>
-            {usersBlocked.map((user) => {
-              return (
-                <div className={classes.listOption} key={user._id}>
-                  {user.image && <img alt="" src={url + user.image} />}
-                  {!user.image && <img alt="" src={profil} />}
-                  <span>{user.username}</span>
-                  <button onClick={() => unblockHandler(user._id)}>
-                    Unblock
-                  </button>
-                </div>
-              );
-            })}
+    <div className={classes.likesContainer}>
+      <div className={classes.likesField}>
+        <div className={classes.listField}>
+          <div className={classes.listTitle}>Users you blocked</div>
+          <div className={classes.listOption}>
+            {(!usersBlocked || usersBlocked.length === 0) && (
+              <div className={classes.noLike}>
+                You haven't blocked any user.
+              </div>
+            )}
+            {usersBlocked &&
+              usersBlocked.length > 0 &&
+              usersBlocked.map((user) => {
+                return (
+                  <div
+                    className={classes.userCard}
+                    key={user._id}
+                    onClick={() => unblockHandler(user._id)}
+                  >
+                    {user.image && <img alt="" src={url + user.image} />}
+                    {!user.image && <img alt="" src={profil} />}
+                    <div>{user.username}</div>
+                    <button className={classes.unblockField}>Unblock</button>
+                  </div>
+                );
+              })}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

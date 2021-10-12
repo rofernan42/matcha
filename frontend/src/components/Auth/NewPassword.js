@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { url } from "../../util/usersReq";
+import { url } from "../../util/utils";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import classes from "./Auth.module.css";
 

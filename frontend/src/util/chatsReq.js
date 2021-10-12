@@ -1,4 +1,4 @@
-import { url } from "./usersReq";
+import { url } from "./utils";
 
 export const fetchMatches = async (data) => {
   const res = await fetch(url + data.path, {

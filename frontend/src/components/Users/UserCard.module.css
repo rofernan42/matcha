@@ -1,5 +1,4 @@
 .container {
-  /* max-width: 1200px; */
   display: inline-block;
   vertical-align: bottom;
   text-align: left;
@@ -19,12 +18,14 @@
   background: linear-gradient(to top, #332e36, #5f5664);
   box-shadow: 5px 5px 20px rgba(61, 61, 61, 0.644);
   animation: usersOpening 1s ease-in;
+  border-radius: 5px;
 }
 
 .profile-card-2 img {
   min-width: 100%;
   min-height: 100%;
   flex-shrink: 0;
+  filter: brightness(70%) grayscale(50%);
   transition: all linear 0.25s;
 }
 
@@ -70,7 +71,7 @@
 }
 
 .profile-card-2:hover img {
-  filter: grayscale(100%);
+  filter: none;
 }
 
 .profile-card-2:hover .profile-username {
@@ -92,7 +93,7 @@
   height: 9px;
   border-radius: 50%;
   margin-top: 5px;
-  margin-left: 5px;
+  margin-right: 5px;
 }
 .green {
   background-color: #58b666;

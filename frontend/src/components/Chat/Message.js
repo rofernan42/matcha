@@ -1,7 +1,7 @@
 import classes from "./Chat.module.css";
 import TimeAgo from "react-timeago";
 import profil from "../../images/blank-profile-picture.jpg";
-import { url } from "../../util/usersReq";
+import { url } from "../../util/utils";
 
 const Message = (props) => {
   return (

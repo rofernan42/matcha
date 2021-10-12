@@ -32,7 +32,7 @@ const AttractionForm = (props) => {
   }, [props, isSending, checkedAttr]);
 
   return (
-    <div className={classes.ageForm} style={{flex: 1}}>
+    <div className={classes.ageForm} style={{ flex: 1 }}>
       <div className={classes.ageHeader}>
         <div className={classes.label}>I am attracted to</div>
       </div>

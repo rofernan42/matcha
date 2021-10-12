@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { url } from "../../util/utils";
 import classes from "./ImageSlider.module.css";
-import { url } from "../../util/usersReq";
 
 const ImageSlider = (props) => {
   const [properties, setProperties] = useState({
@@ -41,25 +41,48 @@ const ImageSlider = (props) => {
   return (
     <>
       {properties.index > 0 && (
-        <button
-          className={`${classes["btn-slider"]} ${classes.prev}`}
-          onClick={prevImage}
-        >
-          {"<"}
+        <button className={`${classes.arrow} ${classes.left}`} onClick={prevImage}>
+          <svg
+            width={props.btnSize}
+            height={props.btnSize}
+            viewBox="0 0 50 80"
+            xmlSpace="preserve"
+          >
+            <polyline
+              fill="none"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              points="45.63,75.8 0.375,38.087 45.63,0.375 "
+            />
+          </svg>
         </button>
       )}
       {properties.index < properties.images.length - 1 && (
-        <button
-          className={`${classes["btn-slider"]} ${classes.next}`}
-          onClick={nextImage}
-        >
-          {">"}
+        <button className={`${classes.arrow} ${classes.right}`} onClick={nextImage}>
+          <svg
+            width={props.btnSize}
+            height={props.btnSize}
+            viewBox="0 0 50 80"
+            xmlSpace="preserve"
+          >
+            <polyline
+              fill="none"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              points="0.375,0.375 45.63,38.087 0.375,75.8 "
+            />
+          </svg>
         </button>
       )}
       <div
         className={`${classes["images-slider"]} ${
           classes[`active-slide-${properties.index}`]
         }`}
+        style={{ width: `${props.width}`, height: `${props.height}`, overflowX: `${props.overflowX}` }}
       >
         <div
           className={classes["images-slider-wrapper"]}
@@ -72,7 +95,11 @@ const ImageSlider = (props) => {
           {properties.images.map((img) => {
             const imgIndex = properties.images.indexOf(img);
             return (
-              <div key={img} className={classes["card-content"]}>
+              <div
+                key={img}
+                className={classes["card-content"]}
+                style={{ width: `${props.width}` }}
+              >
                 <img
                   id={classes[`card-image-${imgIndex}`]}
                   className={classes["card-image"]}
@@ -90,6 +117,7 @@ const ImageSlider = (props) => {
           })}
         </div>
       </div>
+      {/* </div> */}
     </>
   );
 };

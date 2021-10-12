@@ -3,10 +3,12 @@ import Room from "../components/Chat/Room";
 import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
 import { getRoom, fetchMatches } from "../util/chatsReq";
-import { userAction } from "../util/usersReq";
+import { userAction } from "../store/currentUser-actions";
+import { useDispatch } from "react-redux";
 
 const ChatPage = (props) => {
   const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [matches, setMatches] = useState(null);
   const {
@@ -33,11 +35,13 @@ const ChatPage = (props) => {
     setUser(user);
   };
   const updateConvos = async (roomId) => {
-    const updatedMatch = await userAction({
-      path: `chat/room/${roomId}/mark-read`,
-      method: "POST",
-      token: authCtx.token,
-    });
+    const updatedMatch = await dispatch(
+      userAction({
+        path: `chat/room/${roomId}/mark-read`,
+        method: "POST",
+        token: authCtx.token,
+      })
+    );
     setMatches((prev) =>
       prev.map((match) => {
         return {

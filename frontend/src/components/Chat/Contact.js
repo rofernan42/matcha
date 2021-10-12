@@ -1,6 +1,6 @@
 import classes from "./Contacts.module.css";
-import { url } from "../../util/usersReq";
 import profil from "../../images/blank-profile-picture.jpg";
+import { url } from "../../util/utils";
 
 const Contact = (props) => {
   const changeRoomHandler = () => {

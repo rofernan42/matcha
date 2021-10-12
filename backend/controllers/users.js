@@ -16,7 +16,7 @@ exports.getSingleUser = async (req, res, next) => {
       req.params.id
     );
     let resData;
-    if (isBlockedOrBlocking.length > 0) resData = null;
+    if (user._id === req.userId || isBlockedOrBlocking.length > 0) resData = null;
     else {
       const like = await Like.findByUsers(req.params.id, req.userId);
       const likesMe = !!like;

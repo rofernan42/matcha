@@ -5,7 +5,7 @@ import { useState } from "react";
 import TimeAgo from "react-timeago";
 import { calculateDistance, socket } from "../../util/utils";
 import LikeButton from "./LikeButton";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import heart from "../../images/heart.png";
 import heartColor from "../../images/heart-color.png";
 import block from "../../images/block.png";
@@ -62,11 +62,13 @@ const ProfileCard = (props) => {
     }
   };
   const blockUserHandler = async () => {
-    await userAction({
-      path: `block/${props.user._id}`,
-      method: "POST",
-      token: props.token,
-    });
+    await dispatch(
+      userAction({
+        path: `block/${props.user._id}`,
+        method: "POST",
+        token: props.token,
+      })
+    );
     history.go(0);
   };
 
@@ -84,26 +86,25 @@ const ProfileCard = (props) => {
       />
       <div className={`${classes.card} ${match ? classes.match : ""}`}>
         <div className={classes["card-header"]}>
-          <ImageSlider images={props.user.images} />
           <div className={classes["card-header-bar"]}>
             <div className={classes["user-status"]}>
-              <span
+              <div
                 className={`${classes.status} ${
                   props.online ? classes.green : classes.orange
                 }`}
-              ></span>
+              ></div>
               {props.online && (
-                <span className={classes["status-label"]}>online</span>
+                <div className={classes["status-label"]}>online</div>
               )}
               {!props.online && (
                 <>
                   {props.user.lastConnection && (
-                    <span className={classes["status-label"]}>
+                    <div className={classes["status-label"]}>
                       <TimeAgo date={props.user.lastConnection} />
-                    </span>
+                    </div>
                   )}
                   {!props.user.lastConnection && (
-                    <span className={classes["status-label"]}>offline</span>
+                    <div className={classes["status-label"]}>offline</div>
                   )}
                 </>
               )}
@@ -112,14 +113,28 @@ const ProfileCard = (props) => {
               &times;
             </div>
           </div>
+          <ImageSlider
+            images={props.user.images}
+            width={"400px"}
+            height={"250px"}
+            btnSize={"40px"}
+            overflowX={"hidden"}
+          />
+        </div>
+        <div style={{ position: "absolute", top: "260px", right: "25px" }}>
+          <LikeButton sendLikeHandler={sendLikeHandler} liked={props.liked} />
         </div>
         <div className={classes["card-body"]}>
-          <h2 className={classes["name"]}>{props.user.username}</h2>
-          <h2 className={classes["location"]}>
-            {props.user.age && <>{props.user.age} yo - </>}
-            {distance} km away
-          </h2>
-          <img src={quotes} className={classes["bio-img"]} alt="" />
+          <div className={classes["name"]}>
+            {props.user.username}
+            {props.user.age && (
+              <>
+                {", "}
+                {props.user.age}
+              </>
+            )}
+          </div>
+          <div className={classes["location"]}>{distance} km away</div>
           <div className={classes["bio"]}>
             {props.user.bio.length > 0 && <span>{props.user.bio}</span>}
             {props.user.bio.length === 0 && (
@@ -127,10 +142,28 @@ const ProfileCard = (props) => {
             )}
           </div>
         </div>
-        <div style={{ position: "absolute", top: "240px", right: "25px" }}>
-          <LikeButton sendLikeHandler={sendLikeHandler} liked={props.liked} />
-        </div>
         <div className={classes["card-footer"]}>
+          <div className={classes.footerField}>Score</div>
+          <div className={classes.footerField}>
+            <Link to={`/users/${props.user._id}`}>Detailed profile</Link>
+          </div>
+          <div className={classes.footerField}>
+            {props.user.likesMe && (
+              <div className={classes.heartHover}>Likes you !</div>
+            )}
+            {!props.user.likesMe && (
+              <img alt="" src={heart} className={classes.heart} />
+            )}
+            {props.user.likesMe && (
+              <img alt="" src={heartColor} className={classes.heartColor} />
+            )}
+            {/* {props.user.likesMe && (
+              <span className={classes["label"]}>Likes you</span>
+            )} */}
+          </div>
+        </div>
+
+        {/* <div className={classes["card-footer"]}>
           <div className={classes["stats"]}>
             <div className={classes["stat"]}>
               <span className={classes["label"]}>Score</span>
@@ -170,7 +203,7 @@ const ProfileCard = (props) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

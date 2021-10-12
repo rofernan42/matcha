@@ -2,8 +2,8 @@ import classes from "./Chat.module.css";
 import settings from "../../images/settings.png";
 import profil from "../../images/blank-profile-picture.jpg";
 import { useState } from "react";
-import { url } from "../../util/usersReq";
 import { Link } from "react-router-dom";
+import { url } from "../../util/utils";
 
 const ChatHeader = (props) => {
   const [userSettings, setUserSettings] = useState(false);

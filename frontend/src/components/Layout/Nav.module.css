@@ -8,6 +8,7 @@
   align-items: center;
   z-index: 100;
   position: relative;
+  white-space: nowrap;
 }
 
 .logo {

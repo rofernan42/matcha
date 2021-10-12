@@ -1,16 +1,9 @@
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import useHttp from "../hooks/use-http";
 import AuthContext from "../store/auth-context";
 import { fetchUser } from "../util/usersReq";
 import classes from "../components/UserProfile/UserProfile.module.css";
-
 import Modal from "../components/ui/Modal";
 import { toast } from "react-toastify";
 import { socket } from "../util/utils";
@@ -102,37 +95,12 @@ const UserProfilePage = (props) => {
     }
   };
 
-  const visitNotification = useCallback(async () => {
-    try {
-      if (currentUser && +params.userId !== currentUser._id) {
-        await dispatch(
-          userAction({
-            path: `visit/${params.userId}`,
-            method: "POST",
-            token: authCtx.token,
-          })
-        );
-        await createNotification({
-          token: authCtx.token,
-          type: "visit",
-          userId: params.userId,
-        });
-        socket.emit("newVisit", {
-          userId: params.userId,
-        });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }, [authCtx.token, params.userId, dispatch, currentUser]);
-
   useEffect(() => {
     sendReq({
       path: `users/${params.userId}`,
       token: authCtx.token,
     });
-    visitNotification();
-  }, [authCtx.token, params.userId, sendReq, visitNotification]);
+  }, [authCtx.token, params.userId, sendReq]);
 
   const blockUserHandler = async () => {
     try {
@@ -214,7 +182,13 @@ const UserProfilePage = (props) => {
                 onClick={() => setImgSlider(false)}
               />
               <div className={classes.imageSlider}>
-                <ImageSlider images={user.images} />
+                <ImageSlider
+                  images={user.images}
+                  width={"600px"}
+                  height={"400px"}
+                  btnSize={"80px"}
+                  overflowX={"visible"}
+                />
               </div>
             </div>
           )}
