@@ -5,15 +5,15 @@ import AuthContext from "../store/auth-context";
 import { fetchUsers } from "../util/usersReq";
 import classes from "./Pages.module.css";
 import ProfileCard from "../components/Users/ProfileCard";
-import { useLocation } from "react-router-dom";
 import Pagination from "../components/ui/Pagination";
 import Filters from "../components/Users/Filters";
 import searchIcon from "../images/search.png";
 import filter from "../images/filter.png";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router";
 
 const UsersPage = (props) => {
-  const perPage = 5;
+  const perPage = 42;
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
   const authCtx = useContext(AuthContext);
@@ -59,6 +59,7 @@ const UsersPage = (props) => {
       usersData && usersData.filter((usr) => usr.username.includes(search))
     );
   }, [search, usersData]);
+
   return (
     <>
       <div className={classes.container}>

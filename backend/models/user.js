@@ -1,6 +1,7 @@
 const db = require("../util/database");
 const Block = require("./block");
 const Like = require("./like");
+const Match = require("./match");
 const Visit = require("./visit");
 
 class User {
@@ -43,13 +44,14 @@ class User {
       );
     } else {
       return db.execute(
-        "INSERT INTO users (username, name, lastname, email, password, gender, attrMen, attrWomen, bio, interests, score, lat, lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO users (username, name, lastname, email, password, age, gender, attrMen, attrWomen, bio, interests, score, lat, lon, lastConnection, resetToken, resetTokenExpiry, image0, image1, image2, image3, image4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
           this.username,
           this.name,
           this.lastname,
           this.email,
           this.password,
+          this.age,
           this.gender,
           this.attrMen,
           this.attrWomen,
@@ -58,6 +60,14 @@ class User {
           this.score,
           this.lat,
           this.lon,
+          this.lastConnection,
+          this.resetToken,
+          this.resetTokenExpiry,
+          this.image0,
+          this.image1,
+          this.image2,
+          this.image3,
+          this.image4,
         ]
       );
     }
@@ -107,7 +117,9 @@ class User {
       return [];
     }
     const queryUsers =
-      "SELECT _id,username,image0,image1,image2,image3,image4 FROM users WHERE _id IN (" + blockings.join() + ")";
+      "SELECT _id,username,image0,image1,image2,image3,image4 FROM users WHERE _id IN (" +
+      blockings.join() +
+      ")";
     const res = await db.execute(queryUsers);
     const data = res[0].map((user) => {
       return {
@@ -131,7 +143,9 @@ class User {
       return [];
     }
     const queryUsers =
-      "SELECT _id,username,image0,image1,image2,image3,image4 FROM users WHERE _id IN (" + likes.join() + ")";
+      "SELECT _id,username,image0,image1,image2,image3,image4 FROM users WHERE _id IN (" +
+      likes.join() +
+      ")";
     const res = await db.execute(queryUsers);
     const data = res[0].map((user) => {
       return {
@@ -155,7 +169,9 @@ class User {
       return [];
     }
     const queryUsers =
-      "SELECT _id,username,image0,image1,image2,image3,image4 FROM users WHERE _id IN (" + likes.join() + ")";
+      "SELECT _id,username,image0,image1,image2,image3,image4 FROM users WHERE _id IN (" +
+      likes.join() +
+      ")";
     const res = await db.execute(queryUsers);
     const data = res[0].map((user) => {
       return {
@@ -178,13 +194,18 @@ class User {
     if (visits.length === 0) {
       return [];
     }
-    const data = await Promise.all(visits.map(async (user) => {
-      const [img] = await db.execute("SELECT image0,image1,image2,image3,image4 FROM users WHERE _id=?", [user]);
-      return {
-        _id: user,
-        image: Object.values(img[0]).find((img) => img)
-      }
-    }));
+    const data = await Promise.all(
+      visits.map(async (user) => {
+        const [img] = await db.execute(
+          "SELECT image0,image1,image2,image3,image4 FROM users WHERE _id=?",
+          [user]
+        );
+        return {
+          _id: user,
+          image: Object.values(img[0]).find((img) => img),
+        };
+      })
+    );
     return data;
   }
 
@@ -195,6 +216,7 @@ class User {
     const data = await Promise.all(
       res[0].map(async (user) => {
         const likesMe = await Like.findByUsers(user._id, currentUserId);
+        const matchedMe = await Match.findByUsers(user._id, currentUserId);
         const extractedImages = [
           user.image0,
           user.image1,
@@ -206,6 +228,7 @@ class User {
           ...user,
           images: extractedImages,
           likesMe: likesMe ? true : false,
+          matchedMe: matchedMe ? true : false,
         };
       })
     );

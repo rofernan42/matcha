@@ -148,4 +148,4 @@ conn.connect((err) => {
   );
 });
 
-exports.modules = conn;
+module.exports = conn;

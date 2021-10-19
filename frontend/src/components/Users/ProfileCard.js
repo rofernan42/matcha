@@ -1,14 +1,12 @@
 import classes from "./ProfileCard.module.css";
-import quotes from "../../images/left-quotes-sign.png";
 import ImageSlider from "./ImageSlider";
 import { useState } from "react";
 import TimeAgo from "react-timeago";
 import { calculateDistance, socket } from "../../util/utils";
 import LikeButton from "./LikeButton";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import heart from "../../images/heart.png";
 import heartColor from "../../images/heart-color.png";
-import block from "../../images/block.png";
 import { toast } from "react-toastify";
 import { createNotification } from "../../util/notifsReq";
 import { useDispatch } from "react-redux";
@@ -17,7 +15,6 @@ import { currentUserActions } from "../../store/currentUser-slice";
 
 const ProfileCard = (props) => {
   const [match, setMatch] = useState(false);
-  const history = useHistory();
   const dispatch = useDispatch();
 
   const closeProfile = () => {
@@ -61,16 +58,6 @@ const ProfileCard = (props) => {
       });
     }
   };
-  const blockUserHandler = async () => {
-    await dispatch(
-      userAction({
-        path: `block/${props.user._id}`,
-        method: "POST",
-        token: props.token,
-      })
-    );
-    history.go(0);
-  };
 
   const distance = calculateDistance(
     props.currentLoc.lat,
@@ -78,6 +65,7 @@ const ProfileCard = (props) => {
     props.currentLoc.lon,
     props.user.lon
   );
+
   return (
     <>
       <div
@@ -157,53 +145,8 @@ const ProfileCard = (props) => {
             {props.user.likesMe && (
               <img alt="" src={heartColor} className={classes.heartColor} />
             )}
-            {/* {props.user.likesMe && (
-              <span className={classes["label"]}>Likes you</span>
-            )} */}
           </div>
         </div>
-
-        {/* <div className={classes["card-footer"]}>
-          <div className={classes["stats"]}>
-            <div className={classes["stat"]}>
-              <span className={classes["label"]}>Score</span>
-              <span className={classes["value"]}></span>
-            </div>
-            <div className={classes["stat"]}>
-              <div
-                className={`${
-                  props.user.likesMe
-                    ? classes.likedIconTrue
-                    : classes.likedIconFalse
-                }`}
-              >
-                {!props.user.likesMe && (
-                  <img alt="" src={heart} className={classes.heart} />
-                )}
-                {props.user.likesMe && (
-                  <img
-                    alt=""
-                    src={heartColor}
-                    className={`${classes.heart} ${classes.color}`}
-                  />
-                )}
-                {props.user.likesMe && (
-                  <span className={classes["label"]}>Likes you</span>
-                )}
-              </div>
-            </div>
-            <div className={classes["stat"]}>
-              <div className={classes.blockField}>
-                <img
-                  alt=""
-                  src={block}
-                  className={classes.heart}
-                  onClick={blockUserHandler}
-                />
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
     </>
   );

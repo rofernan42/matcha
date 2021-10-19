@@ -151,6 +151,9 @@ exports.getFilteredUsers = async (req, res, next) => {
     } else {
       filteredUsers = sortByDistance(user, filteredUsers);
     }
+    if (req.query.matched === "true") {
+      filteredUsers = filteredUsers.filter((user) => user.matchedMe)
+    }
     res.status(200).json({
       users: filteredUsers.map((user) => {
         return {
@@ -167,6 +170,7 @@ exports.getFilteredUsers = async (req, res, next) => {
           lon: user.lon,
           lastConnection: user.lastConnection,
           likesMe: user.likesMe,
+          matchedMe: user.matchedMe,
           images: user.images.filter((img) => img),
         };
       }),
