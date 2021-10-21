@@ -22,12 +22,14 @@
 }
 
 .userInfo {
-  /* background: linear-gradient(to bottom, #543b68, #d4acee); */
-  /* background-color: #9364af; */
   background-color: rgb(245, 245, 245);
-  flex: 1;
+  /* flex: 1; */
   height: 100%;
   padding: 0 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* width: 400px; */
+  /* max-width: 400px; */
 }
 
 .infoField {
@@ -35,10 +37,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  width: min-content;
 }
 
 .infoField .avatar {
+  /* margin: auto; */
   width: 300px;
   height: 300px;
   border-radius: 3px;
@@ -58,6 +62,7 @@
 }
 
 .icons {
+  margin: auto;
   margin-bottom: 20px;
   width: 80%;
   display: flex;
@@ -81,6 +86,12 @@
   word-spacing: 0.3em;
   letter-spacing: 2px;
   margin-top: 5px;
+  width: 300px;
+}
+
+.infoField .nameField div {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .infoField .label {
@@ -88,27 +99,50 @@
   color: #9b8fa5;
 }
 
+.likeButton {
+  margin: 20px auto;
+}
+
+.matchField {
+  margin: auto;
+  text-align: center;
+  font-size: 25px;
+  color: #4a2a64;
+  word-spacing: 0.2em;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.matchField div {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.matchField .cancelMatch {
+  font-size: 15px;
+  font-weight: normal;
+  color: #9f5ccc;
+}
+
+.matchField .cancelMatch:hover {
+  cursor: pointer;
+  color: #38015c;
+}
+
+/*** MainInfo ***/
 .userDetails {
   flex: 3;
   overflow-y: scroll;
   background-color: rgb(245, 245, 245);
-  /* box-shadow: inset 4px 7px 10px rgba(0, 0, 0, 0.226); */
 }
 
-/* .userDetails .label {
-  width: 95%;
-  margin: auto;
-  border-bottom: 3px solid #543b68;
-  font-size: 30px;
-  font-weight: bold;
-  color: #543b68;
-} */
-
 .userDetails .descriptionField {
+  margin: auto;
   background-color: white;
   border: 1px solid rgb(219, 219, 219);
   width: 90%;
-  max-width: 800px;
+  /* max-width: 800px; */
   min-height: 200px;
   margin-top: 20px;
   padding: 15px;
@@ -126,12 +160,19 @@
   font-weight: bold;
   color: #979797;
   font-size: 15px;
-  margin-bottom: 20px;
+}
+
+.userDetails .scoreField {
+  margin: 10px auto;
+  width: fit-content;
+  font-size: 30px;
+  color: #4a2a64;
+  word-spacing: 0.2em;
+  letter-spacing: 3px;
 }
 
 .userDetails .intField {
   margin: auto;
-  margin-top: 20px;
   width: 90%;
   display: flex;
   align-items: center;
@@ -148,88 +189,6 @@
   color: white;
   padding: 5px 8px;
   border-radius: 3px;
-}
-
-.additional {
-  margin-top: 20px;
-}
-
-.additional .label {
-  width: 100%;
-  font-size: 25px;
-  border-bottom: 2px solid #543b68;
-}
-
-.likeButton {
-  display: inline-block;
-}
-
-.matchField {
-  margin: auto;
-  background: #ffffff;
-  /* box-shadow: 1px 1px 10px #00000062; */
-  /* border-radius: 10px; */
-  border: 1px solid rgb(219, 219, 219);
-  width: fit-content;
-  padding: 15px;
-  margin-bottom: 20px;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.matchField div {
-  text-align: center;
-  /* font-size: 20px; */
-  /* color: #646168; */
-  font-weight: bold;
-  font-size: 25px;
-}
-
-/* .matchField .matchHeart {
-  width: 20px;
-  height: 20px;
-  filter: hue-rotate(280deg);
-} */
-
-.matchField .cancelMatch {
-  padding: 0 10px;
-  font-size: 15px;
-  font-weight: unset;
-  color: #9f5ccc;
-}
-
-.matchField .cancelMatch:hover {
-  cursor: pointer;
-  color: #38015c;
-}
-
-.additional .score {
-  font-size: 40px;
-  font-weight: bold;
-  color: #827092;
-  display: inline-grid;
-}
-.score .num {
-  position: relative;
-  padding: 0 10px;
-}
-.score .denum {
-  grid-column: 2;
-  grid-row: 2;
-  padding: 0 10px;
-}
-.score .num:after {
-  content: "";
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  bottom: -50%;
-  width: 2px;
-  background: #827092;
-  transform: rotate(45deg);
 }
 
 .status {
@@ -252,6 +211,7 @@
   vertical-align: middle;
 }
 
+/*** ImageSlider ***/
 .background {
   z-index: 150;
   position: fixed;

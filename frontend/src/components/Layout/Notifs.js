@@ -1,6 +1,7 @@
 import classes from "./Nav.module.css";
 import Timeago from "react-timeago";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Notifs = (props) => {
   const [notifs, setNotifs] = useState(props.notifs);
@@ -9,38 +10,33 @@ const Notifs = (props) => {
     setNotifs(props.notifs);
   }, [props.notifs]);
 
-  const deleteNotif = (id) => {
-    props.onDeleteNotif({ path: `notifications/${id}`, id: id });
-  };
-
-  const deleteAllNotifs = () => {
-    props.onDeleteNotif({ path: "notifications-all" });
-  };
   return (
     <div
-      className={classes.currentUserOptions}
+      className={classes.notifications}
+      style={{ right: props.posX }}
       onClick={(e) => e.stopPropagation()}
     >
+      <div className={classes.notifsHeader}>
+        <span>Notifications</span>
+        <span style={{ marginLeft: "20px" }}>
+          <Link to="/profile#notifs">See all notifications</Link>
+        </span>
+      </div>
       {notifs && notifs.length > 0 && (
         <>
-          <div className={`${classes.notifOption} ${classes.titleNotifs}`}>
-            <span>Notifications</span>
-            <span className={classes.deleteNotif} onClick={deleteAllNotifs}>
-              Delete all &times;
-            </span>
-          </div>
-          {notifs.map((notif) => (
+          {notifs.slice(0, 5).map((notif) => (
             <div key={notif._id} className={classes.notifOption}>
-              <span className={classes.timeAgo}>
-                <Timeago date={notif.created_at} />
-              </span>
-              <span>{notif.notifContent}</span>
-              <span
-                className={classes.deleteNotif}
-                onClick={() => deleteNotif(notif._id)}
-              >
-                &times;
-              </span>
+              <div className={classes.notifOptionHeader}>
+                <span>
+                  <Link to={`/users/${notif.from_id}`}>{notif.notifType}</Link>
+                </span>
+                <span className={classes.timeAgo}>
+                  <Timeago date={notif.created_at} />
+                </span>
+              </div>
+              <div className={classes.notifOptionContent}>
+                {notif.notifContent}
+              </div>
             </div>
           ))}
         </>

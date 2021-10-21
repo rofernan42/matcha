@@ -10,6 +10,7 @@ import Modal from "../ui/Modal";
 import { toast } from "react-toastify";
 import { createNotification } from "../../util/notifsReq";
 import { useDispatch } from "react-redux";
+import { currentUserActions } from "../../store/currentUser-slice";
 
 const setModalActive = (state, action) => {
   if (action.type === "BLOCK") {
@@ -152,6 +153,7 @@ const Chat = (props) => {
         token: authCtx.token,
       })
     );
+    dispatch(currentUserActions.destroyLike(props.room.user._id));
     history.go(0);
   };
   const cancelMatchHandler = async () => {
@@ -170,6 +172,7 @@ const Chat = (props) => {
     socket.emit("cancelMatch", {
       userId: props.room.user._id,
     });
+    dispatch(currentUserActions.destroyLike(props.room.user._id));
     history.go(0);
   };
   const reportUserHandler = async () => {

@@ -6,18 +6,18 @@ class Notification {
     this.user_id = data.user_id;
     this.notifType = data.notifType || "";
     this.notifContent = data.notifContent || "";
-    this.notifRead = data.notifRead || false;
+    this.from_id = data.from_id;
     this.created_at = Date.now();
   }
 
   save() {
     return db.execute(
-      "INSERT INTO notifications (user_id, notifType, notifContent, notifRead, created_at) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO notifications (user_id, notifType, notifContent, from_id, created_at) VALUES (?, ?, ?, ?, ?)",
       [
         this.user_id,
         this.notifType,
         this.notifContent,
-        this.notifRead,
+        this.from_id,
         this.created_at,
       ]
     );

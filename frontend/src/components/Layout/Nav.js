@@ -13,7 +13,7 @@ import UserOptions from "./UserOptions";
 import blankPicture from "../../images/blank-profile-picture.jpg";
 import { ToastContainer } from "react-toastify";
 import Notifs from "./Notifs";
-import { deleteNotifications, fetchNotifs } from "../../util/notifsReq";
+import { fetchNotifs } from "../../util/notifsReq";
 import { useSelector } from "react-redux";
 
 const Nav = (props) => {
@@ -21,6 +21,7 @@ const Nav = (props) => {
   const [chatNotif, setChatNotif] = useState("");
   const [pushNotif, setPushNotif] = useState("");
   const [notifs, setNotifs] = useState(null);
+  const [posX, setposX] = useState("0");
   const loc = useLocation();
   const isAuth = authCtx.isAuth;
   const currentUser = useSelector((state) => state.currentUser.data);
@@ -75,17 +76,6 @@ const Nav = (props) => {
     if (isAuth) getMatchesNotifs();
   }, [authCtx, isAuth, loc.pathname]);
 
-  const deleteNotif = async (data) => {
-    try {
-      const notifsData = await deleteNotifications({
-        ...data,
-        token: authCtx.token,
-      });
-      setNotifs(notifsData);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   return (
     <>
       <ToastContainer
@@ -142,7 +132,8 @@ const Nav = (props) => {
                   className={classes.navIcon}
                   alt=""
                   src={notifsIcon}
-                  onClick={() => {
+                  onClick={(e) => {
+                    setposX(`${window.innerWidth - e.clientX - 20}px`)
                     props.onToggle.notifsToggleOptions();
                     setPushNotif("");
                   }}
@@ -169,7 +160,7 @@ const Nav = (props) => {
             )}
           </ul>
           {props.dropdowns.notifs && (
-            <Notifs notifs={notifs} onDeleteNotif={deleteNotif} />
+            <Notifs notifs={notifs} posX={posX} />
           )}
           {props.dropdowns.userOptions && (
             <UserOptions onLogout={logoutHandler} />

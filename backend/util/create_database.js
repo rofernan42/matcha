@@ -136,7 +136,7 @@ conn.connect((err) => {
       user_id INT UNSIGNED NOT NULL,
       notifType VARCHAR(255) NULL,
       notifContent VARCHAR(255) NULL,
-      notifRead TINYINT NULL,
+      from_id INT UNSIGNED NOT NULL,
       created_at BIGINT NOT NULL,
       PRIMARY KEY (_id),
       UNIQUE INDEX _id_UNIQUE (_id ASC) VISIBLE);

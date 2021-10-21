@@ -37,7 +37,7 @@ const InterestsForm = (props) => {
       className={classes["edit-settings"]}
       style={{ minWidth: "fit-content" }}
     >
-      <div className={classes.header}>
+      <form className={classes.header} onSubmit={InterestsHandler}>
         <input
           type="text"
           placeholder="My interests..."
@@ -54,7 +54,7 @@ const InterestsForm = (props) => {
             +
           </div>
         </div>
-      </div>
+      </form>
       <div className={classes.interestsList}>
         {(!props.interests || props.interests.length === 0) && (
           <div className={classes.noInterest}>

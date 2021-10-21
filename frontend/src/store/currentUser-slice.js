@@ -20,6 +20,10 @@ const currentUserSlice = createSlice({
         else state.data.likes.push(userId);
       }
     },
+    destroyLike(state, action) {
+      const userId = +action.payload;
+      state.data.likes = state.data.likes.filter((like) => like !== userId);
+    },
   },
 });
 

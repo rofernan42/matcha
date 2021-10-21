@@ -8,13 +8,14 @@
   align-items: center;
   z-index: 100;
   position: relative;
-  white-space: nowrap;
+  font-weight: bold;
 }
 
 .logo {
   font-size: 2rem;
   color: white;
   margin-left: 1rem;
+  white-space: nowrap;
 }
 
 .logo:hover {
@@ -46,7 +47,6 @@
 .header a {
   text-decoration: none;
   color: #d3b2e9;
-  font-weight: bold;
 }
 
 .header a:hover {
@@ -135,6 +135,7 @@
   animation: userOptionsOpening 300ms ease-out forwards;
   transform-origin: top center;
   border: 1px solid #706675f3;
+  max-width: 300px;
 }
 
 .avatar {
@@ -180,39 +181,61 @@
   height: 100%;
 }
 
-.notifOption {
+/*** Notifs ***/
+.notifications {
+  z-index: 100;
+  position: absolute;
+  /* right: 0; */
+  top: 60px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  background-color: #332e36f3;
+  animation: userOptionsOpening 300ms ease-out forwards;
+  transform-origin: top center;
+  border: 1px solid #706675f3;
+  width: 300px;
+  color: #cececea9;
+}
+
+.notifsHeader {
   white-space: nowrap;
   flex: 1;
   color: #cececea9;
   padding: 5px;
+  font-size: smaller;
+  border-bottom: 1px solid #706675f3;
   font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.notifOption.titleNotifs {
-  font-size: smaller;
-  border-bottom: 1px dashed #706675f3;
+.notifOption {
+  border-bottom: 1px solid #70667586;
 }
 
-.notifOption .timeAgo {
-  font-size: 10px;
+.notifOptionHeader {
+  white-space: nowrap;
+  padding: 0 5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notifOptionHeader .timeAgo {
+  font-size: 12px;
   font-style: italic;
-  margin-right: 10px;
 }
 
-.notifOption .deleteNotif {
-  margin-left: 10px;
-}
-
-.notifOption .deleteNotif:hover {
-  cursor: pointer;
-  color: white;
-}
-
-.notifOption.noNotif {
-  padding: 10px;
+.notifOptionContent {
+  text-align: left;
+  padding: 0 10px;
+  font-size: 15px;
+  box-sizing: border-box;
+  font-weight: 500;
+  margin-bottom: 5px;
 }
 
 @keyframes notifOpen {

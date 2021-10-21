@@ -141,15 +141,17 @@ exports.visitProfile = async (req, res, next) => {
       throw error;
     }
     const towardsId = req.params.id;
+    let firstVisit = false;
     if (+towardsId !== user._id) {
       const towardsUser = await User.findById(towardsId);
       const existingVisit = await Visit.findByUsers(user._id, towardsId);
       if (towardsUser && !existingVisit) {
         const visit = new Visit({ id_from: user._id, id_towards: towardsId });
         await visit.save();
+        firstVisit = true;
       }
     }
-    res.status(201).json({ message: "You visited a profile" });
+    res.status(201).json({ firstVisit });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

@@ -1,0 +1,33 @@
+.notifItem {
+  margin: 5px 20px;
+  background-color: white;
+  border: 1px solid #dbdbdb;
+  height: fit-content;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #949494;
+}
+
+.notifItem:hover {
+  background-color: #f1f1f1;
+}
+
+.notifItemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notifItemHeader .timeAgo {
+  font-size: 12px;
+  font-style: italic;
+}
+
+.notifItemContent {
+  font-size: 17px;
+  color: #b571e2;
+}
+
+.notifItem:hover .notifItemContent {
+  color: #38015c;
+}

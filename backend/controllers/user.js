@@ -49,18 +49,18 @@ exports.getProfile = async (req, res, next) => {
 
 exports.editSettings = async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if (!user) {
-    const error = new Error("User not found");
-    error.statusCode = 401;
-    throw error;
-  }
-  const username = req.body.data.username.trim();
-  const name = req.body.data.name.trim();
-  const lastname = req.body.data.lastname.trim();
-  const email = req.body.data.email.trim();
-  let password = req.body.data.password;
-  if (password.length === 0) password = null;
   try {
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+    const username = req.body.data.username.trim();
+    const name = req.body.data.name.trim();
+    const lastname = req.body.data.lastname.trim();
+    const email = req.body.data.email.trim();
+    let password = req.body.data.password;
+    if (password.length === 0) password = null;
     errors = await authValidation(
       username,
       name,
@@ -298,17 +298,9 @@ exports.postImage = async (req, res, next) => {
     }
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-    res
-      .status(201)
-      .json({
-        images: [
-          user.image0,
-          user.image1,
-          user.image2,
-          user.image3,
-          user.image4,
-        ],
-      });
+    res.status(201).json({
+      images: [user.image0, user.image1, user.image2, user.image3, user.image4],
+    });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -350,17 +342,9 @@ exports.deleteImage = async (req, res, next) => {
     }
     const updatedUser = new User({ ...user });
     await updatedUser.save();
-    res
-      .status(201)
-      .json({
-        images: [
-          user.image0,
-          user.image1,
-          user.image2,
-          user.image3,
-          user.image4,
-        ],
-      });
+    res.status(201).json({
+      images: [user.image0, user.image1, user.image2, user.image3, user.image4],
+    });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

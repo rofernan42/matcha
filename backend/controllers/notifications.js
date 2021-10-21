@@ -10,7 +10,7 @@ exports.getNotifications = async (req, res, next) => {
       throw error;
     }
     const notifs = await Notification.fetchByUser(req.userId);
-    res.status(200).json(notifs.slice(0, 5));
+    res.status(200).json(notifs);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -43,6 +43,7 @@ exports.postNotification = async (req, res, next) => {
         user_id,
         notifType,
         notifContent,
+        from_id: req.userId,
       });
       await notif.save();
     }
@@ -54,8 +55,6 @@ exports.postNotification = async (req, res, next) => {
     next(err);
   }
 };
-
-exports.readNotification = async (req, res, next) => {};
 
 exports.deleteNotification = async (req, res, next) => {
   try {

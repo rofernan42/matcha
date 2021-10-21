@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import classes from "./SettingsForm.module.css";
 
 const BioForm = (props) => {
-  const NB_CHAR = 300;
+  const NB_CHAR = 400;
   const [saveActive, setSaveActive] = useState(false);
   const bioRef = useRef();
   const [counter, setCounter] = useState(NB_CHAR - props.bio.length);

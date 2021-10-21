@@ -19,6 +19,16 @@
   justify-content: space-between;
 }
 
+.notifsField {
+  display: flex;
+  flex-direction: column;
+  color: #949494;
+  margin: 20px;
+  background-color: white;
+  border: 1px solid #dbdbdb;
+  padding: 10px;
+}
+
 @keyframes profileOpening {
   0% {
     opacity: 0;

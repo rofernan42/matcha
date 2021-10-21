@@ -2,11 +2,11 @@ import { useContext } from "react";
 import Settings from "../components/Profile/Settings";
 import Sidenav from "../components/Profile/Sidenav";
 import AuthContext from "../store/auth-context";
-import Blocked from "../components/Profile/Blocked";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../store/currentUser-actions";
 import Interactions from "../components/Profile/Interactions";
+import AllNotifs from "../components/Profile/AllNotifs";
 
 const ProfilePage = () => {
   const authCtx = useContext(AuthContext);
@@ -37,7 +37,7 @@ const ProfilePage = () => {
           {loc.hash === "#interactions" && (
             <Interactions token={authCtx.token} />
           )}
-          {loc.hash === "#blocks" && <Blocked token={authCtx.token} />}
+          {loc.hash === "#notifs" && <AllNotifs token={authCtx.token} />}
         </>
       )}
     </>

@@ -7,7 +7,7 @@ module.exports = async (username, name, lastname, email, password, currentUser) 
   if (username.length === 0) {
     errors = { ...errors, errusername: "Username must not be empty" };
   }
-  if (userName && userName._id.toString() !== currentUser) {
+  if (userName && userName._id !== currentUser) {
     errors = { ...errors, errusername: "Username already taken" };
   }
   if (name.length === 0) {
@@ -19,7 +19,7 @@ module.exports = async (username, name, lastname, email, password, currentUser) 
   if (email.length === 0 || !email.includes("@")) {
     errors = { ...errors, erremail: "Bad email input" };
   }
-  if (userEmail && userEmail._id.toString() !== currentUser) {
+  if (userEmail && userEmail._id !== currentUser) {
     errors = { ...errors, erremail: "User already exists" };
   }
   if (password !== null && password.length < 6) {

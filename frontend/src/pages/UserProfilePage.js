@@ -13,6 +13,7 @@ import SideInfo from "../components/UserProfile/SideInfo";
 import MainInfo from "../components/UserProfile/MainInfo";
 import { useSelector, useDispatch } from "react-redux";
 import { userAction } from "../store/currentUser-actions";
+import { currentUserActions } from "../store/currentUser-slice";
 
 const setModalActive = (state, action) => {
   if (action.type === "BLOCK") {
@@ -111,6 +112,7 @@ const UserProfilePage = (props) => {
           token: authCtx.token,
         })
       );
+      dispatch(currentUserActions.destroyLike(params.userId));
       toast.warning(`You have blocked ${user.username}`);
       history.push("/users");
     } catch (err) {
@@ -126,9 +128,11 @@ const UserProfilePage = (props) => {
           token: authCtx.token,
         })
       );
+      dispatch(currentUserActions.destroyLike(params.userId));
       toast.warning(`You have cancelled the match with ${user.username}.`);
       dispatchModal({ type: "CLOSE" });
-      notification("cancel", "cancelMatch");
+      await notification("cancel", "cancelMatch");
+      history.go(0);
     } catch (err) {
       console.log(err);
     }
@@ -163,16 +167,18 @@ const UserProfilePage = (props) => {
             user={user}
             onReport={() => dispatchModal({ type: "REPORT" })}
             onBlock={() => dispatchModal({ type: "BLOCK" })}
+            onCancel={() => dispatchModal({ type: "CANCEL" })}
             onSetImgSlider={() => setImgSlider(true)}
             onlineUsers={props.onlineUsers}
             params={params}
+            token={authCtx.token}
+            currentUser={currentUser}
+            notification={notification}
           />
           <MainInfo
             user={user}
             currentUser={currentUser}
             token={authCtx.token}
-            notification={notification}
-            onCancel={() => dispatchModal({ type: "CANCEL" })}
             params={params}
           />
           {imgSlider && (
