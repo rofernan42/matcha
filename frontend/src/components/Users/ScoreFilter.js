@@ -3,6 +3,33 @@ import { useHistory, useLocation } from "react-router";
 import { Slider } from "@mui/material";
 import classes from "./Filters.module.css";
 
+const marks = [
+  {
+    value: 0,
+    label: "0+",
+  },
+  {
+    value: 1,
+    label: "100+",
+  },
+  {
+    value: 2,
+    label: "200+",
+  },
+  {
+    value: 3,
+    label: "300+",
+  },
+  {
+    value: 4,
+    label: "400+",
+  },
+  {
+    value: 5,
+    label: "500+",
+  },
+];
+
 const ScoreFilter = (props) => {
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
@@ -30,19 +57,21 @@ const ScoreFilter = (props) => {
   return (
     <div className={classes.ageRange}>
       Score range
-      <Slider
-        sx={{ marginBottom: "10px" }}
-        getAriaLabel={() => "Age range"}
-        min={0}
-        max={5}
-        value={value}
-        onChange={handleChange}
-        onChangeCommitted={changeScoreFilter}
-        valueLabelDisplay="auto"
-        color={"secondary"}
-        step={1}
-        marks
-      />
+      <div style={{ marginBottom: "10px" }}>
+        <Slider
+          sx={{ marginBottom: "10px" }}
+          getAriaLabel={() => "Score range"}
+          min={0}
+          max={5}
+          value={value}
+          onChange={handleChange}
+          onChangeCommitted={changeScoreFilter}
+          valueLabelDisplay="auto"
+          color={"secondary"}
+          step={1}
+          marks={marks}
+        />
+      </div>
     </div>
   );
 };

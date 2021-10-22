@@ -22,6 +22,5 @@ export const calculateDistance = (latA, latB, lonA, lonB) => {
       Math.sin(latA) * Math.sin(latB) +
         Math.cos(latA) * Math.cos(latB) * Math.cos(lonB - lonA)
     );
-  if (dist > 1) return Math.round(dist);
-  return Math.round(dist * 100) / 100;
+  return Math.round(dist * 10) / 10;
 };

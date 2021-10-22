@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../store/currentUser-actions";
 import Interactions from "../components/Profile/Interactions";
 import AllNotifs from "../components/Profile/AllNotifs";
+import OwnProfile from "../components/Profile/OwnProfile";
 
 const ProfilePage = () => {
   const authCtx = useContext(AuthContext);
@@ -22,6 +23,7 @@ const ProfilePage = () => {
       })
     );
   };
+
   return (
     <>
       {currentUser && (
@@ -38,6 +40,7 @@ const ProfilePage = () => {
             <Interactions token={authCtx.token} />
           )}
           {loc.hash === "#notifs" && <AllNotifs token={authCtx.token} />}
+          {loc.hash === "#perso" && <OwnProfile token={authCtx.token} />}
         </>
       )}
     </>

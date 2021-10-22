@@ -23,7 +23,11 @@ function App() {
 
   useEffect(() => {
     if (authCtx.isAuth) {
-      dispatch(fetchCurrentUser(authCtx.token));
+      const getCurrentUser = async () => {
+        const data = await dispatch(fetchCurrentUser(authCtx.token));
+        if (!data) authCtx.logout();
+      };
+      getCurrentUser();
     }
   }, [dispatch, authCtx]);
 
@@ -47,6 +51,7 @@ function App() {
       });
     }
   }, [authCtx.isAuth]);
+
   return (
     <Layout>
       <Switch>

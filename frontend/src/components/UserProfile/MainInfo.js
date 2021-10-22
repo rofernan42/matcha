@@ -62,7 +62,7 @@ const MainInfo = (props) => {
         )}
       </div>
       <div className={classes.scoreField}>
-        Score <b>1000</b>
+        Score <b>{props.user.score}</b>
       </div>
       <div className={classes.descriptionField}>
         <div className={classes.usernameField} style={{ marginBottom: "20px" }}>

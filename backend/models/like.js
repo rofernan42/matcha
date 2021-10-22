@@ -19,10 +19,10 @@ class Like {
   }
 
   static async destroyByUsers(user1, user2) {
-    return db.execute(
-      "DELETE FROM likes WHERE (id_from=? AND id_towards=?)",
-      [user1, user2]
-    );
+    return db.execute("DELETE FROM likes WHERE (id_from=? AND id_towards=?)", [
+      user1,
+      user2,
+    ]);
   }
 
   static async findByUsers(from, towards) {

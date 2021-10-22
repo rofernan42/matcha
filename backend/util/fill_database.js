@@ -120,7 +120,7 @@ const fillDb = async (nbUsers) => {
       gender: gender,
       bio: faker.lorem.paragraph(),
       interests: randomInterests(),
-      score: 0.0,
+      score: Math.floor(Math.random() * 300),
       lastConnection: Date.now(),
       attrMen: attr.attrMen,
       attrWomen: attr.attrWomen,

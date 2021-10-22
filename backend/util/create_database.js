@@ -28,7 +28,7 @@ conn.connect((err) => {
       attrWomen TINYINT NULL,
       bio TEXT NULL,
       interests VARCHAR(255) NULL,
-      score DECIMAL(2,1) NULL,
+      score INT UNSIGNED NULL,
       lat DECIMAL(10,6) NULL,
       lon DECIMAL(10,6) NULL,
       lastConnection BIGINT NULL,

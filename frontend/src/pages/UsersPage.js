@@ -29,12 +29,17 @@ const UsersPage = (props) => {
 
   useEffect(() => {
     const getUsers = async () => {
-      const users = await fetchUsers({
+      try {
+        const users = await fetchUsers({
         token: authCtx.token,
         path: "filtered-users" + loc.search,
       });
       setUsersData(users.users);
       setUsernameFilter(users.users);
+    } catch (err) {
+      console.log(err);
+      setUsersData([]);
+    }
     };
     getUsers();
   }, []);

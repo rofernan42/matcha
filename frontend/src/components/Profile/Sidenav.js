@@ -42,7 +42,7 @@ const Sidenav = (props) => {
               }`}
             >
               <img alt="" src={profil} />
-              <Link to={`/users/${props.userId}`}>See profile</Link>
+              <Link to="#perso">See profile</Link>
             </div>
           </div>
         </div>

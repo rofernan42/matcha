@@ -15,6 +15,7 @@ exports.postLike = async (req, res, next) => {
       throw error;
     }
     const towardsId = req.params.id;
+    const towardsUser = await User.findById(towardsId);
     if (towardsId == user._id) {
       const error = new Error("Invalid user");
       error.statusCode = 401;
@@ -22,12 +23,16 @@ exports.postLike = async (req, res, next) => {
     }
     const match = await createMatch(user._id, towardsId);
     const existingLike = await Like.findByUsers(user._id, towardsId);
+    const updatedUser = new User({ ...towardsUser });
     if (!existingLike) {
       const newLike = new Like({ id_from: user._id, id_towards: towardsId });
+      updatedUser.score++;
       await newLike.save();
     } else {
+      updatedUser.score--;
       await Like.destroy(existingLike._id);
     }
+    await updatedUser.save();
     res.status(201).json({ match });
   } catch (err) {
     if (!err.statusCode) {
@@ -46,6 +51,9 @@ exports.cancelMatch = async (req, res, next) => {
       throw error;
     }
     const towardsId = req.params.id;
+    const towardsUser = await User.findById(towardsId);
+    const updatedUser = new User({ ...towardsUser, score: --towardsUser.score });
+    await updatedUser.save();
     await Like.destroyByUsers(user._id, towardsId);
     await Match.destroy(user._id, towardsId);
     res.status(201).json({ message: "match cancelled" });
@@ -71,6 +79,9 @@ exports.postBlock = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
+    const towardsUser = await User.findById(towardsId);
+    const updatedUser = new User({ ...towardsUser, score: --towardsUser.score });
+    await updatedUser.save();
     await Like.destroyByUsers(user._id, towardsId);
     await Match.destroy(user._id, towardsId);
     const newBlock = new Block({ id_from: user._id, id_towards: towardsId });

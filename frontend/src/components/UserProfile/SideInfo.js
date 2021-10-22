@@ -49,37 +49,38 @@ const SideInfo = (props) => {
     <div className={classes.userInfo}>
       <div className={classes.infoField}>
         <div>
-          {props.user.images.length === 0 && (
-            <img className={classes.avatar} alt="" src={profil} />
-          )}
-          {props.user.images.length > 0 && (
-            <div
-              className={classes.avatar}
-              style={{ backgroundImage: `url(${url + props.user.images[0]})` }}
-              onClick={props.onSetImgSlider}
-            >
-              <div>
-                <span
-                  className={`${classes.status} ${
-                    online ? classes.green : classes.orange
-                  }`}
-                ></span>
-                {online && (
-                  <span className={classes["status-label"]}>online</span>
-                )}
-                {!online && (
-                  <span className={classes["status-label"]}>
-                    {props.user.lastConnection && (
-                      <ReactTimeago date={props.user.lastConnection} />
-                    )}
-                    {!props.user.lastConnection && (
-                      <span className={classes["status-label"]}>offline</span>
-                    )}
-                  </span>
-                )}
-              </div>
+          <div
+            className={classes.avatar}
+            style={{
+              backgroundImage: `url(${
+                props.user.images.length > 0
+                  ? url + props.user.images[0]
+                  : profil
+              })`,
+            }}
+            onClick={props.onSetImgSlider}
+          >
+            <div>
+              <span
+                className={`${classes.status} ${
+                  online ? classes.green : classes.orange
+                }`}
+              ></span>
+              {online && (
+                <span className={classes["status-label"]}>online</span>
+              )}
+              {!online && (
+                <span className={classes["status-label"]}>
+                  {props.user.lastConnection && (
+                    <ReactTimeago date={props.user.lastConnection} />
+                  )}
+                  {!props.user.lastConnection && (
+                    <span className={classes["status-label"]}>offline</span>
+                  )}
+                </span>
+              )}
             </div>
-          )}
+          </div>
           <div className={classes.nameField}>
             <div className={classes.label}>Full name</div>
             <div>
@@ -97,9 +98,7 @@ const SideInfo = (props) => {
         )}
         {match && (
           <div className={classes.matchField}>
-            <div>
-              You matched with {props.user.username}
-            </div>
+            <div>You matched with {props.user.username}</div>
             <div className={classes.cancelMatch} onClick={props.onCancel}>
               &times; Cancel match
             </div>

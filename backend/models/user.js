@@ -22,10 +22,10 @@ class User {
         : data.attrWomen;
     this.bio = data.bio || "";
     this.interests = data.interests || "";
-    this.score = data.score || 0.0;
+    this.score = (data.score || data.score < 0) || 0;
     this.lat = data.lat || null;
     this.lon = data.lon || null;
-    this.lastConnection = Date.now();
+    this.lastConnection = data.lastConnection || Date.now();
     this.resetToken = data.resetToken || null;
     this.resetTokenExpiry = data.resetTokenExpiry || null;
     this.image0 = data.image0 || null;

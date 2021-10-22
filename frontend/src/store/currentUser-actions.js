@@ -19,8 +19,10 @@ export const fetchCurrentUser = (token) => {
     try {
       const userData = await fetchData();
       dispatch(currentUserActions.setUser({ ...userData }));
+      return true;
     } catch (err) {
       console.log(err);
+      return null;
     }
   };
 };

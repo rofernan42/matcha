@@ -131,7 +131,7 @@ const ProfileCard = (props) => {
           </div>
         </div>
         <div className={classes["card-footer"]}>
-          <div className={classes.footerField}>Score</div>
+          <div className={classes.footerField}>Score: {props.user.score}</div>
           <div className={classes.footerField}>
             <Link to={`/users/${props.user._id}`}>Detailed profile</Link>
           </div>

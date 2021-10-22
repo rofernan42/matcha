@@ -16,7 +16,8 @@ exports.getSingleUser = async (req, res, next) => {
       req.params.id
     );
     let resData;
-    if (user._id === req.userId || isBlockedOrBlocking.length > 0) resData = null;
+    if (user._id === req.userId || isBlockedOrBlocking.length > 0)
+      resData = null;
     else {
       const like = await Like.findByUsers(req.params.id, req.userId);
       const likesMe = !!like;
@@ -126,7 +127,11 @@ exports.getFilteredUsers = async (req, res, next) => {
       );
     }
     if (req.query.minScore || req.query.maxScore) {
-      console.log("filter by score");
+      filteredUsers = filterByScore(
+        req.query.minScore,
+        req.query.maxScore,
+        filteredUsers
+      );
     }
     if (req.query.minDist || req.query.maxDist) {
       filteredUsers = filterByDistance(
@@ -147,12 +152,12 @@ exports.getFilteredUsers = async (req, res, next) => {
     } else if (req.query.sort === "age") {
       filteredUsers = sortByAge(req.query.order, filteredUsers);
     } else if (req.query.sort === "score") {
-      console.log("sort by score");
+      filteredUsers = sortByScore(req.query.order, filteredUsers);
     } else {
       filteredUsers = sortByDistance(user, filteredUsers);
     }
     if (req.query.matched === "true") {
-      filteredUsers = filteredUsers.filter((user) => user.matchedMe)
+      filteredUsers = filteredUsers.filter((user) => user.matchedMe);
     }
     res.status(200).json({
       users: filteredUsers.map((user) => {
@@ -239,6 +244,26 @@ const filterByAttraction = (user, users) => {
         (usrs) => usrs.gender === "female" || usrs.gender === "other"
       );
     }
+  }
+  return filteredUsers;
+};
+
+const sortByScore = (order, users) => {
+  if (order === "increase") {
+    return users.sort((a, b) => a.score - b.score);
+  } else if (order === "decrease") {
+    return users.sort((a, b) => b.score - a.score);
+  }
+  return users;
+};
+
+const filterByScore = (minScore, maxScore, users) => {
+  let filteredUsers = users;
+  if (minScore) {
+    filteredUsers = filteredUsers.filter((usr) => usr.score >= minScore * 100);
+  }
+  if (maxScore && maxScore < 5) {
+    filteredUsers = filteredUsers.filter((usr) => usr.score <= maxScore * 100);
   }
   return filteredUsers;
 };
