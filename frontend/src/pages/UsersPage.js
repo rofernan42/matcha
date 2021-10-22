@@ -31,15 +31,15 @@ const UsersPage = (props) => {
     const getUsers = async () => {
       try {
         const users = await fetchUsers({
-        token: authCtx.token,
-        path: "filtered-users" + loc.search,
-      });
-      setUsersData(users.users);
-      setUsernameFilter(users.users);
-    } catch (err) {
-      console.log(err);
-      setUsersData([]);
-    }
+          token: authCtx.token,
+          path: "filtered-users" + loc.search,
+        });
+        setUsersData(users.users);
+        setUsernameFilter(users.users);
+      } catch (err) {
+        console.log(err);
+        setUsersData([]);
+      }
     };
     getUsers();
   }, []);
@@ -148,6 +148,7 @@ const UsersPage = (props) => {
       {userProfile.display && currentUser && (
         <ProfileCard
           key={userProfile.profile._id}
+          onUpdateUsers={filtersHandler}
           onCloseProfile={closeProfileHandler}
           user={userProfile.profile}
           token={authCtx.token}

@@ -12,10 +12,12 @@ import { createNotification } from "../../util/notifsReq";
 import { useDispatch } from "react-redux";
 import { userAction } from "../../store/currentUser-actions";
 import { currentUserActions } from "../../store/currentUser-slice";
+import { useLocation } from "react-router";
 
 const ProfileCard = (props) => {
   const [match, setMatch] = useState(false);
   const dispatch = useDispatch();
+  const loc = useLocation();
 
   const closeProfile = () => {
     props.onCloseProfile();
@@ -46,6 +48,7 @@ const ProfileCard = (props) => {
       });
       setTimeout(() => {
         props.onCloseProfile();
+        props.onUpdateUsers(loc.search);
       }, 1000);
     } else if (!props.liked) {
       await createNotification({
@@ -110,7 +113,12 @@ const ProfileCard = (props) => {
           />
         </div>
         <div style={{ position: "absolute", top: "260px", right: "25px" }}>
-          <LikeButton sendLikeHandler={sendLikeHandler} liked={props.liked} />
+          {!props.user.matchedMe && (
+            <LikeButton sendLikeHandler={sendLikeHandler} liked={props.liked} />
+          )}
+          {props.user.matchedMe && (
+            <div className={classes.matched}>Matched</div>
+          )}
         </div>
         <div className={classes["card-body"]}>
           <div className={classes["name"]}>

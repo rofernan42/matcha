@@ -87,6 +87,17 @@
   cursor: pointer;
 }
 
+.matched {
+  cursor: default;
+  color: white;
+  font-size: 18px;
+  background-color: #630c9c;
+  box-shadow: 0 10px 15px #c79ee285;
+  padding: 8px 10px;
+  border-radius: 30px;
+  font-weight: bold;
+}
+
 /*** BODY ***/
 .card-body {
   flex: 1;
